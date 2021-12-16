@@ -3,11 +3,9 @@ package mqttClient;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-import java.util.UUID;
 
 public class Publisher {
     static String mqtt_server = "broker.mqttdashboard.com";
-    static Integer port = 8000;
     static String client_ID = "UnClienteID";
 
     public static void main(String[] args) {
