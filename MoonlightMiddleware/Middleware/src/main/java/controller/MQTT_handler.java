@@ -53,5 +53,4 @@ public class MQTT_handler {
             e.printStackTrace();
         }
     }
-
 }
