@@ -2,8 +2,10 @@ plugins {
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+/*group 'org.example'
+group 'eu.quanticol'*/
+
+//version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -14,6 +16,11 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+
+    /*implementation 'eu.quanticol:moonlight:1.0-SNAPSHOT'
+    implementation 'eu.quanticol.moonlight:moonlight:1.0-SNAPSHOT'
+    implementation 'eu.quanticol.moonlight:moonlight-core:0.3-SNAPSHOT'*/
 }
 
 test {
