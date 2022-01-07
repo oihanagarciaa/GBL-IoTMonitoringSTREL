@@ -1,22 +1,18 @@
 package controller;
 
-import model.SignalDefinition;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import view.Screen;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Subscriber implements MqttCallback {
-    SignalDefinition signalDefinition;
     MQTT_handler mqtt_handler;
     Screen view;
     int size;
 
-    public Subscriber(MQTT_handler mqtt_handler, Screen view, SignalDefinition signalDefinition, int size){
-        this.signalDefinition = signalDefinition;
+    public Subscriber(MQTT_handler mqtt_handler, Screen view, int size){
         this.view = view;
         this.size = size;
         this.mqtt_handler = mqtt_handler;
@@ -32,21 +28,30 @@ public class Subscriber implements MqttCallback {
         System.out.println("Recivido");
         String msg = message.toString();
         view.setRecievedMessage(message.toString());
-        /*String[] valuesStr = msg.split(" ");
+        String[] valuesStr = msg.split(" ");
         Integer[] numbers = new Integer[size];
         for(int i = 0;i < size;i++)
         {
-            try
-            {
-                numbers[i] = Integer.parseInt(valuesStr[i]);
+            if(valuesStr.length <= i){
+                numbers[i] = 0;
+            }else{
+                try
+                {
+                    numbers[i] = Integer.parseInt(valuesStr[i]);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    numbers[i] = 0;
+                }
             }
-            catch (NumberFormatException nfe)
-            {
-                numbers[i] = null;
+        }
+        Thread thread = new Thread(){
+            public void run(){
+                System.out.println("Publishing...");
+                mqtt_handler.publishSignal(Arrays.asList(numbers));
             }
-        }*/
-        //System.out.println("Publish");
-        mqtt_handler.publishMessage(/*signalDefinition.setUpSignal(Arrays.asList(numbers))*/"HOLA");
+        };
+        thread.start();
     }
 
     @Override

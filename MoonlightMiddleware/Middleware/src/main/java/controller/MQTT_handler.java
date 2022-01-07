@@ -1,8 +1,7 @@
 package controller;
 
-import eu.quanticol.moonlight.signal.SpatialTemporalSignal;
-import eu.quanticol.moonlight.space.MoonLightRecord;
-import model.SignalDefinition;
+import eu.quanticol.moonlight.signal.GraphModel;
+import model.DataSerializable;
 import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -11,7 +10,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import view.Screen;
 
+import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 public class MQTT_handler {
 
@@ -23,12 +25,10 @@ public class MQTT_handler {
     int qos = 0;
     MqttClient sampleClient;
     Subscriber sub;
-    SignalDefinition signalDefinition;
 
-    public MQTT_handler(Screen view, SignalDefinition signalDefinition, int size){
+    public MQTT_handler(Screen view, int size){
         this.view = view;
-        this.signalDefinition = signalDefinition;
-        sub = new Subscriber(this, this.view, this.signalDefinition, size);
+        sub = new Subscriber(this, this.view, size);
 
         MemoryPersistence persistence = new MemoryPersistence();
 
@@ -62,23 +62,10 @@ public class MQTT_handler {
         }
     }
 
-    public void publishMessage(int size, String msg){ /*SpatialTemporalSignal now implements serializable*/
-        String[] valuesStr = msg.split(" ");
-        Integer[] numbers = new Integer[size];
-        for(int i = 0;i < size;i++)
-        {
-            try
-            {
-                numbers[i] = Integer.parseInt(valuesStr[i]);
-            }
-            catch (NumberFormatException nfe)
-            {
-                numbers[i] = null;
-            }
-        }
+    public void publishSignal(List<Integer> numbers){
         try {
-            System.out.println("Publishing...");
-            MqttMessage mqttmessage = new MqttMessage(SerializationUtils.serialize(signalDefinition.setUpSignal(Arrays.asList(numbers))));
+            byte[] data = SerializationUtils.serialize((Serializable) numbers);
+            MqttMessage mqttmessage = new MqttMessage(data);
             mqttmessage.setQos(qos);
             sampleClient.publish(topicPublisher, mqttmessage);
         } catch (MqttException e) {

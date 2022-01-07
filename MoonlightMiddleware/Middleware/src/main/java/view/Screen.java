@@ -12,14 +12,15 @@ public class Screen extends JFrame {
     public Screen(){
         this.setSize(600, 400);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //this.getContentPane().setBackground( new Color(235, 222, 240));
+        sendingMoonlight = new JTextField("Message...");
+        jbSend = new JButton("Send message");
         this.setContentPane(panelCentral());
         this.setVisible(true);
     }
 
     public Container panelCentral() {
         JSplitPane panel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                panelSensors(), panelMoonlight());
+                panelSensors(), /*panelMoonlight()*/null);
         panel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         panel.setOneTouchExpandable(false);
         panel.setDividerLocation(300);
@@ -48,9 +49,6 @@ public class Screen extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
 
         JLabel title = new JLabel("iot/moonlight");
-
-        sendingMoonlight = new JTextField("Message...");
-        jbSend = new JButton("Send message");
 
         panel.add(title, BorderLayout.NORTH);
         panel.add(sendingMoonlight, BorderLayout.CENTER);

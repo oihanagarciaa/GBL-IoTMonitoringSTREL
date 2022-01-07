@@ -23,7 +23,7 @@ public class Controller implements ActionListener {
                 view.setRecievedMessage("");
                 break;
             case "Send message":
-                mqtt_handler.publishMessage(6, view.getSendingMessage());
+                mqtt_handler.publishMessage(view.getSendingMessage());
                 break;
             default:
                 break;
