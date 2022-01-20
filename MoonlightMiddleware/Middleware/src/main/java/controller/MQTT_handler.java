@@ -1,7 +1,6 @@
 package controller;
 
-import eu.quanticol.moonlight.signal.GraphModel;
-import model.DataSerializable;
+import eu.quanticol.moonlight.signal.Signal;
 import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -11,12 +10,9 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import view.Screen;
 
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 public class MQTT_handler {
-
     Screen view;
     private static final String clientId = "MyIoTClientID2";
     private static final String brokerUrl ="tcp://broker.mqttdashboard.com:1883";
@@ -64,6 +60,9 @@ public class MQTT_handler {
 
     public void publishSignal(List<Integer> numbers){
         try {
+            Signal<List<Integer>> s = new Signal<>();
+            s.add(4.0, numbers);
+            
             byte[] data = SerializationUtils.serialize((Serializable) numbers);
             MqttMessage mqttmessage = new MqttMessage(data);
             mqttmessage.setQos(qos);

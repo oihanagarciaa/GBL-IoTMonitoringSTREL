@@ -1,5 +1,7 @@
 package controller;
 
+import eu.quanticol.moonlight.signal.MoonLightRecord;
+import eu.quanticol.moonlight.signal.Signal;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -30,6 +32,7 @@ public class Subscriber implements MqttCallback {
         view.setRecievedMessage(message.toString());
         String[] valuesStr = msg.split(" ");
         Integer[] numbers = new Integer[size];
+
         for(int i = 0;i < size;i++)
         {
             if(valuesStr.length <= i){
@@ -45,6 +48,7 @@ public class Subscriber implements MqttCallback {
                 }
             }
         }
+
         Thread thread = new Thread(){
             public void run(){
                 System.out.println("Publishing...");
