@@ -1,1 +1,1 @@
-GBL Runtime Verification for Spatio-Temporal Properties (with Aggregated Operators)
+Runtime Verification for Spatio-Temporal Properties (with Aggregated Operators)
