@@ -1,6 +1,11 @@
 package controller;
 
+import eu.quanticol.moonlight.domain.AbstractInterval;
+import eu.quanticol.moonlight.domain.BooleanDomain;
+import eu.quanticol.moonlight.domain.DoubleDomain;
+import eu.quanticol.moonlight.signal.Segment;
 import eu.quanticol.moonlight.signal.Signal;
+import eu.quanticol.moonlight.signal.online.*;
 import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -58,7 +63,7 @@ public class MQTT_handler {
         }
     }
 
-    public void publishSignal(List<Integer> numbers){
+    public void publishList(List<Integer> numbers){
         try {
             Signal<List<Integer>> s = new Signal<>();
             s.add(4.0, numbers);
@@ -70,5 +75,26 @@ public class MQTT_handler {
         } catch (MqttException e) {
             e.printStackTrace();
         }
+    }
+
+    public void publishSignal(List<Integer> numbers){
+
+        MultiOnlineSignal multiOnlineSignal = new MultiOnlineSignal();
+        MultiOnlineSpaceTimeSignal multiOnlineSpaceTimeSignal = new MultiOnlineSpaceTimeSignal(6, );
+
+        OnlineSignal<Double> onlineSignal
+                = new OnlineSignal<Double>(new DoubleDomain());
+
+
+        TimeChain<Double, List<Integer>> timeChain2 = new TimeChain<Double, List<Integer>>(5.0);
+
+        timeChain2.add(new Segment<>(0, numbers));
+        AbstractInterval<Double> abstractInterval = new AbstractInterval<Double>(15.0, 19.1);
+
+
+        TimeChain<Double, AbstractInterval<Double>> timeChain = new TimeChain<Double, AbstractInterval<Double>>(Double.MAX_VALUE);
+        timeChain.add(new Segment<>(2.0, new AbstractInterval<Double>(4.5, 6.4)));
+        onlineSignal.refine(timeChain);
+
     }
 }

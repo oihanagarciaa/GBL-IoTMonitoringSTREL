@@ -1,7 +1,10 @@
 package controller;
 
-import eu.quanticol.moonlight.signal.MoonLightRecord;
+
+import eu.quanticol.moonlight.domain.BooleanDomain;
 import eu.quanticol.moonlight.signal.Signal;
+import eu.quanticol.moonlight.signal.online.OnlineSignal;
+import eu.quanticol.moonlight.signal.online.TimeChain;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -52,10 +55,12 @@ public class Subscriber implements MqttCallback {
         Thread thread = new Thread(){
             public void run(){
                 System.out.println("Publishing...");
-                mqtt_handler.publishSignal(Arrays.asList(numbers));
+                mqtt_handler.publishList(Arrays.asList(numbers));
             }
         };
         thread.start();
+
+
     }
 
     @Override
