@@ -1,26 +1,25 @@
 package controller;
 
 
-import eu.quanticol.moonlight.domain.BooleanDomain;
-import eu.quanticol.moonlight.signal.Signal;
-import eu.quanticol.moonlight.signal.online.OnlineSignal;
-import eu.quanticol.moonlight.signal.online.TimeChain;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import view.Screen;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Subscriber implements MqttCallback {
     MQTT_handler mqtt_handler;
-    Screen view;
-    int size;
+    ExecutorService executor;
+    Controller controller;
 
-    public Subscriber(MQTT_handler mqtt_handler, Screen view, int size){
-        this.view = view;
-        this.size = size;
+    /*tmp*/ int i = 0;
+
+    public Subscriber(MQTT_handler mqtt_handler, Controller controller){
+        this.controller = controller;
         this.mqtt_handler = mqtt_handler;
+        executor = Executors.newCachedThreadPool();
     }
 
     @Override
@@ -28,39 +27,23 @@ public class Subscriber implements MqttCallback {
 
     }
 
+    /*
+    Is it good to use executors here?
+     */
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        System.out.println("Recivido");
         String msg = message.toString();
-        view.setRecievedMessage(message.toString());
-        String[] valuesStr = msg.split(" ");
-        Integer[] numbers = new Integer[size];
+        System.out.println("msg: "+msg);
 
-        for(int i = 0;i < size;i++)
-        {
-            if(valuesStr.length <= i){
-                numbers[i] = 0;
-            }else{
-                try
-                {
-                    numbers[i] = Integer.parseInt(valuesStr[i]);
-                }
-                catch (NumberFormatException nfe)
-                {
-                    numbers[i] = 0;
-                }
-            }
-        }
+        executor.execute(() -> controller.convertSignalForMoonlight(msg));
 
-        Thread thread = new Thread(){
-            public void run(){
-                System.out.println("Publishing...");
-                mqtt_handler.publishList(Arrays.asList(numbers));
-            }
-        };
-        thread.start();
-
-
+        /*
+        Change when to send the update
+         */
+        if(i==6) {
+            mqtt_handler.publishUpdate(controller.getUpdate());
+            i = 0;
+        }else { i++;}
     }
 
     @Override

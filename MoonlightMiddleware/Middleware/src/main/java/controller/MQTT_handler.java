@@ -1,10 +1,6 @@
 package controller;
 
-import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.domain.BooleanDomain;
-import eu.quanticol.moonlight.domain.DoubleDomain;
-import eu.quanticol.moonlight.signal.Segment;
-import eu.quanticol.moonlight.signal.Signal;
+import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.*;
 import org.apache.commons.lang3.SerializationUtils;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -12,13 +8,11 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import view.Screen;
 
 import java.io.Serializable;
 import java.util.List;
 
 public class MQTT_handler {
-    Screen view;
     private static final String clientId = "MyIoTClientID2";
     private static final String brokerUrl ="tcp://broker.mqttdashboard.com:1883";
     private static final String topicSubscriber = "iot/sensors";
@@ -27,12 +21,9 @@ public class MQTT_handler {
     MqttClient sampleClient;
     Subscriber sub;
 
-    public MQTT_handler(Screen view, int size){
-        this.view = view;
-        sub = new Subscriber(this, this.view, size);
-
+    public MQTT_handler(int size, Controller controller){
+        sub = new Subscriber(this, controller);
         MemoryPersistence persistence = new MemoryPersistence();
-
         try {
             sampleClient = new MqttClient(brokerUrl, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
@@ -42,33 +33,26 @@ public class MQTT_handler {
         } catch (MqttException e) {
             e.printStackTrace();
         }
+        subscribe();
     }
 
     public void subscribe(){
         try {
             sampleClient.setCallback(sub);
             sampleClient.subscribe(topicSubscriber);
+            System.out.println("Subscribed");
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
-    public void publishMessage(String message){
+    /*
+    /!\ Update is not serializable, so I can't send it this way
+    /!\ Moonlight Record is not serializable, so I can't send it this way
+     */
+    public void publishUpdate(Update<Double, List<MoonLightRecord>> update){
         try {
-            MqttMessage mqttmessage = new MqttMessage(message.getBytes());
-            mqttmessage.setQos(qos);
-            sampleClient.publish(topicPublisher, mqttmessage);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void publishList(List<Integer> numbers){
-        try {
-            Signal<List<Integer>> s = new Signal<>();
-            s.add(4.0, numbers);
-            
-            byte[] data = SerializationUtils.serialize((Serializable) numbers);
+            byte[] data = SerializationUtils.serialize((Serializable) update);
             MqttMessage mqttmessage = new MqttMessage(data);
             mqttmessage.setQos(qos);
             sampleClient.publish(topicPublisher, mqttmessage);
@@ -77,8 +61,8 @@ public class MQTT_handler {
         }
     }
 
-    public void publishSignal(List<Integer> numbers){
-
+    /*public void publishSignal(List<Integer> numbers){
+        SignalDomain<>
         MultiOnlineSignal multiOnlineSignal = new MultiOnlineSignal();
         MultiOnlineSpaceTimeSignal multiOnlineSpaceTimeSignal = new MultiOnlineSpaceTimeSignal(6, );
 
@@ -95,6 +79,5 @@ public class MQTT_handler {
         TimeChain<Double, AbstractInterval<Double>> timeChain = new TimeChain<Double, AbstractInterval<Double>>(Double.MAX_VALUE);
         timeChain.add(new Segment<>(2.0, new AbstractInterval<Double>(4.5, 6.4)));
         onlineSignal.refine(timeChain);
-
-    }
+    }*/
 }

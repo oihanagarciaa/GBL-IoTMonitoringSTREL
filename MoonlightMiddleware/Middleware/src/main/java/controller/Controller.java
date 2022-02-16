@@ -1,32 +1,36 @@
 package controller;
 
-import view.Screen;
+import eu.quanticol.moonlight.io.MoonLightRecord;
+import eu.quanticol.moonlight.signal.online.Update;
+import model.DataConverter;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Controller implements ActionListener {
-    Screen view;
-    MQTT_handler mqtt_handler;
+public class Controller {
+    DataConverter converter;
+    /*
+    /!\ If different threads are going to access here at the same time, I have to make it synchronized
+     */
+    List<MoonLightRecord> records;
 
-    public Controller(Screen view, MQTT_handler mqttHandler){
-        this.view = view;
-        this.view.addJButtonListener(this);
-        this.mqtt_handler = mqttHandler;
+    public Controller() {
+        converter = new DataConverter();
+        records = new ArrayList<>();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        switch (e.getActionCommand()) {
-            case "Subscribe":
-                mqtt_handler.subscribe();
-                view.setRecievedMessage("");
-                break;
-            case "Send message":
-                mqtt_handler.publishMessage(view.getSendingMessage());
-                break;
-            default:
-                break;
-        }
+    public void convertSignalForMoonlight(String message){
+        MoonLightRecord m = converter.convertJSONtoMoonlightRecord(converter.convertStringtoJSONObject(message));
+        /* I need some value to know witch sensor we are talking about
+        Then, add the moonlightRecord in the adequate position of the list
+        records.add(index, m);
+         */
+        records.add(m);
+    }
+
+    public Update<Double, List<MoonLightRecord>> getUpdate(){
+        Update<Double, List<MoonLightRecord>> update = converter.createUpdate(records);
+        records.clear();
+        return update;
     }
 }
