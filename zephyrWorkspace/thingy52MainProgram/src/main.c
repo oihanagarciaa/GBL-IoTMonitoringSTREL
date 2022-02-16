@@ -1,6 +1,3 @@
-/*
-
-*/
 #include <zephyr.h>
 #include <device.h>
 #include <drivers/sensor.h>
@@ -31,50 +28,27 @@ static const struct json_obj_descr values_descr[] = {
     JSON_OBJ_DESCR_PRIM(struct values, co2, JSON_TOK_NUMBER),
     JSON_OBJ_DESCR_PRIM(struct values, tvoc, JSON_TOK_NUMBER),
 };
+
 struct values jsonValues;
 char bytes [125];
+
+const struct device *tempHumdev;
+const struct device *airDev;
 /////////////////////////////
 
 #define DEVICE_NAME CONFIG_BT_DEVICE_NAME
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
 
-// Some custom service uuids
-/*static struct bt_uuid_128 my_service_uuid = BT_UUID_INIT_128(
-    BT_UUID_128_ENCODE(0x10362e64, 0x3e14, 0x11ec, 0x9bbc, 0x0242ac130002));
-static struct bt_uuid_128 my_characteristics_uuid = BT_UUID_INIT_128(
-    BT_UUID_128_ENCODE(0xa3bfe44d, 0x30c3, 0x4a29, 0xacf9, 0x3414fc8972d0));
-// Statically define my custom service
-BT_GATT_SERVICE_DEFINE(
-    read_sensor_service, BT_GATT_PRIMARY_SERVICE(&my_service_uuid),
-    BT_GATT_CHARACTERISTIC(
-        &my_characteristics_uuid.uuid, // uuid
-        BT_GATT_CHRC_READ,             // service-characteristics is readable
-        BT_GATT_PERM_READ,             // only read-permissions for value
-        NULL, NULL, (void *)1));*/
+struct bt_conn *connection_ref;
 
 /* Set up advertising data */
 static const struct bt_data advertisement[] = {
     BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
-    BT_DATA_BYTES(BT_DATA_SVC_DATA16,
-    		      0xaa, 0xfe, /* Eddystone UUID */
-    		      0x20, /* Eddystone-TLM frame type */
-    		      'z', 'e', 'p', 'h', 'y', 'r',
-    		      'p', 'r', 'o', 'j', 'e', 'c', 't')
-};
+    BT_DATA_BYTES(BT_DATA_UUID128_ALL,
+                  BT_UUID_128_ENCODE(0x10362e64, 0x3e14, 0x11ec, 0x9bbc,
+                                     0x0242ac130002))};
 
-void scan_callback(const bt_addr_le_t *addr, int8_t rssi, uint8_t type,
-                   struct net_buf_simple *ad) {
-  // skip non-connectable advertisements
-  if (type != BT_GAP_ADV_TYPE_ADV_IND && type != BT_GAP_ADV_TYPE_ADV_IND) {
-    return;
-  }
-  printk("Scan response callback called.\n");
-}
 
-/* Set Scan Response data */
-static const struct bt_data scan_response[] = {
-    BT_DATA(BT_DATA_NAME_COMPLETE, DEVICE_NAME, DEVICE_NAME_LEN),
-};
 
 static void connection_established(struct bt_conn *conn, uint8_t err) {
   char addr[BT_ADDR_LE_STR_LEN];
@@ -154,8 +128,8 @@ static void readAirValues(const struct device *dev)
 	if (rc == 0) {
 		const struct ccs811_result_type *rp = ccs811_result(dev);
 
-		sensor_channel_get(dev, SENSOR_CHAN_CO2, &co2);
-		sensor_channel_get(dev, SENSOR_CHAN_VOC, &tvoc);
+		jsonValues.co2 = sensor_channel_get(dev, SENSOR_CHAN_CO2, &co2);
+		jsonValues.tvoc = sensor_channel_get(dev, SENSOR_CHAN_VOC, &tvoc);
 
 		printk("CCS811: %u ppm eCO2\n        %u ppb eTVOC\n", co2.val1, tvoc.val1);
         }
@@ -207,14 +181,43 @@ static void setUpAirDev(const struct device *dev)
 	}
 }
 
+//////////////////////////////////
+/* Declarations of read and write callbacks */
+static ssize_t read_callback(struct bt_conn *conn,
+                             const struct bt_gatt_attr *attr, void *buf,
+                             uint16_t len, uint16_t offset) {
+  // increase our meaningful data, use helper method to write it
+  readTempHumValues(tempHumdev);
+  readAirValues(airDev);
+  return bt_gatt_attr_read(conn, attr, buf, len, offset, &jsonValues, sizeof(jsonValues));
+}
+/* Write callback, currently, do nothing, also not used */
+ssize_t write_callback(struct bt_conn *conn, const struct bt_gatt_attr *attr,
+                       const void *buf, uint16_t len, uint16_t offset,
+                       uint8_t flags) {
+  return 0;
+}
 
+static struct bt_uuid_128 my_service_uuid = BT_UUID_INIT_128(
+    BT_UUID_128_ENCODE(0x10362e64, 0x3e14, 0x11ec, 0x9bbc, 0x0242ac130002));
+
+static struct bt_uuid_128 my_characteristics_uuid = BT_UUID_INIT_128(
+    BT_UUID_128_ENCODE(0xa3bfe44d, 0x30c3, 0x4a29, 0xacf9, 0x3414fc8972d0));
+
+BT_GATT_SERVICE_DEFINE(
+    read_sensor_service, BT_GATT_PRIMARY_SERVICE(&my_service_uuid),
+    BT_GATT_CHARACTERISTIC(
+        &my_characteristics_uuid.uuid, // uuid
+        BT_GATT_CHRC_READ,             // service-characteristics is readable
+        BT_GATT_PERM_READ,             // read and write permissions
+        &read_callback, &write_callback, (void *)1));
 
 void main(void)
 {
-	const struct device *tempHumdev = device_get_binding("HTS221");
+	tempHumdev = device_get_binding("HTS221");
 	setUpTempHumDev(tempHumdev);
 
-	const struct device *airDev = device_get_binding(DT_LABEL(DT_INST(0, ams_ccs811)));
+	airDev = device_get_binding(DT_LABEL(DT_INST(0, ams_ccs811)));
 	setUpAirDev(airDev);
 /////////////////////////////////
 	int err;
@@ -232,8 +235,8 @@ void main(void)
 	  printk("Set up advertising.");
 
 	  struct bt_le_adv_param adv_param = {
-                .id = BT_ID_DEFAULT,
-                .sid = 0,
+                .id = 'DE0364',
+                .sid = 1,
                 .secondary_max_skip = 0,
                 .options = (BT_LE_ADV_OPT_CONNECTABLE | BT_LE_ADV_OPT_USE_NAME |
                             BT_LE_ADV_OPT_FORCE_NAME_IN_AD),
@@ -252,13 +255,5 @@ void main(void)
             printk("Started advertising.\n");
           }
 ////////////////////////////////
-	while (!IS_ENABLED(CONFIG_HTS221_TRIGGER)) {
-		readTempHumValues(tempHumdev);
-		readAirValues(airDev);
 
-		//json_obj_encode_buf(values_descr, ARRAY_SIZE(values_descr), &jsonValues, bytes, 125);
-
-		k_sleep(K_MSEC(5000));
-	}
-	k_sleep(K_FOREVER);
 }
