@@ -14,13 +14,6 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-      - name: Cache Gradle packages
-        working-directory: ${{runner.workspace}}/GBL-IoTMonitoringSTREL/MoonlightMiddleware
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
       - name: Change wrapper permissions
         working-directory: ${{runner.workspace}}/GBL-IoTMonitoringSTREL/MoonlightMiddleware
         run: chmod +x gradlew
