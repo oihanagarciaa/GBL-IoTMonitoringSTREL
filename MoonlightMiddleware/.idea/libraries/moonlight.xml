@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="moonlight">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/moonlight.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
