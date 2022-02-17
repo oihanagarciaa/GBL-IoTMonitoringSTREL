@@ -27,10 +27,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Change wrapper permissions
-        working-directory: ${{runner.workspace}}/MoonlightMiddleware
+        working-directory: ${{runner.workspace}}/GBL-IoTMonitoringSTREL/MoonlightMiddleware
         run: chmod +x gradlew
       - name: Build and analyze
-        working-directory: ${{runner.workspace}}/MoonlightMiddleware
+        working-directory: ${{runner.workspace}}/GBL-IoTMonitoringSTREL/MoonlightMiddleware
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
