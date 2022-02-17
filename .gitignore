@@ -1,28 +1,31 @@
-# Java
-*.iml
-.idea/
-.launch
-dependency-reduced-pom.xml
-.project
-.classpath
-.DS_Store
-build/
+# Gradle cache
 .gradle
-.settings
-out/
-bin/
-xtend-gen
-xtext-gen
-*.asv
-output/
-api_resources/
+*/.gradle
 
-distribution/**/**
-distribution_files/matlab/moonlight/jar
-distribution_files/matlab/moonlight/script
-distribution_files/python/.ipynb_checkpoints/
-distribution_files/python/jar/
-distribution_files/java/build
-distribution_files/java/lib/moonlight.jar
-distribution_files/console/
-!distribution_files/matlab/moonlight/script/.placeHolder
+# JetBrains project user-specific files
+.idea
+*/.idea
+
+# build directory
+build
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# output dir
+out/
+
+# TODO: temp
+gradle.properties
