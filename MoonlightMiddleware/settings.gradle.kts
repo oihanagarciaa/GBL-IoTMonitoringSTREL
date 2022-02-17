@@ -1,5 +1,2 @@
-rootProject.name = "MoonlightMiddleware"
-include("probaGradle")
-include("probaMQTT")
-include("Middleware")
 
+rootProject.name = "MoonlightMiddleware"
