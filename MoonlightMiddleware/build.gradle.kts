@@ -11,6 +11,11 @@ repositories {
     mavenCentral()
 }
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 sonarqube {
     properties {
         property("sonar.projectKey", "oihanagarciaa_GBL-IoTMonitoringSTREL")
