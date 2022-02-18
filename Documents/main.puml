@@ -1,0 +1,57 @@
+@startuml
+
+class Sensor {
+    public Sensor(Broker broker)
+    private broker;
+    void publish(Message m)
+}
+
+class Broker {
+    void receivedSubscriber(Topic t, Subscriber s)
+
+    ' receivedMessage: it is the method that gets called when someone publishes something [OPTIONAL]
+    void receivedMessage(Topic t, Message m)
+}
+
+Sensor -|> Broker
+
+package Middleware {
+
+Subscriber -|> Broker
+    class Subscriber {
+        void subscribe(Topic t)
+        void receive(Topic t, Message m)
+    }
+
+Controller -|> Subscriber
+Controller -|> ServiceHandler
+Controller -|> DataConverter
+
+   class Controller {
+        void initializeService(Service moonlight)
+        void establishConnection(ConnType MQTT, Broker broker)
+
+        void runForever()
+   }
+
+    class DataConverter {
+        Update fromMessageToUpdate(Message m)
+    }
+
+    class ServiceHandler {
+        void initializeService(enum ServiceID)
+        void startService()
+        void endService()
+        void updateService(Update u)
+        T getResponseFromService(Info i)
+    }
+
+ServiceHandler -|> Moonlight
+
+}
+
+
+package Moonlight {}
+
+
+@enduml
