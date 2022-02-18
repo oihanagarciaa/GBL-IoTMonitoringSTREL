@@ -42,7 +42,7 @@ Controller -|> DataConverter
         void initializeService(enum ServiceID)
         void startService()
         void endService()
-        void updateService(Update u)
+        void askService(Update u)
         T getResponseFromService(Info i)
     }
 

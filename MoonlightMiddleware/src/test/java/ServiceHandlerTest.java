@@ -24,11 +24,14 @@ class ServiceHandlerTest {
     void ableToDealWithFailingServices() {
         Service service = new FakeNotWorkingService();
 
-        //assertFalse(service.run());
+        ServiceHandler handler = new ServiceHandler(ServiceType.MOONLIGHT, service);
+
+        handler.startService();
+        assertFalse(service.isRunning());
     }
 
 
-    static class FakeWorkingService implements Service {
+    static class FakeWorkingService implements Service<Double, Double> {
         private boolean running = false;
         @Override
         public boolean isRunning() {
@@ -48,12 +51,20 @@ class ServiceHandlerTest {
         public void stop() {
             running = false;
         }
+
+        @Override
+        public void askService(Double aDouble) {
+
+        }
+
+        @Override
+        public Double getResponseFromService() {
+            return null;
+        }
     }
 
-    static class FakeNotWorkingService implements Service {
-        /**
-         * @return true if it is running
-         */
+    static class FakeNotWorkingService implements Service<Double, Double> {
+
         @Override
         public boolean isRunning() {
             return false;
@@ -64,20 +75,24 @@ class ServiceHandlerTest {
             return;
         }
 
-        /**
-         * Setup the basics for the service
-         */
         @Override
         public void init() {
 
         }
 
-        /**
-         * The service will stop functioning afterwords.
-         */
         @Override
         public void stop() {
 
+        }
+
+        @Override
+        public void askService(Double aDouble) {
+
+        }
+
+        @Override
+        public Double getResponseFromService() {
+            return null;
         }
     }
 
