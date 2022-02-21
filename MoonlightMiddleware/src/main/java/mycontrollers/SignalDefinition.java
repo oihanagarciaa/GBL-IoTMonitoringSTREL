@@ -1,4 +1,4 @@
-package model;
+package mycontrollers;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.DataHandler;

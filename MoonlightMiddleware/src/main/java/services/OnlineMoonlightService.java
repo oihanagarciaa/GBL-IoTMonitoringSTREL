@@ -1,27 +1,27 @@
 package services;
 
-import controller.MonitorController;
+import eu.quanticol.moonlight.formula.Formula;
+import moonlight.OnlineMoonlightController;
+import mycontrollers.MonitorController;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.AtomicFormula;
-import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
-import eu.quanticol.moonlight.signal.online.OnlineSignal;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
 
 import java.util.List;
 
-
 public class OnlineMoonlightService implements Service<Update<Double, List<MoonLightRecord>>,
         SpaceTimeSignal<Double, AbstractInterval<Boolean>>>{
-    private MonitorController monitorController;
+    private OnlineMoonlightController monitorController;
     private Update<Double, List<MoonLightRecord>> newUpdate;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> results;
 
     public OnlineMoonlightService(){
-        monitorController = new MonitorController();
+        monitorController = new OnlineMoonlightController();
     }
+
     private OnlineSpaceTimeMonitor<Double, MoonLightRecord, Boolean> onlineMonitor;
 
     @Override
@@ -36,8 +36,8 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
 
     @Override
     public void init() {
-        //TODO: change the formula
-        onlineMonitor = monitorController.onlineMonitorInit(new AtomicFormula("manyPeople"));
+        Formula onlineNoiseNearbySchool = monitorController.formula();
+        onlineMonitor = monitorController.onlineMonitorInit(onlineNoiseNearbySchool);
     }
 
     @Override
@@ -54,6 +54,5 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
     public SpaceTimeSignal<Double, AbstractInterval<Boolean>> getResponseFromService() {
         return results;
     }
-
 
 }

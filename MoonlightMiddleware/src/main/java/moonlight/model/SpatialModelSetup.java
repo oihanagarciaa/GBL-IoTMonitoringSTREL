@@ -1,4 +1,4 @@
-package model;
+package moonlight.model;
 
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Pair;

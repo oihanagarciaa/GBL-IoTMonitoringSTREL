@@ -1,4 +1,4 @@
-package model;
+package mycontrollers;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.DataHandler;
@@ -10,12 +10,12 @@ import org.json.simple.JSONValue;
 import java.util.List;
 
 
-public class DataConverter {
+public class MyDataConverter {
 
     RecordHandler factory;
 
 
-    public DataConverter(){
+    public MyDataConverter(){
         factory = new RecordHandler(DataHandler.REAL, DataHandler.REAL, DataHandler.REAL, DataHandler.REAL);
     }
 

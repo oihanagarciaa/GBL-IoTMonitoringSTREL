@@ -1,7 +1,7 @@
 package main;
 
-import controller.Controller;
-import controller.MQTT_handler;
+import mycontrollers.Controller;
+import mycontrollers.MQTT_handler;
 
 public class Principal {
     static final int size = 6;

@@ -1,4 +1,4 @@
-package controller;
+package mycontrollers;
 
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -17,7 +17,7 @@ import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
-import model.SpatialModelSetup;
+import moonlight.model.SpatialModelSetup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,7 +154,7 @@ public class MonitorController {
         atomicFormulas.put("manyPeople", par -> a -> a.get(2, Integer.class) < MAX_PERSONS);
     }
 
-    private static Formula formula() {
+    public static Formula formula() {
         Formula noiseLevel = new AtomicFormula("noiseLevel");
         /*Formula isSchool = new AtomicFormula("isSchool");
         Formula noiseNearby = new EscapeFormula("distance", noiseLevel);
