@@ -1,5 +1,6 @@
 package subscriber;
 
+
 public interface Subscriber<M> {
 
     void subscribe(String topic);

@@ -30,4 +30,6 @@ public class ServiceHandler {
         service.stop();
     }
 
+    //TODO: should I add getResults and setUpdate?
+
 }

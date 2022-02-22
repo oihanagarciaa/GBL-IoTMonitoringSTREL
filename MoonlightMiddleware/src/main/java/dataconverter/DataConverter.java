@@ -11,7 +11,7 @@ public interface DataConverter<U, M> {
      *
      * @return
      */
-    U getDataToMonitor();
+    //U getDataToMonitor();
 
     /**
      *
