@@ -1,18 +1,15 @@
-import controller.Controller;
 import eu.quanticol.moonlight.domain.AbstractInterval;
+import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.DataHandler;
 import eu.quanticol.moonlight.signal.EnumerationHandler;
 import eu.quanticol.moonlight.signal.RecordHandler;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
-import moonlight.OnlineMoonlightController;
-import org.junit.Before;
+import eu.quanticol.moonlight.space.SpatialModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import services.OnlineMoonlightService;
-import services.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,17 +24,19 @@ public class OnlineMoonlightServiceTest {
 
     @BeforeEach
     public void start(){
-        onlineMoonlightService = new OnlineMoonlightService();
+        Formula formula = mock(Formula.class);
+        SpatialModel<?> model = mock(SpatialModel.class);
+        onlineMoonlightService = new OnlineMoonlightService(formula, model);
         onlineMoonlightService.init();
     }
 
     @Test
-    public void serviceInitialization(){
+    void serviceInitialization(){
         assertTrue(onlineMoonlightService.isRunning());
     }
 
     @Test
-    public void monitorWithoutUpdate(){
+    void monitorWithoutUpdate(){
         //TODO: change the exception class
         assertThrows(Exception.class, onlineMoonlightService::run);
     }

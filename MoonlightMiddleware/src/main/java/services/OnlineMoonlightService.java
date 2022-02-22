@@ -1,10 +1,9 @@
 package services;
 
 import eu.quanticol.moonlight.formula.Formula;
-import moonlight.OnlineMoonlightController;
-import mycontrollers.MonitorController;
+import eu.quanticol.moonlight.space.SpatialModel;
+import moonlight.OnlineMoonlightSetup;
 import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
@@ -14,12 +13,12 @@ import java.util.List;
 
 public class OnlineMoonlightService implements Service<Update<Double, List<MoonLightRecord>>,
         SpaceTimeSignal<Double, AbstractInterval<Boolean>>>{
-    private OnlineMoonlightController monitorController;
+    private OnlineMoonlightSetup monitorController;
     private Update<Double, List<MoonLightRecord>> newUpdate;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> results;
 
-    public OnlineMoonlightService(){
-        monitorController = new OnlineMoonlightController();
+    public OnlineMoonlightService(Formula formula, SpatialModel<?> model) {
+        monitorController = new OnlineMoonlightSetup();
     }
 
     private OnlineSpaceTimeMonitor<Double, MoonLightRecord, Boolean> onlineMonitor;

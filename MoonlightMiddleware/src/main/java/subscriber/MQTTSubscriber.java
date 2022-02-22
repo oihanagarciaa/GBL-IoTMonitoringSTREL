@@ -1,16 +1,15 @@
 package subscriber;
 
-import controller.ServiceController;
+import controller.MainController;
 import messages.Message;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
-import services.Service;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<Message> {
-    final private ServiceController controller;
+    final private MainController controller;
 
-    public MQTTSubscriber(String broker, ServiceController controller){
+    public MQTTSubscriber(String broker, MainController controller){
         this.controller = controller;
     }
 

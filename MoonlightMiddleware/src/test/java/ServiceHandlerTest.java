@@ -3,7 +3,6 @@
 import org.junit.jupiter.api.Test;
 import services.Service;
 import services.ServiceHandler;
-import services.ServiceType;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

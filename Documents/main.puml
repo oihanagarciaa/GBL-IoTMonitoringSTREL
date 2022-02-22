@@ -15,6 +15,16 @@ class Broker {
 
 Sensor -|> Broker
 
+
+class Main {
+    void main()
+    // I will use MQTT
+    // I will use this spatial configuration
+    // I want to check this Formula
+    loadSettings()
+}
+
+
 package Middleware {
 
 Subscriber -|> Broker
@@ -24,10 +34,22 @@ Subscriber -|> Broker
     }
 
 Controller -|> Subscriber
-Controller -|> ServiceHandler
+Controller -|> Service
 Controller -|> DataConverter
 
+
+    class Service {
+        void initializeService(enum ServiceID)
+        void startService()
+        void endService()
+        void askService(Update u)
+        T getResponseFromService(Info i)
+    }
+
+
+
    class Controller {
+        Controller()
         void initializeService(Service moonlight)
         void establishConnection(ConnType MQTT, Broker broker)
 
@@ -38,15 +60,7 @@ Controller -|> DataConverter
         Update fromMessageToUpdate(Message m)
     }
 
-    class ServiceHandler {
-        void initializeService(enum ServiceID)
-        void startService()
-        void endService()
-        void askService(Update u)
-        T getResponseFromService(Info i)
-    }
-
-ServiceHandler -|> Moonlight
+Service -|> Moonlight
 
 }
 
