@@ -39,10 +39,10 @@ public class OnlineMoonlightSetup {
     }
 
     public OnlineSpaceTimeMonitor<Double, MoonLightRecord, Boolean> onlineMonitorInit(Formula f){
-        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = formulas.setOnlineAtoms();
+        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = formulas.getOnlineAtoms();
 
         onlineMonitor = new OnlineSpaceTimeMonitor<>(f, SIZE, new BooleanDomain(),
-                locSvc, atoms, formulas.getDistanceFunctions());
+                locSvc, atoms, formulas.getdistanceFUnctions());
 
         return onlineMonitor;
     }

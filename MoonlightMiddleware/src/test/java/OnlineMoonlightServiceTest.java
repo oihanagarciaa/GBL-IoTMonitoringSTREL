@@ -6,14 +6,15 @@ import eu.quanticol.moonlight.signal.EnumerationHandler;
 import eu.quanticol.moonlight.signal.RecordHandler;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
+import eu.quanticol.moonlight.space.DistanceStructure;
+import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import services.OnlineMoonlightService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -26,7 +27,10 @@ public class OnlineMoonlightServiceTest {
     public void start(){
         Formula formula = mock(Formula.class);
         SpatialModel<?> model = mock(SpatialModel.class);
-        onlineMoonlightService = new OnlineMoonlightService(formula, model);
+        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = mock(Map.class);
+        HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions = mock(HashMap.class);
+        LocationService<Double, ?> locSvc = mock(LocationService.class);
+        onlineMoonlightService = new OnlineMoonlightService(formula, model, atoms, locSvc, distanceFunctions);
         onlineMoonlightService.init();
     }
 

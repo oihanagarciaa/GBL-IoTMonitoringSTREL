@@ -1,12 +1,17 @@
 package controller;
 
+import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
+import eu.quanticol.moonlight.io.MoonLightRecord;
+import eu.quanticol.moonlight.space.DistanceStructure;
+import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
-import messages.Message;
-import services.Service;
 import services.MonitorType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  *  The interface between the user/client and the middleware
@@ -23,6 +28,9 @@ public interface Controller {
     void setMonitorType(MonitorType monitorType);
     void setFormula(Formula formula);
     void setSpatialModel(SpatialModel<?> model);
+    void setAtomicFormulas(Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms);
+    void setLocationService(LocationService<Double, ?> locSvc);
+    void setDistanceFunctions(HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions);
 
     /**
      * Running method
