@@ -9,18 +9,16 @@ package services;
  *
  * @see Service
  */
-public class ServiceHandler {
-    private final Service service;
+public class ServiceHandler<U, T> {
+    private final Service<U, T> service;
 
-    public ServiceHandler(ServiceType type, Service service) {
-        if(type == ServiceType.MOONLIGHT) {
-            //service = null; //todo: should be MoonlightService
-            this.service = service;
-            service.init();
-        } else
-            throw new UnsupportedOperationException("Unknown service passed");
-
+    public ServiceHandler(Service<U, T> service) {
+        //service = null; //todo: should be MoonlightService
+        this.service = service;
+        service.init();
     }
+
+    //Theads
 
     public void startService() {
         service.run();

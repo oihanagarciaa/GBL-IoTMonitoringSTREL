@@ -1,5 +1,6 @@
 package controller;
 
+import messages.Message;
 import services.Service;
 
 /**
@@ -17,4 +18,6 @@ public interface Controller {
     void establishConnection(ConnType connType, String broker);
 
     void runForever();
+
+    void updateData(Message message);
 }

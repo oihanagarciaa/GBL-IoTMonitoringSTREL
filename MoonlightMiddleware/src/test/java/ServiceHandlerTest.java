@@ -13,7 +13,7 @@ class ServiceHandlerTest {
     @Test
     void ableToStartAService() {
         Service service = new FakeWorkingService();
-        ServiceHandler handler = new ServiceHandler(ServiceType.MOONLIGHT, service);
+        ServiceHandler handler = new ServiceHandler(service);
 
         handler.startService();
 
@@ -24,7 +24,7 @@ class ServiceHandlerTest {
     void ableToDealWithFailingServices() {
         Service service = new FakeNotWorkingService();
 
-        ServiceHandler handler = new ServiceHandler(ServiceType.MOONLIGHT, service);
+        ServiceHandler handler = new ServiceHandler(service);
 
         handler.startService();
         assertFalse(service.isRunning());
