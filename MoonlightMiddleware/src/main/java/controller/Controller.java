@@ -23,14 +23,13 @@ public interface Controller {
     /**
      * Setup methods
      */
-    void setDataSource(String sourceId);
+    void setDataSource(String sourceBrokerId);
     void setConnectionType(ConnType connectionType);
     void setMonitorType(MonitorType monitorType);
     void setFormula(Formula formula);
-    void setSpatialModel(SpatialModel<?> model);
+    void setSpatialModel(SpatialModel<Double> model);
     void setAtomicFormulas(Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms);
-    void setLocationService(LocationService<Double, ?> locSvc);
-    void setDistanceFunctions(HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions);
+    void setDistanceFunctions(HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions);
 
     /**
      * Running method

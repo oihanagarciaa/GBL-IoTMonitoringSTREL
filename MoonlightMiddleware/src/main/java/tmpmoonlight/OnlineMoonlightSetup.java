@@ -1,4 +1,4 @@
-package moonlight;
+package tmpmoonlight;
 
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -9,8 +9,8 @@ import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
-import moonlight.model.OnlineFormulas;
-import moonlight.model.SpatialModelSetup;
+import tmpmoonlight.model.OnlineFormulas;
+import tmpmoonlight.model.SpatialModelSetup;
 
 import java.util.Map;
 import java.util.function.Function;

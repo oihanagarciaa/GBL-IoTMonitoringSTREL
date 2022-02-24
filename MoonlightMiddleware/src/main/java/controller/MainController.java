@@ -8,7 +8,6 @@ import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
 import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import messages.Message;
 import services.MonitorType;
@@ -26,33 +25,32 @@ import java.util.stream.Collectors;
 /**
  * Main entry point of the middleware
  */
-public class MainController implements Controller{
-    Subscriber<Message> subscriber;
-    DataConverter<Update<Double, List<MoonLightRecord>>, Message> dataConverter;
+public class MainController implements Controller {
+    Subscriber<String> subscriber;
+    DataConverter<Update<Double, List<MoonLightRecord>>, String> dataConverter;
     String broker;
     Service<Update<Double, List<MoonLightRecord>>, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
-    private SpatialModel<?> model;
+
+    private SpatialModel<Double> model;
     private Formula formula;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
     private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
-    private LocationService<Double,?> locSvc;
-    private HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions;
+    private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
     public void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
-            //TODO: add distance function, atoms
-            service = new OnlineMoonlightService(formula, model, atoms, locSvc, distanceFunctions);
-        } else
+            service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
+            dataConverter = new OnlineMoonlightDataConverter();
+        } else {
             throw new UnsupportedOperationException("Not supported monitor type");
-
+        }
         service.init();
     }
 
     public void establishConnection() {
         if(connectionType == ConnType.MQTT){
-            //TODO: create a subscriber. One subscriber for each protocol?
             subscriber = new MQTTSubscriber(broker, this);
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Rest not implemented");
@@ -75,16 +73,16 @@ public class MainController implements Controller{
         throw new UnsupportedOperationException("This is not implemented yet");
     }
 
-    public void updateData(Message message) {
-        service.askService(dataConverter.fromMessageToMonitorData(message));
+    public void updateData(String message) {
+        //TODO: Buffer
+        service.updateService(dataConverter.fromMessageToMonitorData(message));
         service.run();
         result = service.getResponseFromService();
-
     }
 
     @Override
-    public void setDataSource(String sourceId) {
-        broker = sourceId;
+    public void setDataSource(String sourceBrokerId) {
+        broker = sourceBrokerId;
     }
 
     @Override
@@ -104,8 +102,8 @@ public class MainController implements Controller{
     }
 
     @Override
-    public void setSpatialModel(SpatialModel<?> model) {
-        this.model = model;
+    public void setSpatialModel(SpatialModel<Double> model) {
+        this.model = (SpatialModel<Double>) model;
     }
 
     @Override
@@ -114,12 +112,7 @@ public class MainController implements Controller{
     }
 
     @Override
-    public void setLocationService(LocationService<Double, ?> locSvc) {
-        this.locSvc = locSvc;
-    }
-
-    @Override
-    public void setDistanceFunctions(HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions) {
+    public void setDistanceFunctions(HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
         this.distanceFunctions = distanceFunctions;
     }
 
@@ -129,7 +122,7 @@ public class MainController implements Controller{
             initializeService();
             establishConnection();
             subscriber.subscribe("iot/sensors");
-            dataConverter = new OnlineMoonlightDataConverter();
+            dataConverter.initDataConverter(model.size());
             return true;
         } catch (Exception e) {
             // TODO: dangerous catch-all exception, refactor
@@ -143,4 +136,5 @@ public class MainController implements Controller{
                      .map(Object::toString) // convert signal segments to strings
                      .collect(Collectors.toList()); // recollect as list of strings
     }
+
 }

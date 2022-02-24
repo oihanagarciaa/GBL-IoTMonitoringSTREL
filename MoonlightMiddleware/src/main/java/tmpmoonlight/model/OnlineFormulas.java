@@ -1,8 +1,7 @@
-package moonlight.model;
+package tmpmoonlight.model;
 
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.DoubleDistance;
-import eu.quanticol.moonlight.formula.Parameters;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.SpatialModel;

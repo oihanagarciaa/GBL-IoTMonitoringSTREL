@@ -1,12 +1,11 @@
 package subscriber;
 
 import controller.MainController;
-import messages.Message;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MQTTSubscriber implements MqttCallback, Subscriber<Message> {
+public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     final private MainController controller;
 
     public MQTTSubscriber(String broker, MainController controller){
@@ -20,7 +19,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<Message> {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        receive(topic, fromMQTTtoMessage(message));
+        receive(topic, message.toString());
     }
 
     @Override
@@ -34,12 +33,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<Message> {
     }
 
     @Override
-    public void receive(String topic, Message message) {
+    public void receive(String topic, String message) {
         controller.updateData(message);
-    }
-
-    public Message fromMQTTtoMessage(MqttMessage mqttMessage){
-        //TODO
-        return null;
     }
 }

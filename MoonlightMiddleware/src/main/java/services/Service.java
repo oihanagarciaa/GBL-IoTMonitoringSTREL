@@ -29,7 +29,7 @@ public interface Service<U, T> {
      * Pass the update
      * @param u
      */
-    void askService(U u);
+    void updateService(U u);
 
     /**
      * Get the results

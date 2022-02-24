@@ -1,4 +1,4 @@
-package mycontrollers;
+package tmpmycontrollers;
 
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -17,7 +17,7 @@ import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
-import moonlight.model.SpatialModelSetup;
+import tmpmoonlight.model.SpatialModelSetup;
 
 import java.util.ArrayList;
 import java.util.HashMap;

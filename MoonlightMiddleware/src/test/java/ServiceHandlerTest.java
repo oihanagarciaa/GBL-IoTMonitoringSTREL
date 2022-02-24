@@ -52,7 +52,7 @@ class ServiceHandlerTest {
         }
 
         @Override
-        public void askService(Double aDouble) {
+        public void updateService(Double aDouble) {
 
         }
 
@@ -85,7 +85,7 @@ class ServiceHandlerTest {
         }
 
         @Override
-        public void askService(Double aDouble) {
+        public void updateService(Double aDouble) {
 
         }
 

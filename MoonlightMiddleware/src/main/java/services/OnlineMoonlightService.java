@@ -2,7 +2,6 @@ package services;
 
 import eu.quanticol.moonlight.domain.BooleanDomain;
 import eu.quanticol.moonlight.formula.Formula;
-import eu.quanticol.moonlight.formula.Parameters;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
@@ -11,6 +10,7 @@ import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
+import eu.quanticol.moonlight.util.Utils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,25 +20,24 @@ import java.util.function.Function;
 public class OnlineMoonlightService implements Service<Update<Double, List<MoonLightRecord>>,
         SpaceTimeSignal<Double, AbstractInterval<Boolean>>>{
 
-    private Formula formula;
-    private SpatialModel<?> spatialModel;
-    private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
-    private HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions;
-    private LocationService<Double, ?> locSvc;
+    final private Formula formula;
+    final private SpatialModel<Double> spatialModel;
+    final private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
+    final private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
+    final private LocationService<Double, Double> locSvc;
 
     private OnlineSpaceTimeMonitor<?, MoonLightRecord, Boolean> onlineMonitor;
 
     private Update<Double, List<MoonLightRecord>> newUpdate;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> results;
 
-    public OnlineMoonlightService(Formula formula, SpatialModel<?> model,
+    public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
             Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms,
-            LocationService<Double, ?> locationService,
-            HashMap<String, Function<SpatialModel<?>, DistanceStructure<?, Double>>> distanceFunctions) {
+            HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
-        this.locSvc = locationService;
+        locSvc = Utils.createLocServiceStatic(0, 1, 10, this.spatialModel);
         this.distanceFunctions = distanceFunctions;
     }
 
@@ -65,7 +64,7 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
     }
 
     @Override
-    public void askService(Update<Double, List<MoonLightRecord>> update) {
+    public void updateService(Update<Double, List<MoonLightRecord>> update) {
         newUpdate = update;
     }
 
