@@ -12,6 +12,7 @@ import eu.quanticol.moonlight.util.Pair;
 import eu.quanticol.moonlight.util.Utils;
 import services.MonitorType;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -33,7 +34,7 @@ public class Principal {
         initMainController();
         c.run();
         Thread thread = new Thread(){
-            final Random rand = new Random();
+            final SecureRandom rand = new SecureRandom();
             @Override
             public void run() {
                 try{
