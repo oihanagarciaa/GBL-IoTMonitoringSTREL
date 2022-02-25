@@ -1,7 +1,7 @@
 package controller;
 
 import dataconverter.DataConverter;
-import dataconverter.OnlineMoonlightDataConverter;
+import dataconverter.OnlineMoonlightBuffer;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
@@ -9,7 +9,6 @@ import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.SpatialModel;
-import messages.Message;
 import services.MonitorType;
 import services.OnlineMoonlightService;
 import services.Service;
@@ -26,6 +25,7 @@ import java.util.stream.Collectors;
  * Main entry point of the middleware
  */
 public class MainController implements Controller {
+    //TODO: subscriber receives String, maube change to Message
     Subscriber<String> subscriber;
     DataConverter<Update<Double, List<MoonLightRecord>>, String> dataConverter;
     String broker;
@@ -35,14 +35,16 @@ public class MainController implements Controller {
 
     private SpatialModel<Double> model;
     private Formula formula;
+    //TODO: it is no compulsory to be Abstract interval
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
     private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
+    //TODO: distance functions are not compulsory
     private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
     public void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
-            dataConverter = new OnlineMoonlightDataConverter();
+            dataConverter = new OnlineMoonlightBuffer();
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }
@@ -74,7 +76,6 @@ public class MainController implements Controller {
     }
 
     public void updateData(String message) {
-        //TODO: Buffer
         service.updateService(dataConverter.fromMessageToMonitorData(message));
         service.run();
         result = service.getResponseFromService();

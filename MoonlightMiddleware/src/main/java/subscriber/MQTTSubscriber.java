@@ -29,7 +29,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void subscribe(String topic) {
-
+        //TODO: subscribe
     }
 
     @Override

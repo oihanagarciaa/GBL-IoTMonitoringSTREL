@@ -1,7 +1,6 @@
 package main;
 
 import controller.ConnType;
-import controller.Controller;
 import controller.MainController;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.DoubleDistance;
@@ -16,6 +15,7 @@ import services.MonitorType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.function.Function;
 
 public class Principal {
@@ -28,6 +28,7 @@ public class Principal {
 
     //TODO: the client has to set up the controller
     public static void main(String[] args) {
+
         c = new MainController();
         initMainController();
         c.run();
@@ -35,30 +36,37 @@ public class Principal {
 
             @Override
             public void run() {
-                Random rand = new Random();
-                int i, n, p;
-                do {
-                    try {
-                        i = rand.nextInt(6);
-                        n = 50+rand.nextInt(30);
-                        p = 20+rand.nextInt(10);
-                        String s = "{\n" +
-                                "            \"id\": "+i+"\n" +
-                                "            \"place\":"+ i+"\n" +
-                                "            \"noise\":"+ n+"\n" +
-                                "            \"people\":"+ p+"\n" +
-                                "         }";
-                        c.updateData(s);
-                        System.out.println("RESULTS:\n"+c.getResults()+"\n- - - - - - - - - - - - - - - - - - - -");
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }while (true);
+                try{
+                    Random rand = new Random();
+                    int i, n, p;
+                    do {
+                            i = rand.nextInt(6);
+                            n = 50+rand.nextInt(30);
+                            p = 20+rand.nextInt(10);
+                            String s = "{\n" +
+                                    "            \"id\": "+i+"\n" +
+                                    "            \"place\":"+ i+"\n" +
+                                    "            \"noise\":"+ n+"\n" +
+                                    "            \"people\":"+ p+"\n" +
+                                    "         }";
+                            c.updateData(s);
+                            System.out.println("RESULTS:\n"+c.getResults()+"\n- - - - - - - - - - - - - - - - - - - -");
+                            Thread.sleep(500);
+                    }while (true);
+                }catch(InterruptedException e) {
 
+                }
             }
         };
-        thread.run();
+        Scanner teclado = new Scanner(System.in);
+        thread.start();
+        teclado.nextLine();
+        thread.interrupt();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void initMainController() {
@@ -87,13 +95,14 @@ public class Principal {
         return Utils.createSpatialModel(size, cityMap);
     }
 
+    //TODO: Escape formula gets stuck
     public static Formula formula() {
         Formula controlPeople = new AtomicFormula("manyPeople");
         /*Formula isSchool = new AtomicFormula("isSchool");
         Formula noiseLevel = new AtomicFormula("noiseLevel");
-        Formula noiseNearby = new EscapeFormula("distance", noiseLevel);
+        Formula noiseNearby = new EscapeFormula("distance", noiseLevel);*/
 
-        return new OrFormula(new NegationFormula(isSchool), noiseNearby);*/
+        //return new OrFormula(new NegationFormula(isSchool), noiseNearby);
         return controlPeople;
     }
 

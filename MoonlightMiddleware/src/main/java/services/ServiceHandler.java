@@ -1,5 +1,6 @@
 package services;
 
+//TODO: this doesn't do nothing for the moment. Maybe delete
 /**
  * Handler for a generic service,
  * this should be an Abstract Factory for services,

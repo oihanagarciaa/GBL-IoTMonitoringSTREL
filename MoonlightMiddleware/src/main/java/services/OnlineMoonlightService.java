@@ -37,6 +37,7 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
+        //TODO: change start, end and dt?
         locSvc = Utils.createLocServiceStatic(0, 1, 10, this.spatialModel);
         this.distanceFunctions = distanceFunctions;
     }

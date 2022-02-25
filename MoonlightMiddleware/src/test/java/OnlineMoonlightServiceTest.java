@@ -41,12 +41,10 @@ public class OnlineMoonlightServiceTest {
 
     @Test
     void monitorWithoutUpdate(){
-        //TODO: change the exception class
         startOnlineMoonlightService();
-        assertThrows(Exception.class, onlineMoonlightService::run);
+        assertThrows(NullPointerException.class, onlineMoonlightService::run);
     }
 
-    //////No va
     @Test
     void getResponseFromServiceTest(){
         OnlineMoonlightService onlineMoonlightService;
