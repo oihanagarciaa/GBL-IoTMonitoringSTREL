@@ -20,11 +20,11 @@ import java.util.function.Function;
 public class OnlineMoonlightService implements Service<Update<Double, List<MoonLightRecord>>,
         SpaceTimeSignal<Double, AbstractInterval<Boolean>>>{
 
-    final private Formula formula;
-    final private SpatialModel<Double> spatialModel;
-    final private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
-    final private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
-    final private LocationService<Double, Double> locSvc;
+    private final Formula formula;
+    private final SpatialModel<Double> spatialModel;
+    private final Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
+    private final Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
+    private final LocationService<Double, Double> locSvc;
 
     private OnlineSpaceTimeMonitor<?, MoonLightRecord, Boolean> onlineMonitor;
 
@@ -33,7 +33,7 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
 
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
             Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms,
-            HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
+            Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
@@ -54,7 +54,7 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
 
     @Override
     public void init() {
-        onlineMonitor = new OnlineSpaceTimeMonitor(
+        onlineMonitor = new OnlineSpaceTimeMonitor<Double, MoonLightRecord, Boolean>(
                 formula, spatialModel.size(), new BooleanDomain(),
                 locSvc, atoms, distanceFunctions);
     }

@@ -11,7 +11,7 @@ public class OnlineMoonlightConverterTest {
     void convertWithoutInit(){
         OnlineMoonlightBuffer converter = new OnlineMoonlightBuffer();
 
-        assertThrows(NullPointerException.class, () ->{ converter.fromMessageToMonitorData(new String(""));});
+        assertThrows(NullPointerException.class, () -> converter.fromMessageToMonitorData(new String("")));
     }
 
     @Test

@@ -94,7 +94,6 @@ public class MainController implements Controller {
     @Override
     public void setMonitorType(MonitorType monitorType) {
         this.monitorType = monitorType;
-
     }
 
     @Override
@@ -104,7 +103,7 @@ public class MainController implements Controller {
 
     @Override
     public void setSpatialModel(SpatialModel<Double> model) {
-        this.model = (SpatialModel<Double>) model;
+        this.model = model;
     }
 
     @Override

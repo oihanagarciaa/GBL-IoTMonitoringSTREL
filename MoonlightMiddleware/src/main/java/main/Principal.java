@@ -33,11 +33,11 @@ public class Principal {
         initMainController();
         c.run();
         Thread thread = new Thread(){
-
+            final Random rand = new Random();
             @Override
             public void run() {
                 try{
-                    Random rand = new Random();
+
                     int i, n, p;
                     do {
                             i = rand.nextInt(6);
@@ -54,7 +54,7 @@ public class Principal {
                             Thread.sleep(500);
                     }while (true);
                 }catch(InterruptedException e) {
-
+                    Thread.currentThread().interrupt();
                 }
             }
         };
@@ -65,8 +65,9 @@ public class Principal {
         try {
             thread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
+
     }
 
     private static void initMainController() {

@@ -23,8 +23,7 @@ public class MQTT_handler {
 
     public MQTT_handler(int size, Controller controller){
         sub = new Subscriber(this, controller);
-        MemoryPersistence persistence = new MemoryPersistence();
-        try {
+        try(MemoryPersistence persistence = new MemoryPersistence()) {
             sampleClient = new MqttClient(brokerUrl, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);

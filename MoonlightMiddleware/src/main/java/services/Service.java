@@ -27,13 +27,13 @@ public interface Service<U, T> {
 
     /**
      * Pass the update
-     * @param u
+     * @param u Update, new collected data
      */
     void updateService(U u);
 
     /**
      * Get the results
-     * @return
+     * @return Gets the result of the monitor
      */
     T getResponseFromService();
 }
