@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * Main entry point of the middleware
  */
 public class MainController implements Controller {
-    //TODO: subscriber receives String, maube change to Message
+    //TODO: subscriber receives String, maybe change to Message
     Subscriber<String> subscriber;
     DataConverter<Update<Double, List<MoonLightRecord>>, String> dataConverter;
     String broker;

@@ -19,12 +19,12 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-public class OnlineMoonlightServiceTest {
+class OnlineMoonlightServiceTest {
 
     OnlineMoonlightService onlineMoonlightService;
 
 
-    public void startOnlineMoonlightService(){
+    private void startOnlineMoonlightService(){
         Formula formula = mock(Formula.class);
         SpatialModel model = mock(SpatialModel.class);
         Map atoms = mock(Map.class);
