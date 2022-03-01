@@ -11,7 +11,7 @@ class OnlineMoonlightConverterTest {
     void convertWithoutInit(){
         OnlineMoonlightBuffer converter = new OnlineMoonlightBuffer();
 
-        assertThrows(NullPointerException.class, () -> converter.fromMessageToMonitorData(new String("")));
+        assertThrows(NullPointerException.class, () -> converter.fromMessageToMonitorData(1, new String("")));
     }
 
     @Test
@@ -22,9 +22,10 @@ class OnlineMoonlightConverterTest {
         spyConverter.initDataConverter(Integer.MIN_VALUE);
         Update uExpected = mock(Update.class);
         String s = "";
-        doReturn(uExpected).when(spyConverter).fromMessageToMonitorData(s);
+        int id = 1;
+        doReturn(uExpected).when(spyConverter).fromMessageToMonitorData(id, s);
 
-        Update uReturned = spyConverter.fromMessageToMonitorData(s);
+        Update uReturned = spyConverter.fromMessageToMonitorData(id, s);
 
         assertEquals(uExpected, uReturned);
     }

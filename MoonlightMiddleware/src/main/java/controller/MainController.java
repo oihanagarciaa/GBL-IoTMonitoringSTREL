@@ -75,8 +75,8 @@ public class MainController implements Controller {
         throw new UnsupportedOperationException("This is not implemented yet");
     }
 
-    public void updateData(String message) {
-        service.updateService(dataConverter.fromMessageToMonitorData(message));
+    public void updateData(int id, String message) {
+        service.updateService(dataConverter.fromMessageToMonitorData(id, message));
         service.run();
         result = service.getResponseFromService();
     }
@@ -121,7 +121,7 @@ public class MainController implements Controller {
         try {
             initializeService();
             establishConnection();
-            subscriber.subscribe("iot/sensors");
+            subscriber.subscribe("institute/thingy/#");
             dataConverter.initDataConverter(model.size());
             return true;
         } catch (Exception e) {

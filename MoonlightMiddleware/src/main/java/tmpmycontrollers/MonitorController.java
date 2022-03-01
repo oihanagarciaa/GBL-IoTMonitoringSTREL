@@ -17,7 +17,7 @@ import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
-import tmpmoonlight.model.SpatialModelSetup;
+import tmpmoonlight.SpatialModelSetup;
 
 import java.util.ArrayList;
 import java.util.HashMap;

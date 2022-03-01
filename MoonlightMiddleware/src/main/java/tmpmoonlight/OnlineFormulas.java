@@ -1,4 +1,4 @@
-package tmpmoonlight.model;
+package tmpmoonlight;
 
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.DoubleDistance;

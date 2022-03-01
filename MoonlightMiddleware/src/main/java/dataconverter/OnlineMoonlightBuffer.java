@@ -16,8 +16,8 @@ public class OnlineMoonlightBuffer implements DataConverter
     }
 
     @Override
-    public Update<Double, List<MoonLightRecord>> fromMessageToMonitorData(String message) {
-        moonLightRecords = converter.getMoonLightRecords(message);
+    public Update<Double, List<MoonLightRecord>> fromMessageToMonitorData(int id, String message) {
+        moonLightRecords = converter.getMoonLightRecords(id, message);
         return getUpdate();
     }
 

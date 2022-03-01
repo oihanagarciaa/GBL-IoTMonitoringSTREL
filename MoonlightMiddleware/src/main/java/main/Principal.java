@@ -32,7 +32,7 @@ public class Principal {
         c = new MainController();
         initMainController();
         c.run();
-        Thread thread = new Thread(){
+        /*Thread thread = new Thread(){
             final SecureRandom rand = new SecureRandom();
             @Override
             public void run() {
@@ -66,14 +66,14 @@ public class Principal {
             thread.join();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        }
+        }*/
 
     }
 
     private static void initMainController() {
         c.setMonitorType(MonitorType.ONLINE_MOONLIGHT);
         c.setConnectionType(ConnType.MQTT);
-        c.setDataSource("tcp...");
+        c.setDataSource("tcp://localhost:1883");
         SpatialModel<Double> spatialModel = buildSpatialModel(6);
         c.setSpatialModel(spatialModel);
         c.setFormula(formula());

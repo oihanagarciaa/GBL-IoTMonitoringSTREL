@@ -16,9 +16,9 @@ public class ConverterStringMoonlightRecord {
     List<MoonLightRecord> moonLightRecords;
 
 
-    public List<MoonLightRecord> getMoonLightRecords(String s){
+    public List<MoonLightRecord> getMoonLightRecords(int id, String s){
         JSONObject object = convertStringtoJSONObject(s);
-        convertJSONtoMoonlightRecord(object);
+        convertJSONtoMoonlightRecord(id, object);
         return moonLightRecords;
     }
 
@@ -28,16 +28,14 @@ public class ConverterStringMoonlightRecord {
         return (JSONObject) obj;
     }
 
-    public void convertJSONtoMoonlightRecord(JSONObject j){
+    public void convertJSONtoMoonlightRecord(int id, JSONObject j){
         //TODO: update converter
         /*For the moment I suppose that the JSON file is like:
          {
-            "id": 2
             "place": 3
             "noise": 40
             "people": 30
          }*/
-        long id = (long) j.get("id");
         long noise = (long) j.get("noise");
         long people = (long) j.get("people");
 

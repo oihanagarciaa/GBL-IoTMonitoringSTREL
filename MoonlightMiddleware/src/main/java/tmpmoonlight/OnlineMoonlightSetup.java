@@ -9,8 +9,6 @@ import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
-import tmpmoonlight.model.OnlineFormulas;
-import tmpmoonlight.model.SpatialModelSetup;
 
 import java.util.Map;
 import java.util.function.Function;
