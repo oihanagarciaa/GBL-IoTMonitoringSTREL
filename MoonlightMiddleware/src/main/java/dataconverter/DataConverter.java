@@ -10,7 +10,7 @@ public interface DataConverter<U, M> {
     /**
      *
      * @param message The message arrived from the broker
-     * @return (Update or just one moonlight record??)
+     * @return Returns the Update
      */
     U fromMessageToMonitorData(int id, M message);
 

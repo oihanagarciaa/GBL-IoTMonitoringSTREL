@@ -1,3 +1,4 @@
+import dataconverter.DataConverter;
 import dataconverter.OnlineMoonlightBuffer;
 import eu.quanticol.moonlight.signal.online.Update;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,7 @@ class OnlineMoonlightConverterTest {
     @Test
     void convertWithoutInit(){
         OnlineMoonlightBuffer converter = new OnlineMoonlightBuffer();
-
-        assertThrows(NullPointerException.class, () -> converter.fromMessageToMonitorData(1, new String("")));
+        converter.fromMessageToMonitorData(1, "");
     }
 
     @Test
@@ -28,5 +28,23 @@ class OnlineMoonlightConverterTest {
         Update uReturned = spyConverter.fromMessageToMonitorData(id, s);
 
         assertEquals(uExpected, uReturned);
+    }
+
+    @Test
+    void convertJSON(){
+        DataConverter dataConverter = new OnlineMoonlightBuffer();
+        dataConverter.initDataConverter(5);
+        Object u = dataConverter.fromMessageToMonitorData(2, "{ \"place\": 2, \"noise\": 300, \"people\": 10}");
+        assertEquals(u.getClass(), Update.class);
+    }
+
+    /**
+     * If the JSON file is not correct, the program must continue working, treat exceptions
+     */
+    @Test
+    void failingJSON(){
+        DataConverter dataConverter = new OnlineMoonlightBuffer();
+        dataConverter.initDataConverter(5);
+        Object u = dataConverter.fromMessageToMonitorData(2, "asdfghjk");
     }
 }

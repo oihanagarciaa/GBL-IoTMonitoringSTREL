@@ -36,12 +36,16 @@ public class ConverterStringMoonlightRecord {
             "noise": 40
             "people": 30
          }*/
-        long noise = (long) j.get("noise");
-        long people = (long) j.get("people");
+        try{
+            long noise = (long) j.get("noise");
+            long people = (long) j.get("people");
 
-        MoonLightRecord moonLightRecord = factory.fromObjectArray(places.get(Math.toIntExact(id)), Math.toIntExact(noise), Math.toIntExact(people));
+            MoonLightRecord moonLightRecord = factory.fromObjectArray(places.get(Math.toIntExact(id)), Math.toIntExact(noise), Math.toIntExact(people));
 
-        moonLightRecords.set(Math.toIntExact(id), moonLightRecord);
+            moonLightRecords.set(Math.toIntExact(id), moonLightRecord);
+        }catch (NullPointerException e){
+
+        }
     }
 
     List<String> places;
