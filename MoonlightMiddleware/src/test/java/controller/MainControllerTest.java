@@ -45,16 +45,9 @@ class MainControllerTest {
         assertEquals(expectedResult, spy.getResults().get(0));
     }
 
-    @Test
-    void initializationTest(){
-        Controller controller = controllerInit();
-
-        assertTrue(controller.run());
-    }
-
     private MainController controllerInit() {
         MainController controller = new MainController();
-        String sourceId = "source";
+        String sourceId = "tcp://localhost:1883";
         ConnType connType = ConnType.MQTT;
         MonitorType monitorType = MonitorType.ONLINE_MOONLIGHT;
         Formula f = mock(Formula.class);
