@@ -1,5 +1,6 @@
-package controller;
-
+import controller.ConnType;
+import controller.Controller;
+import controller.MainController;
 import dataconverter.ConverterStringMoonlightRecord;
 import dataconverter.DataConverter;
 import dataconverter.OnlineMoonlightBuffer;
@@ -63,7 +64,7 @@ class MainControllerTest {
         assertEquals(results.size(), 2);
     }
 
-    private MainController controllerInit() {
+    public static MainController controllerInit() {
         MainController controller = new MainController();
         String sourceId = "tcp://localhost:1883";
         ConnType connType = ConnType.MQTT;
@@ -83,7 +84,7 @@ class MainControllerTest {
         return controller;
     }
 
-    private MainController controllerInitRealValues(){
+    public static MainController controllerInitRealValues(){
         MainController c = new MainController();
         c.setMonitorType(MonitorType.ONLINE_MOONLIGHT);
         c.setConnectionType(ConnType.MQTT);

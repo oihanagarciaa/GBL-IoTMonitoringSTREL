@@ -23,7 +23,7 @@ public class OnlineMoonlightBuffer implements DataConverter
 
     double t = 0;
     public Update<Double, List<MoonLightRecord>> getUpdate(){
-        //TODO: think how to set the time
+        //TODO: change the time
 
         return new Update<>(t, ++t, moonLightRecords);
     }

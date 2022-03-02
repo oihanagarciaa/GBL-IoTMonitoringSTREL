@@ -35,10 +35,8 @@ public class MainController implements Controller {
 
     private SpatialModel<Double> model;
     private Formula formula;
-    //TODO: it is no compulsory to be Abstract interval
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
     private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
-    //TODO: distance functions are not compulsory
     private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
     public void initializeService() {
@@ -54,6 +52,7 @@ public class MainController implements Controller {
     public void establishConnection() {
         if(connectionType == ConnType.MQTT){
             subscriber = new MQTTSubscriber(broker, this);
+            subscriber.subscribe("institute/thingy/#");
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Rest not implemented");
         }else
@@ -62,7 +61,7 @@ public class MainController implements Controller {
     }
 
     public void runForever() {
-        //TODO: run forever
+        //TODO: run forever (Quit?)
         /*
         What does this do?
         ...
@@ -75,10 +74,20 @@ public class MainController implements Controller {
         throw new UnsupportedOperationException("This is not implemented yet");
     }
 
+    //TODO: Aggregation -> think how to do it better
+    int cont = 0;
+    final static int frecuency = 3;
     public void updateData(int id, String message) {
-        service.updateService(dataConverter.fromMessageToMonitorData(id, message));
-        service.run();
-        result = service.getResponseFromService();
+        cont = (++cont)%frecuency;
+        if(cont != 0){
+            dataConverter.fromMessageToMonitorData(id, message);
+        }else{
+            service.updateService(dataConverter.fromMessageToMonitorData(id, message));
+            service.run();
+            result = service.getResponseFromService();
+            //TODO: Quit print line
+            System.out.println("Results: "+getResults());
+        }
     }
 
     @Override
@@ -121,7 +130,6 @@ public class MainController implements Controller {
         try {
             initializeService();
             establishConnection();
-            subscriber.subscribe("institute/thingy/#");
             dataConverter.initDataConverter(model.size());
             return true;
         } catch (Exception e) {
