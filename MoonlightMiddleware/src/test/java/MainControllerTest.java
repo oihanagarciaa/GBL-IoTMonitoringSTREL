@@ -111,7 +111,6 @@ class MainControllerTest {
         return Utils.createSpatialModel(size, cityMap);
     }
 
-    //TODO: Escape formula gets stuck
     public static Formula formula() {
         Formula controlPeople = new AtomicFormula("manyPeople");
         return controlPeople;
