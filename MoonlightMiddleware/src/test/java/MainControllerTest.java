@@ -59,9 +59,11 @@ class MainControllerTest {
         MainController controller = controllerInitRealValues();
         controller.initializeService();
         controller.run();
-        controller.updateData(4, "");
+        for(int i = 0; i < 3; i++){
+            controller.updateData(4, "");
+        }
         List<String> results = controller.getResults();
-        assertEquals(results.size(), 2);
+        assertEquals(3, results.size());
     }
 
     public static MainController controllerInit() {
