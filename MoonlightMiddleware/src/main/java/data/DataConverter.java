@@ -1,4 +1,4 @@
-package dataconverter;
+package data;
 
 /**
  * Interface to convert the received message into the desired data

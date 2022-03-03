@@ -1,5 +1,7 @@
 package services;
 
+import java.util.Collection;
+
 /**
  * Interface to implement for Moonlight Middleware services
  */
@@ -30,6 +32,12 @@ public interface Service<U, T> {
      * @param u Update, new collected data
      */
     void updateService(U u);
+
+    /**
+     * Pass a set of updates
+     * @param updates new collected data
+     */
+    void updateService(Collection<U> updates);
 
     /**
      * Get the results

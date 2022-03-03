@@ -1,4 +1,4 @@
-package dataconverter;
+package data;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.DataHandler;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConverterStringMoonlightRecord {
+public class StringToMoolightRecordParser {
     RecordHandler factory;
     List<MoonLightRecord> moonLightRecords;
 

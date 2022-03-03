@@ -1,15 +1,11 @@
 import controller.ConnType;
 import controller.Controller;
 import controller.MainController;
-import dataconverter.ConverterStringMoonlightRecord;
-import dataconverter.DataConverter;
-import dataconverter.OnlineMoonlightBuffer;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.DoubleDistance;
 import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.signal.online.Update;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.SpatialModel;
 import eu.quanticol.moonlight.util.Pair;

@@ -12,6 +12,7 @@ import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
 import eu.quanticol.moonlight.util.Utils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -66,6 +67,14 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
     @Override
     public void updateService(Update<Double, List<MoonLightRecord>> update) {
         newUpdate = update;
+    }
+
+    @Override
+    public void updateService(Collection<Update<Double, List<MoonLightRecord>>> updates) {
+        for(var update: updates) {
+            updateService(update);
+            //TODO: find some way to deal with multiple updates;
+        }
     }
 
     @Override

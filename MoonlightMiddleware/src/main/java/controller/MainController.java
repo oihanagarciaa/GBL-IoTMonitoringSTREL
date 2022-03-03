@@ -1,7 +1,9 @@
 package controller;
 
-import dataconverter.DataConverter;
-import dataconverter.OnlineMoonlightBuffer;
+import data.Buffer;
+import data.ConstantSizeBuffer;
+import data.DataConverter;
+import data.OnlineMoonlightDataConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
@@ -32,6 +34,7 @@ public class MainController implements Controller {
     Service<Update<Double, List<MoonLightRecord>>, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
+    Buffer<Update<Double, List<MoonLightRecord>>> updateBuffer;
 
     private SpatialModel<Double> model;
     private Formula formula;
@@ -42,7 +45,8 @@ public class MainController implements Controller {
     public void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
-            dataConverter = new OnlineMoonlightBuffer();
+            dataConverter = new OnlineMoonlightDataConverter();
+            updateBuffer = new ConstantSizeBuffer<>(3, service);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }
@@ -74,20 +78,22 @@ public class MainController implements Controller {
         throw new UnsupportedOperationException("This is not implemented yet");
     }
 
-    //TODO: Aggregation -> think how to do it better
-    int cont = 0;
-    final static int frecuency = 3;
+
+    //TODO: the aggregation is not trivial, we have to decide:
+    //  - how to deal with multiple update for a single sensor
+    //  - how to deal with missing updates from one or more sensors
     public void updateData(int id, String message) {
-        cont = (++cont)%frecuency;
-        if(cont != 0){
-            dataConverter.fromMessageToMonitorData(id, message);
-        }else{
-            service.updateService(dataConverter.fromMessageToMonitorData(id, message));
-            service.run();
-            result = service.getResponseFromService();
-            //TODO: Quit print line
-            System.out.println("Results: "+getResults());
+        Update<Double, List<MoonLightRecord>> update =
+                dataConverter.fromMessageToMonitorData(id, message);
+        if(updateBuffer.add(update)){
+            updateResponse();
         }
+    }
+
+    private void updateResponse() {
+        result = service.getResponseFromService();
+        //TODO: Quit print line
+        System.out.println("Results: "+getResults());
     }
 
     @Override

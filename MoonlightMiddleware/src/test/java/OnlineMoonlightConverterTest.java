@@ -1,5 +1,5 @@
-import dataconverter.DataConverter;
-import dataconverter.OnlineMoonlightBuffer;
+import data.DataConverter;
+import data.OnlineMoonlightDataConverter;
 import eu.quanticol.moonlight.signal.online.Update;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ class OnlineMoonlightConverterTest {
 
     @Test
     void convertWithoutInit(){
-        OnlineMoonlightBuffer converter = new OnlineMoonlightBuffer();
+        OnlineMoonlightDataConverter converter = new OnlineMoonlightDataConverter();
         assertThrows(UnsupportedOperationException.class, () -> {
             converter.fromMessageToMonitorData(1, "");
         });
@@ -19,8 +19,8 @@ class OnlineMoonlightConverterTest {
 
     @Test
     void convertTest(){
-        OnlineMoonlightBuffer converter = new OnlineMoonlightBuffer();
-        OnlineMoonlightBuffer spyConverter = spy(converter);
+        OnlineMoonlightDataConverter converter = new OnlineMoonlightDataConverter();
+        OnlineMoonlightDataConverter spyConverter = spy(converter);
 
         spyConverter.initDataConverter(Integer.MIN_VALUE);
         Update uExpected = mock(Update.class);
@@ -35,7 +35,7 @@ class OnlineMoonlightConverterTest {
 
     @Test
     void convertJSON(){
-        DataConverter dataConverter = new OnlineMoonlightBuffer();
+        DataConverter dataConverter = new OnlineMoonlightDataConverter();
         dataConverter.initDataConverter(5);
         Object u = dataConverter.fromMessageToMonitorData(2, "{ \"place\": 2, \"noise\": 300, \"people\": 10}");
         assertEquals(u.getClass(), Update.class);
@@ -47,7 +47,7 @@ class OnlineMoonlightConverterTest {
     @Disabled("we need to deal with failures in some way")
     @Test
     void failingJSON(){
-        DataConverter dataConverter = new OnlineMoonlightBuffer();
+        DataConverter dataConverter = new OnlineMoonlightDataConverter();
         dataConverter.initDataConverter(5);
         dataConverter.fromMessageToMonitorData(2, "asdfghjk");
     }

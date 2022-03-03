@@ -1,18 +1,18 @@
-package dataconverter;
+package data;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.Update;
 
 import java.util.List;
 
-public class OnlineMoonlightBuffer implements DataConverter
+public class OnlineMoonlightDataConverter implements DataConverter
         <Update<Double, List<MoonLightRecord>>, String> {
 
     List<MoonLightRecord> moonLightRecords;
-    ConverterStringMoonlightRecord converter;
+    StringToMoolightRecordParser converter;
 
-    public OnlineMoonlightBuffer(){
-        converter = new ConverterStringMoonlightRecord();
+    public OnlineMoonlightDataConverter(){
+        converter = new StringToMoolightRecordParser();
     }
 
     @Override
