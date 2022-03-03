@@ -45,7 +45,7 @@ public class ConverterStringMoonlightRecord {
 
             moonLightRecords.set(id, moonLightRecord);
         }catch (NullPointerException e){
-            //Ignore
+            throw new UnsupportedOperationException("Invalid data format");
         }
     }
 
