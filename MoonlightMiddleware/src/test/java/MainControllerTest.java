@@ -60,7 +60,7 @@ class MainControllerTest {
         controller.initializeService();
         controller.run();
         for(int i = 0; i < 3; i++){
-            controller.updateData(4, "");
+            controller.updateData(4, basicValidJSON());
         }
         List<String> results = controller.getResults();
         assertEquals(3, results.size());
@@ -136,5 +136,13 @@ class MainControllerTest {
                 m -> new DistanceStructure<Double, Double>(x -> x,
                         new DoubleDistance(), 60.0, Double.MAX_VALUE, city));
         return distanceFunctions;
+    }
+
+    private static String basicValidJSON() {
+        return "{\n" +
+                "            \"place\": 3\n" +
+                "            \"noise\": 40\n" +
+                "            \"people\": 30\n" +
+                "}";
     }
 }
