@@ -34,7 +34,7 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
     }
 
     @Override
-    public Collection<E> get() {
+    public List<E> get() {
         return elements;
     }
 

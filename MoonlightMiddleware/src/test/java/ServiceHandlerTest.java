@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import services.Service;
 import services.ServiceHandler;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -57,6 +59,10 @@ class ServiceHandlerTest {
         }
 
         @Override
+        public void updateService(List<Double> updates) {
+
+        }
+        @Override
         public Double getResponseFromService() {
             return null;
         }
@@ -86,6 +92,11 @@ class ServiceHandlerTest {
 
         @Override
         public void updateService(Double aDouble) {
+
+        }
+
+        @Override
+        public void updateService(List<Double> updates) {
 
         }
 

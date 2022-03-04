@@ -69,12 +69,18 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
         newUpdate = update;
     }
 
+
     @Override
-    public void updateService(Collection<Update<Double, List<MoonLightRecord>>> updates) {
-        for(var update: updates) {
+    public void updateService(List<Update<Double, List<MoonLightRecord>>> updates) {
+        int size = updates.size()-1;
+        double start = updates.get(0).getStart();
+        double end = updates.get(size).getEnd();
+        /*for(var update: updates) {
             updateService(update);
-            //TODO: find some way to deal with multiple updates;
-        }
+            //TODO: find some way to deal with multiple updates
+            update.getValue();
+        }*/
+        updateService(new Update<>(start, end, updates.get(size).getValue()));
     }
 
     @Override

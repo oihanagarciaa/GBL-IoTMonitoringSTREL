@@ -35,7 +35,6 @@ public class MainController implements Controller {
     private ConnType connectionType;
     private MonitorType monitorType;
     Buffer<Update<Double, List<MoonLightRecord>>> updateBuffer;
-
     private SpatialModel<Double> model;
     private Formula formula;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
@@ -46,7 +45,7 @@ public class MainController implements Controller {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new OnlineMoonlightDataConverter();
-            updateBuffer = new ConstantSizeBuffer<>(3, service);
+            updateBuffer = new ConstantSizeBuffer<>(5, service);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }
@@ -61,7 +60,6 @@ public class MainController implements Controller {
             throw new UnsupportedOperationException("Rest not implemented");
         }else
             throw new UnsupportedOperationException("Unknown connection type");
-
     }
 
     public void runForever() {
@@ -136,6 +134,7 @@ public class MainController implements Controller {
         try {
             initializeService();
             establishConnection();
+            //TODO: change the init converter
             dataConverter.initDataConverter(model.size());
             return true;
         } catch (Exception e) {
