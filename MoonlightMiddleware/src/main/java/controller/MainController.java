@@ -45,7 +45,7 @@ public class MainController implements Controller {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new OnlineMoonlightDataConverter();
-            updateBuffer = new ConstantSizeBuffer<>(5, service);
+            updateBuffer = new ConstantSizeBuffer<>(3, service);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }

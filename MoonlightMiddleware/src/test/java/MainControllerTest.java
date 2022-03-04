@@ -59,7 +59,7 @@ class MainControllerTest {
             controller.updateData(4, basicValidJSON());
         }
         List<String> results = controller.getResults();
-        assertEquals(3, results.size());
+        assertEquals(2, results.size());
     }
 
     public static MainController controllerInit() {
