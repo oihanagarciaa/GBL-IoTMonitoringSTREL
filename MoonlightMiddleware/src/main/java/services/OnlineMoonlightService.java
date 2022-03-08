@@ -69,7 +69,7 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
         newUpdate = update;
     }
 
-
+    //TODO:DELETE METHOD
     @Override
     public void updateService(List<Update<Double, List<MoonLightRecord>>> updates) {
         int size = updates.size()-1;
@@ -78,7 +78,6 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
         /*for(var update: updates) {
             updateService(update);
             //TODO: find some way to deal with multiple updates
-            update.getValue();
         }*/
         updateService(new Update<>(start, end, updates.get(size).getValue()));
     }

@@ -7,6 +7,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import java.util.UUID;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
+    //TODO: To change to a generic controller I have to add updateData(...) to the interface
     final private MainController controller;
     private static final String clientId = UUID.randomUUID().toString();
     private static int qos = 0;

@@ -17,6 +17,7 @@ import services.Service;
 import subscriber.MQTTSubscriber;
 import subscriber.Subscriber;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +82,7 @@ public class MainController implements Controller {
     //  - how to deal with multiple update for a single sensor
     //  - how to deal with missing updates from one or more sensors
     public void updateData(int id, String message) {
+
         Update<Double, List<MoonLightRecord>> update =
                 dataConverter.fromMessageToMonitorData(id, message);
         if(updateBuffer.add(update)){
@@ -91,7 +93,7 @@ public class MainController implements Controller {
     private void updateResponse() {
         result = service.getResponseFromService();
         //TODO: Quit print line
-        System.out.println("Results: "+getResults());
+        System.out.println(getResults());
     }
 
     @Override

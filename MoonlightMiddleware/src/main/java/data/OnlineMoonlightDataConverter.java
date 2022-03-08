@@ -5,6 +5,7 @@ import eu.quanticol.moonlight.signal.online.Update;
 
 import java.util.List;
 
+//TODO: Maybe this needs to be to data converter to TimeChain
 public class OnlineMoonlightDataConverter implements DataConverter
         <Update<Double, List<MoonLightRecord>>, String> {
 
