@@ -1,5 +1,6 @@
 import data.DataConverter;
-import data.OnlineMoonlightDataConverter;
+import data.MoonlightRecordConverter;
+import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.Update;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,33 +12,32 @@ class OnlineMoonlightConverterTest {
 
     @Test
     void convertWithoutInit(){
-        OnlineMoonlightDataConverter converter = new OnlineMoonlightDataConverter();
+        MoonlightRecordConverter converter = new MoonlightRecordConverter();
         assertThrows(UnsupportedOperationException.class, () -> {
-            converter.fromMessageToMonitorData(1, "");
+            converter.fromMessageToMonitorData("");
         });
     }
 
     @Test
     void convertTest(){
-        OnlineMoonlightDataConverter converter = new OnlineMoonlightDataConverter();
-        OnlineMoonlightDataConverter spyConverter = spy(converter);
+        MoonlightRecordConverter converter = new MoonlightRecordConverter();
+        MoonlightRecordConverter spyConverter = spy(converter);
 
-        spyConverter.initDataConverter(Integer.MIN_VALUE);
-        Update uExpected = mock(Update.class);
+        //spyConverter.initDataConverter(Integer.MIN_VALUE);
+        MoonLightRecord uExpected = mock(MoonLightRecord.class);
         String s = "";
-        int id = 1;
-        doReturn(uExpected).when(spyConverter).fromMessageToMonitorData(id, s);
+        doReturn(uExpected).when(spyConverter).fromMessageToMonitorData(s);
 
-        Update uReturned = spyConverter.fromMessageToMonitorData(id, s);
+        MoonLightRecord uReturned = spyConverter.fromMessageToMonitorData(s);
 
         assertEquals(uExpected, uReturned);
     }
 
     @Test
     void convertJSON(){
-        DataConverter dataConverter = new OnlineMoonlightDataConverter();
-        dataConverter.initDataConverter(5);
-        Object u = dataConverter.fromMessageToMonitorData(2, "{ \"place\": 2, \"noise\": 300, \"people\": 10}");
+        DataConverter dataConverter = new MoonlightRecordConverter();
+        //dataConverter.initDataConverter(5);
+        Object u = dataConverter.fromMessageToMonitorData("{ \"place\": 2, \"noise\": 300, \"people\": 10}");
         assertEquals(u.getClass(), Update.class);
     }
 
@@ -47,8 +47,8 @@ class OnlineMoonlightConverterTest {
     @Disabled("we need to deal with failures in some way")
     @Test
     void failingJSON(){
-        DataConverter dataConverter = new OnlineMoonlightDataConverter();
-        dataConverter.initDataConverter(5);
-        dataConverter.fromMessageToMonitorData(2, "asdfghjk");
+        DataConverter dataConverter = new MoonlightRecordConverter();
+        //dataConverter.initDataConverter(5);
+        dataConverter.fromMessageToMonitorData(/*2,*/ "asdfghjk");
     }
 }

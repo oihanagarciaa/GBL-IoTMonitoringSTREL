@@ -21,6 +21,7 @@ public class DataStoringTimeChain<V> {
         timechains = new ArrayList<>();
         for(int i = 0; i < size; i++){
             TimeChain<Double, V> timeChain = new TimeChain<>(100.0);
+            //TODO: Maybe initialize the TimeChains
             timechains.add(timeChain);
         }
     }

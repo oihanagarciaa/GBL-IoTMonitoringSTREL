@@ -12,7 +12,7 @@ public interface DataConverter<U, M> {
      * @param message The message arrived from the broker
      * @return Returns the Update
      */
-    U fromMessageToMonitorData(int id, M message);
+    U fromMessageToMonitorData(M message);
 
-    void initDataConverter(int size);
+    //void initDataConverter(int size);
 }

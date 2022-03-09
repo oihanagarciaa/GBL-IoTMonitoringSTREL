@@ -3,7 +3,7 @@ package controller;
 import data.Buffer;
 import data.ConstantSizeBuffer;
 import data.DataConverter;
-import data.OnlineMoonlightDataConverter;
+import data.MoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
@@ -17,7 +17,6 @@ import services.Service;
 import subscriber.MQTTSubscriber;
 import subscriber.Subscriber;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ import java.util.stream.Collectors;
 public class MainController implements Controller {
     //TODO: subscriber receives String, maybe change to Message
     Subscriber<String> subscriber;
-    DataConverter<Update<Double, List<MoonLightRecord>>, String> dataConverter;
+    DataConverter<MoonLightRecord, String> dataConverter;
     String broker;
     Service<Update<Double, List<MoonLightRecord>>, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
     private ConnType connectionType;
@@ -45,7 +44,7 @@ public class MainController implements Controller {
     public void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
-            dataConverter = new OnlineMoonlightDataConverter();
+            dataConverter = new MoonlightRecordConverter();
             updateBuffer = new ConstantSizeBuffer<>(3, service);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
@@ -56,6 +55,7 @@ public class MainController implements Controller {
     public void establishConnection() {
         if(connectionType == ConnType.MQTT){
             subscriber = new MQTTSubscriber(broker, this);
+            //TODO: Declare the topic somewhere else
             subscriber.subscribe("institute/thingy/#");
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Rest not implemented");
@@ -82,10 +82,9 @@ public class MainController implements Controller {
     //  - how to deal with multiple update for a single sensor
     //  - how to deal with missing updates from one or more sensors
     public void updateData(int id, String message) {
-
-        Update<Double, List<MoonLightRecord>> update =
-                dataConverter.fromMessageToMonitorData(id, message);
-        if(updateBuffer.add(update)){
+        MoonLightRecord moonLightRecord =
+                dataConverter.fromMessageToMonitorData(message);
+        if(updateBuffer.add(/*moonLightRecord*/null)){
             updateResponse();
         }
     }
@@ -136,8 +135,6 @@ public class MainController implements Controller {
         try {
             initializeService();
             establishConnection();
-            //TODO: change the init converter
-            dataConverter.initDataConverter(model.size());
             return true;
         } catch (Exception e) {
             // TODO: dangerous catch-all exception, refactor

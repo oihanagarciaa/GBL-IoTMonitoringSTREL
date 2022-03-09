@@ -4,7 +4,8 @@ import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.*;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 
-import javax.sound.midi.Soundbank;
+import java.util.Arrays;
+import java.util.List;
 
 //TODO: DELETE this class
 public class Provisional {
@@ -36,7 +37,7 @@ public class Provisional {
             }
         });
         myTimeChain.toUpdates().stream().forEach(u -> {
-            if(u.getStart() == 4.0 && u.getEnd() == 5.0){
+            if(u.getStart() <= 5.0 && u.getEnd() >=6.0){
                 System.out.println("V2: "+u.getValue());
             }
         });
