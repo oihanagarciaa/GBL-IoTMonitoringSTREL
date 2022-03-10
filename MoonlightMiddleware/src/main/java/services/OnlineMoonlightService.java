@@ -2,6 +2,7 @@ package services;
 
 import eu.quanticol.moonlight.domain.BooleanDomain;
 import eu.quanticol.moonlight.formula.Formula;
+import eu.quanticol.moonlight.signal.online.TimeChain;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.LocationService;
 import eu.quanticol.moonlight.space.SpatialModel;
@@ -10,6 +11,7 @@ import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
 import eu.quanticol.moonlight.signal.online.Update;
+import eu.quanticol.moonlight.space.StaticLocationService;
 import eu.quanticol.moonlight.util.Utils;
 
 import java.util.Collection;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class OnlineMoonlightService implements Service<Update<Double, List<MoonLightRecord>>,
+public class OnlineMoonlightService implements Service<MoonLightRecord,
         SpaceTimeSignal<Double, AbstractInterval<Boolean>>>{
 
     private final Formula formula;
@@ -28,7 +30,6 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
 
     private OnlineSpaceTimeMonitor<?, MoonLightRecord, Boolean> onlineMonitor;
 
-    private Update<Double, List<MoonLightRecord>> newUpdate;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> results;
 
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
@@ -37,8 +38,7 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
-        //TODO: change start, end and dt?
-        locSvc = Utils.createLocServiceStatic(0, 1, 1000, this.spatialModel);
+        locSvc = new StaticLocationService<>(this.spatialModel);
         this.distanceFunctions = distanceFunctions;
     }
 
@@ -48,8 +48,13 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
     }
 
     @Override
-    public void run() {
-        results = onlineMonitor.monitor(newUpdate);
+    public void run(Update<Double, List<MoonLightRecord>> update) {
+        results = onlineMonitor.monitor(update);
+    }
+
+    @Override
+    public void run(TimeChain<Double, List<MoonLightRecord>> timeChain) {
+        results = onlineMonitor.monitor(timeChain);
     }
 
     @Override
@@ -64,23 +69,6 @@ public class OnlineMoonlightService implements Service<Update<Double, List<MoonL
         onlineMonitor = null;
     }
 
-    @Override
-    public void updateService(Update<Double, List<MoonLightRecord>> update) {
-        newUpdate = update;
-    }
-
-    //TODO:DELETE METHOD
-    @Override
-    public void updateService(List<Update<Double, List<MoonLightRecord>>> updates) {
-        int size = updates.size()-1;
-        double start = updates.get(0).getStart();
-        double end = updates.get(size).getEnd();
-        /*for(var update: updates) {
-            updateService(update);
-            //TODO: find some way to deal with multiple updates
-        }*/
-        updateService(new Update<>(start, end, updates.get(size).getValue()));
-    }
 
     @Override
     public SpaceTimeSignal<Double, AbstractInterval<Boolean>> getResponseFromService() {

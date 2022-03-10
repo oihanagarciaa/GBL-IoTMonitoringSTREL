@@ -1,11 +1,15 @@
 package services;
 
+import eu.quanticol.moonlight.io.MoonLightRecord;
+import eu.quanticol.moonlight.signal.online.TimeChain;
+import eu.quanticol.moonlight.signal.online.Update;
+
 import java.util.List;
 
 /**
  * Interface to implement for Moonlight Middleware services
  */
-public interface Service<U, T> {
+public interface Service<E, T> {
 
     /**
      * @return true if it is running
@@ -14,8 +18,15 @@ public interface Service<U, T> {
 
     /**
      * Runs the service
+     * @param update New values as an Update class
      */
-    void run();
+    void run(Update<Double, List<E>> update);
+
+    /**
+     * Runs the service
+     * @param timeChain New values as a TimeChain class
+     */
+    void run(TimeChain<Double, List<E>> timeChain);
 
     /**
      * Setup the basics for the service
@@ -26,18 +37,6 @@ public interface Service<U, T> {
      * The service will stop functioning afterwords.
      */
     void stop();
-
-    /**
-     * Pass the update
-     * @param u Update, new collected data
-     */
-    void updateService(U u);
-
-    /**
-     * Pass a set of updates
-     * @param updates new collected data
-     */
-    void updateService(List<U> updates);
 
     /**
      * Get the results

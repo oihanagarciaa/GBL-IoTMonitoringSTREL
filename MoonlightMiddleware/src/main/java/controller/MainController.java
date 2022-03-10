@@ -1,8 +1,8 @@
 package controller;
 
 import data.Buffer;
-import data.ConstantSizeBuffer;
 import data.DataConverter;
+import data.FixedRateTimeBuffer;
 import data.MoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
@@ -31,10 +31,10 @@ public class MainController implements Controller {
     Subscriber<String> subscriber;
     DataConverter<MoonLightRecord, String> dataConverter;
     String broker;
-    Service<Update<Double, List<MoonLightRecord>>, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
+    Service<MoonLightRecord, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
-    Buffer<Update<Double, List<MoonLightRecord>>> updateBuffer;
+    Buffer<MoonLightRecord> buffer;
     private SpatialModel<Double> model;
     private Formula formula;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
@@ -45,7 +45,8 @@ public class MainController implements Controller {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new MoonlightRecordConverter();
-            updateBuffer = new ConstantSizeBuffer<>(3, service);
+            //buffer = new ConstantSizeBuffer<>(3, service);
+            buffer = new FixedRateTimeBuffer<MoonLightRecord>(model.size(), service, 5000);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }
@@ -78,13 +79,11 @@ public class MainController implements Controller {
     }
 
 
-    //TODO: the aggregation is not trivial, we have to decide:
-    //  - how to deal with multiple update for a single sensor
-    //  - how to deal with missing updates from one or more sensors
+    //
     public void updateData(int id, String message) {
         MoonLightRecord moonLightRecord =
                 dataConverter.fromMessageToMonitorData(message);
-        if(updateBuffer.add(/*moonLightRecord*/null)){
+        if(buffer.add(moonLightRecord)){
             updateResponse();
         }
     }
