@@ -1,5 +1,7 @@
-package data;
+package dataStorages;
 
+
+import messages.Message;
 
 import java.util.Collection;
 
@@ -10,10 +12,10 @@ public interface Buffer<E> {
 
     /**
      * Primitive for adding an element to the buffer
-     * @param element element to be stored
+     * @param message contains the element and information to be stored
      * @return <code>true</code> if the buffer gets full
      */
-    boolean add(E element);
+    boolean add(Message message);
 
     /**
      * Primitive for retrieving the current data of the buffer

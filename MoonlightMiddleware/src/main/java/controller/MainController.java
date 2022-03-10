@@ -1,16 +1,16 @@
 package controller;
 
-import data.Buffer;
-import data.DataConverter;
-import data.FixedRateTimeBuffer;
-import data.MoonlightRecordConverter;
+import dataStorages.Buffer;
+import DELETEdataConverters.DataConverter;
+import dataStorages.FixedRateTimeBuffer;
+import DELETEdataConverters.MoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
-import eu.quanticol.moonlight.signal.online.Update;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.SpatialModel;
+import messages.Message;
 import services.MonitorType;
 import services.OnlineMoonlightService;
 import services.Service;
@@ -79,11 +79,8 @@ public class MainController implements Controller {
     }
 
 
-    //
-    public void updateData(int id, String message) {
-        MoonLightRecord moonLightRecord =
-                dataConverter.fromMessageToMonitorData(message);
-        if(buffer.add(moonLightRecord)){
+    public void updateData(Message message) {
+        if(buffer.add(message)){
             updateResponse();
         }
     }

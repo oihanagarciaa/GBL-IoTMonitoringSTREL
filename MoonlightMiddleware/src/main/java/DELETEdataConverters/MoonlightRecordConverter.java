@@ -1,13 +1,7 @@
-package data;
+package DELETEdataConverters;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.signal.online.Update;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
-import java.util.List;
-
-//TODO: Maybe this needs to be to data converter to TimeChain
 public class MoonlightRecordConverter implements DataConverter
         <MoonLightRecord, String> {
 

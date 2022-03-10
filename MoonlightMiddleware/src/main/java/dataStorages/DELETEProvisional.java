@@ -1,19 +1,15 @@
-package data;
+package dataStorages;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.*;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 
-import java.util.Arrays;
-import java.util.List;
-
 //TODO: DELETE this class
-public class Provisional {
+public class DELETEProvisional {
     TimeChain<Double, MoonLightRecord> myTimeChain;
-    Signal<MoonLightRecord> mySignal;
     RecordHandler factory;
 
-    public Provisional(){
+    public DELETEProvisional(){
         factory = new RecordHandler(DataHandler.INTEGER, DataHandler.INTEGER);
         setMyTimeChain();
     }
@@ -27,7 +23,9 @@ public class Provisional {
         myTimeChain.add(new Segment<>(5.0, moonLightRecord2));
 
         System.out.println(myTimeChain.toUpdates().toString());
-        System.out.println("TIME 4: "+myTimeChain.toUpdates().get(2));
+
+
+        /*System.out.println("TIME 4: "+myTimeChain.toUpdates().get(2));
         System.out.println(myTimeChain.subChain(0, 1, 3.0).toString());
         System.out.println(myTimeChain.get(2));
         myTimeChain.toUpdates().stream().forEach(u -> {
@@ -40,13 +38,13 @@ public class Provisional {
             if(u.getStart() <= 5.0 && u.getEnd() >=6.0){
                 System.out.println("V2: "+u.getValue());
             }
-        });
+        });*/
     }
 
     //TODO: TIME CHAIN Questions
     // 1- Time chain can't change previous values?
     // 2- A time chain for each sensor?
     public static void main(String[] args) {
-        Provisional provisional = new Provisional();
+        DELETEProvisional provisional = new DELETEProvisional();
     }
 }

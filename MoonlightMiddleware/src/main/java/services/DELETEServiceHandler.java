@@ -10,10 +10,10 @@ package services;
  *
  * @see Service
  */
-public class ServiceHandler<U, T> {
+public class DELETEServiceHandler<U, T> {
     private final Service<U, T> service;
 
-    public ServiceHandler(Service<U, T> service) {
+    public DELETEServiceHandler(Service<U, T> service) {
         //service = null; //todo: should be MoonlightService
         this.service = service;
         service.init();
@@ -22,7 +22,7 @@ public class ServiceHandler<U, T> {
     //Theads
 
     public void startService() {
-        service.run();
+        //service.run();
     }
 
     public void endService() {

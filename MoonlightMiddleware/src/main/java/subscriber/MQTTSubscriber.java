@@ -1,6 +1,8 @@
 package subscriber;
 
 import controller.MainController;
+import messages.Message;
+import messages.OfficeMessage;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -49,11 +51,11 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
         }
     }
 
-    //TODO: Is there a better way to extract the ID?
+    //TODO: Think where to declare the specific message type (new OfficeMessage...)
     @Override
     public void receive(String topic, String message) {
-        String[] topics = topic.split("/");
-        int id = Integer.parseInt(topics[topics.length-1]);
-        controller.updateData(id, message);
+        Message messageClass = new OfficeMessage();
+        messageClass.transformReceivedData(topic, message);
+        controller.updateData(messageClass);
     }
 }

@@ -1,4 +1,4 @@
-package data;
+package DELETEdataConverters;
 
 /**
  * Interface to convert the received message into the desired data

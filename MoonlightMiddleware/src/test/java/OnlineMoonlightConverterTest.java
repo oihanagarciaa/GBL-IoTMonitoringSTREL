@@ -1,5 +1,5 @@
-import data.DataConverter;
-import data.MoonlightRecordConverter;
+import DELETEdataConverters.DataConverter;
+import DELETEdataConverters.MoonlightRecordConverter;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.Update;
 import org.junit.jupiter.api.Disabled;

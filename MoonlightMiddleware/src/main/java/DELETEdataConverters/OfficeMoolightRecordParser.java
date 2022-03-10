@@ -1,4 +1,4 @@
-package data;
+package DELETEdataConverters;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.RecordHandler;
@@ -8,7 +8,7 @@ import org.json.simple.JSONValue;
 import java.util.Arrays;
 import java.util.List;
 
-//TODO: Needs changes
+//TODO: DELETE
 public class OfficeMoolightRecordParser {
     RecordHandler factory;
     List<String> places;

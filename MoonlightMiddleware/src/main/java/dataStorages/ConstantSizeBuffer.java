@@ -1,11 +1,12 @@
-package data;
+package dataStorages;
 
+import messages.Message;
 import services.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
+//TODO: This is not used anymore
 public class ConstantSizeBuffer<E> implements Buffer<E>{
     private final int maxCapacity;
     private List<E> elements;
@@ -22,11 +23,12 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
     }
 
     @Override
-    public boolean add(E element) {
-        elements.add(element);
+    public boolean add(Message message) {
+        elements.add((E) message.getValueElement());
         if(bufferIsFull()) {
-            connectedService.updateService(get());
-            connectedService.run();
+            //TODO: This is wrong
+            //connectedService.updateService(get());
+            //connectedService.run(get());
             flush();
             return true;
         }

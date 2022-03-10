@@ -2,7 +2,7 @@
 
 import org.junit.jupiter.api.Test;
 import services.Service;
-import services.ServiceHandler;
+import services.DELETEServiceHandler;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ class ServiceHandlerTest {
     @Test
     void ableToStartAService() {
         Service service = new FakeWorkingService();
-        ServiceHandler handler = new ServiceHandler(service);
+        DELETEServiceHandler handler = new DELETEServiceHandler(service);
 
         handler.startService();
 
@@ -25,7 +25,7 @@ class ServiceHandlerTest {
     void ableToDealWithFailingServices() {
         Service service = new FakeNotWorkingService();
 
-        ServiceHandler handler = new ServiceHandler(service);
+        DELETEServiceHandler handler = new DELETEServiceHandler(service);
 
         handler.startService();
         assertFalse(service.isRunning());
