@@ -1,13 +1,13 @@
 package dataStorages;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
+import eu.quanticol.moonlight.signal.Segment;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 import eu.quanticol.moonlight.signal.online.TimeSegment;
 import eu.quanticol.moonlight.signal.online.Update;
-import messages.Message;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -39,17 +39,35 @@ public class DataStoringTimeChain<V>{
         }
     }
 
+    /**
+     * There are n TimeChains, one for each sensor
+     * Converts all the TimeChains in a single one
+     * @return A single TimeChain
+     */
     public TimeChain<Double, List<V>> getDataToMonitor(){
         //TODO: Create a single TimeChain with all the TimeChains
-        /*Update.asTimeChain(updates);
-        List<List<Update<Double, V>>> timechainsUpdates = new ArrayList<>();
-        for (int i = 0; i< size; i++){
-            timechainsUpdates.add(timechains.get(i).toUpdates());
-        }*/
-        return null;
+        List<V> valueList = new ArrayList<>();
+        double endTime = timechains.stream().max(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
+        TimeChain<Double, List<V>> joinedTimeChain = new TimeChain<>(endTime);
+        List<TimeChain<Double, V>> timeChainsCopy = List.copyOf(timechains);
+        boolean stop = false;
+        double time = timechains.stream().min(Comparator.comparing(TimeChain::getStart)).get().getStart();
+
+        while (stop == false){
+            for(int i = 0; i < size; i++){
+                valueList.add(timeChainsCopy.get(i).get(0).getValue());
+            }
+            joinedTimeChain.add(new Segment<>(time, valueList));
+            time = timeChainsCopy.stream().min(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
+            double finalTime = time;
+            timeChainsCopy.removeIf(value -> value.get(0).getEnd() <= finalTime);
+            if(time == endTime) stop = true;
+        }
+
+        return joinedTimeChain;
     }
 
     public void deleteValues(){
-        //TODO: DELETE THE TIME CHAIN VALUES
+        timechains.removeAll(timechains);
     }
 }
