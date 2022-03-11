@@ -1,5 +1,8 @@
 package dataStorages;
 
+import com.sun.tools.javac.Main;
+import controller.Controller;
+import controller.MainController;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 import messages.Message;
 import services.Service;
@@ -15,8 +18,11 @@ public class FixedRateTimeBuffer<E> implements Buffer<E>{
     int size;
     Service<E, ?> service;
     DataStoringTimeChain<E> storingTimeChain;
+    MainController controller;
 
-    public FixedRateTimeBuffer(int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
+    public FixedRateTimeBuffer(MainController controller, int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
+        this.controller = controller;
+
         size = spatialModelSize;
         service = serviceToConnect;
 
@@ -31,8 +37,7 @@ public class FixedRateTimeBuffer<E> implements Buffer<E>{
         public void run() {
             service.run(storingTimeChain.getDataToMonitor());
             flush();
-            //TODO: think what to do with the results
-            service.getResponseFromService();
+            controller.updateResponse();
         }
     }
 

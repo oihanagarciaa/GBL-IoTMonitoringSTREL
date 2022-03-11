@@ -42,7 +42,7 @@ class OnlineMoonlightServiceTest {
     @Test
     void monitorWithoutUpdate(){
         startOnlineMoonlightService();
-        assertThrows(NullPointerException.class, onlineMoonlightService::run);
+        assertThrows(IllegalArgumentException.class, () -> {onlineMoonlightService.run(new Update<>(0.0, 0.0, null));});
     }
 
     @Test
@@ -68,8 +68,7 @@ class OnlineMoonlightServiceTest {
             signalSP.add(factory.fromObjectArray(20));
         }
         Update<Double, List<MoonLightRecord>> update = new Update<>(0.0, 1.0, signalSP);
-        onlineMoonlightService.updateService(update);
-        onlineMoonlightService.run();
+        onlineMoonlightService.run(update);
         SpaceTimeSignal<Double, AbstractInterval<Boolean>> signal = onlineMoonlightService.getResponseFromService();
         System.out.println(signal);
         assertNotNull(signal);

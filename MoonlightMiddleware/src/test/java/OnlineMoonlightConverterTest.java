@@ -33,6 +33,7 @@ class OnlineMoonlightConverterTest {
         assertEquals(uExpected, uReturned);
     }
 
+    @Disabled("Maybe I will delete the converter")
     @Test
     void convertJSON(){
         DataConverter dataConverter = new MoonlightRecordConverter();

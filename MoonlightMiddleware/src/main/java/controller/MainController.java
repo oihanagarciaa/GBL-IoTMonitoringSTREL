@@ -46,7 +46,7 @@ public class MainController implements Controller {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new MoonlightRecordConverter();
             //buffer = new ConstantSizeBuffer<>(3, service);
-            buffer = new FixedRateTimeBuffer<MoonLightRecord>(model.size(), service, 5000);
+            buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }
@@ -85,7 +85,7 @@ public class MainController implements Controller {
         }
     }
 
-    private void updateResponse() {
+    public void updateResponse() {
         result = service.getResponseFromService();
         //TODO: Quit print line
         System.out.println(getResults());
@@ -140,6 +140,7 @@ public class MainController implements Controller {
 
     @Override
     public List<String> getResults() {
+        updateResponse();
         return result.getSegments().toList().stream() // converts signal to a list
                      .map(Object::toString) // convert signal segments to strings
                      .collect(Collectors.toList()); // recollect as list of strings

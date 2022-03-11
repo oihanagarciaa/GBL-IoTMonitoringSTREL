@@ -16,9 +16,9 @@ public class OfficeMessage extends Message<MoonLightRecord>{
     List<String> places;
 
     public OfficeMessage(){
+        places = Arrays.asList("Hospital", "School", "MetroStop", "School", "MainSquare", "BusStop");
         factory = new RecordHandler(new EnumerationHandler<>(
                 String.class, places.toArray(new String[0])), DataHandler.INTEGER, DataHandler.INTEGER);
-        places = Arrays.asList("Hospital", "School", "MetroStop", "School", "MainSquare", "BusStop");
     }
 
     @Override

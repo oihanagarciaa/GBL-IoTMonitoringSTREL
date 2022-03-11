@@ -1,5 +1,6 @@
-
-
+import eu.quanticol.moonlight.signal.online.TimeChain;
+import eu.quanticol.moonlight.signal.online.Update;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import services.Service;
 import services.DELETEServiceHandler;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ServiceHandlerTest {
 
+    @Disabled("The service handler is not used anymore")
     @Test
     void ableToStartAService() {
         Service service = new FakeWorkingService();
@@ -40,9 +42,15 @@ class ServiceHandlerTest {
         }
 
         @Override
-        public void run() {
+        public void run(Update<Double, List<Double>> update) {
             running = true;
         }
+
+        @Override
+        public void run(TimeChain<Double, List<Double>> timeChain) {
+            running = true;
+        }
+
         @Override
         public void init() {
             // do nothing
@@ -53,15 +61,6 @@ class ServiceHandlerTest {
             running = false;
         }
 
-        @Override
-        public void updateService(Double aDouble) {
-
-        }
-
-        @Override
-        public void updateService(List<Double> updates) {
-
-        }
         @Override
         public Double getResponseFromService() {
             return null;
@@ -76,8 +75,13 @@ class ServiceHandlerTest {
         }
 
         @Override
-        public void run() {
-            return;
+        public void run(Update<Double, List<Double>> update) {
+
+        }
+
+        @Override
+        public void run(TimeChain<Double, List<Double>> timeChain) {
+
         }
 
         @Override
@@ -87,16 +91,6 @@ class ServiceHandlerTest {
 
         @Override
         public void stop() {
-
-        }
-
-        @Override
-        public void updateService(Double aDouble) {
-
-        }
-
-        @Override
-        public void updateService(List<Double> updates) {
 
         }
 
