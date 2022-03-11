@@ -3,32 +3,34 @@ package dataStorages;
 import messages.Message;
 import services.Service;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-//TODO: This is not used anymore
 public class ConstantSizeBuffer<E> implements Buffer<E>{
     private final int maxCapacity;
-    private List<E> elements;
+    DataStoringTimeChain<E> storingTimeChain;
     private final Service<E, ?> connectedService;
+    int counter;
 
-    public ConstantSizeBuffer(int bufferSize, Service<E, ?> serviceToConnect) {
+    public ConstantSizeBuffer(int spatialModelSize, int bufferSize, Service<E, ?> serviceToConnect) {
+        counter = 0;
+
         maxCapacity = bufferSize;
-        elements = new ArrayList<>(bufferSize);
         connectedService = serviceToConnect;
+
+        storingTimeChain = new DataStoringTimeChain<>(spatialModelSize);
     }
 
     private boolean bufferIsFull() {
-        return elements.size() == maxCapacity - 1;
+        return counter == maxCapacity;
     }
 
     @Override
     public boolean add(Message message) {
-        elements.add((E) message.getValueElement());
+        storingTimeChain.saveNewValue(message.getId(), message.getTime(), (E) message.getValueElement());
+        counter ++;
         if(bufferIsFull()) {
-            //TODO: This is wrong
-            //connectedService.updateService(get());
-            //connectedService.run(get());
+            connectedService.run(storingTimeChain.getDataToMonitor());
             flush();
             return true;
         }
@@ -36,12 +38,13 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
     }
 
     @Override
-    public List<E> get() {
-        return elements;
+    public Collection<E> get() {
+        return storingTimeChain.getAllValues();
     }
 
     @Override
     public void flush() {
-        elements = new ArrayList<>(maxCapacity);
+        counter = 0;
+        storingTimeChain.deleteValues();
     }
 }

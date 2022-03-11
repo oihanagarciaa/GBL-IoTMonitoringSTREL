@@ -1,19 +1,14 @@
 package dataStorages;
 
-import com.sun.tools.javac.Main;
-import controller.Controller;
 import controller.MainController;
-import eu.quanticol.moonlight.signal.online.TimeChain;
 import messages.Message;
 import services.Service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class FixedRateTimeBuffer<E> implements Buffer<E>{
-    //TODO: see where to add the timer.cancel()
     Timer timer;
     int size;
     Service<E, ?> service;
@@ -49,7 +44,7 @@ public class FixedRateTimeBuffer<E> implements Buffer<E>{
 
     @Override
     public Collection<E> get() {
-        return null;
+        return storingTimeChain.getAllValues();
     }
 
     @Override

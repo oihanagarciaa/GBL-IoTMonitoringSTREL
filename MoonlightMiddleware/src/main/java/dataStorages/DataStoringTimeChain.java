@@ -22,12 +22,7 @@ public class DataStoringTimeChain<V>{
 
     public DataStoringTimeChain(int size){
         this.size = size;
-        timechains = new ArrayList<>();
-        for(int i = 0; i < size; i++){
-            //TODO: Think how to initialize the timechain
-            TimeChain<Double, V> timeChain = new TimeChain<Double, V>(100.0);
-            timechains.add(timeChain);
-        }
+        initTimeChains();
     }
 
     public void saveNewValue(int id, double time, V value){
@@ -46,28 +41,51 @@ public class DataStoringTimeChain<V>{
      */
     public TimeChain<Double, List<V>> getDataToMonitor(){
         //TODO: Create a single TimeChain with all the TimeChains
-        List<V> valueList = new ArrayList<>();
-        double endTime = timechains.stream().max(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
-        TimeChain<Double, List<V>> joinedTimeChain = new TimeChain<>(endTime);
-        List<TimeChain<Double, V>> timeChainsCopy = List.copyOf(timechains);
-        boolean stop = false;
-        double time = timechains.stream().min(Comparator.comparing(TimeChain::getStart)).get().getStart();
+        try{
+            List<V> valueList = new ArrayList<>();
+            double endTime = timechains.stream().max(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
+            TimeChain<Double, List<V>> joinedTimeChain = new TimeChain<>(endTime);
+            List<TimeChain<Double, V>> timeChainsCopy = List.copyOf(timechains);
+            boolean stop = false;
+            double time = timechains.stream().min(Comparator.comparing(TimeChain::getStart)).get().getStart();
 
-        while (stop == false){
-            for(int i = 0; i < size; i++){
-                valueList.add(timeChainsCopy.get(i).get(0).getValue());
+            while (stop == false){
+                for(int i = 0; i < size; i++){
+                    valueList.add(timeChainsCopy.get(i).get(0).getValue());
+                }
+                joinedTimeChain.add(new Segment<>(time, valueList));
+                time = timeChainsCopy.stream().min(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
+                double finalTime = time;
+                timeChainsCopy.removeIf(value -> value.get(0).getEnd() <= finalTime);
+                if(time == endTime) stop = true;
             }
-            joinedTimeChain.add(new Segment<>(time, valueList));
-            time = timeChainsCopy.stream().min(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
-            double finalTime = time;
-            timeChainsCopy.removeIf(value -> value.get(0).getEnd() <= finalTime);
-            if(time == endTime) stop = true;
+            return joinedTimeChain;
+        }catch (IndexOutOfBoundsException exception){
         }
+        return null;
+    }
 
-        return joinedTimeChain;
+    public List<V> getAllValues(){
+        List<V> listRecords = new ArrayList<>();
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < timechains.get(i).size(); j++){
+                listRecords.add(timechains.get(i).get(j).getValue());
+            }
+        }
+        return listRecords;
     }
 
     public void deleteValues(){
         timechains.removeAll(timechains);
+        initTimeChains();
+    }
+
+    private void initTimeChains(){
+        timechains = new ArrayList<>();
+        for(int i = 0; i < size; i++){
+            //TODO: Think how to initialize the timechain
+            TimeChain<Double, V> timeChain = new TimeChain<Double, V>(100.0);
+            timechains.add(timeChain);
+        }
     }
 }

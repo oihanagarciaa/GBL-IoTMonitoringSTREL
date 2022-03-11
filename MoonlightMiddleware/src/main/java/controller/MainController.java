@@ -27,8 +27,9 @@ import java.util.stream.Collectors;
  * Main entry point of the middleware
  */
 public class MainController implements Controller {
-    //TODO: subscriber receives String, maybe change to Message
     Subscriber<String> subscriber;
+
+
     DataConverter<MoonLightRecord, String> dataConverter;
     String broker;
     Service<MoonLightRecord, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
@@ -41,10 +42,11 @@ public class MainController implements Controller {
     private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
     private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
-    public void initializeService() {
+    public void initializeService() throws UnsupportedOperationException{
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new MoonlightRecordConverter();
+            //TODO: how to initialize the service
             //buffer = new ConstantSizeBuffer<>(3, service);
             buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
         } else {
@@ -53,7 +55,7 @@ public class MainController implements Controller {
         service.init();
     }
 
-    public void establishConnection() {
+    public void establishConnection() throws UnsupportedOperationException{
         if(connectionType == ConnType.MQTT){
             subscriber = new MQTTSubscriber(broker, this);
             //TODO: Declare the topic somewhere else
@@ -63,21 +65,6 @@ public class MainController implements Controller {
         }else
             throw new UnsupportedOperationException("Unknown connection type");
     }
-
-    public void runForever() {
-        //TODO: run forever (Quit?)
-        /*
-        What does this do?
-        ...
-        1. getmessage?
-        2. convert the data
-        3. send update to the service
-        4. serviceHandler.startService();
-        5. serviceHandler.getResults(); (?)
-         */
-        throw new UnsupportedOperationException("This is not implemented yet");
-    }
-
 
     public void updateData(Message message) {
         if(buffer.add(message)){
@@ -132,15 +119,13 @@ public class MainController implements Controller {
             initializeService();
             establishConnection();
             return true;
-        } catch (Exception e) {
-            // TODO: dangerous catch-all exception, refactor
+        } catch (UnsupportedOperationException e) {
             return false;
         }
     }
 
     @Override
     public List<String> getResults() {
-        updateResponse();
         return result.getSegments().toList().stream() // converts signal to a list
                      .map(Object::toString) // convert signal segments to strings
                      .collect(Collectors.toList()); // recollect as list of strings
