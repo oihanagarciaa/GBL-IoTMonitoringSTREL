@@ -1,14 +1,16 @@
 package dataStorages;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
+import eu.quanticol.moonlight.signal.DataHandler;
+import eu.quanticol.moonlight.signal.EnumerationHandler;
+import eu.quanticol.moonlight.signal.RecordHandler;
 import eu.quanticol.moonlight.signal.Segment;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 import eu.quanticol.moonlight.signal.online.TimeSegment;
 import eu.quanticol.moonlight.signal.online.Update;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * All the values of the sensors will be stored here
@@ -41,25 +43,33 @@ public class DataStoringTimeChain<V>{
      */
     public TimeChain<Double, List<V>> getDataToMonitor(){
         //TODO: Create a single TimeChain with all the TimeChains
-        List<V> valueList = new ArrayList<>();
-        double endTime = timechains.stream().max(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
-        TimeChain<Double, List<V>> joinedTimeChain = new TimeChain<>(endTime);
-        List<TimeChain<Double, V>> timeChainsCopy = List.copyOf(timechains);
-        boolean stop = false;
-        double time = timechains.stream().min(Comparator.comparing(TimeChain::getStart)).get().getStart();
-
-        while (stop == false){
-            for(int i = 0; i < size; i++){
-                valueList.add(timeChainsCopy.get(i).get(0).getValue());
+        TimeChain<Double, List<V>> returnTimeChain = new TimeChain<>(Double.MAX_VALUE);
+        Map<Double, List<V>> map = new HashMap<>();
+        //TODO: Quit factory
+        RecordHandler factory;
+        List<String> places;
+        places = Arrays.asList("Hospital", "School", "MetroStop", "School", "MainSquare", "BusStop");
+        factory = new RecordHandler(new EnumerationHandler<>(
+                String.class, places.toArray(new String[0])), DataHandler.INTEGER, DataHandler.INTEGER);
+        for(int i = 0; i < size; i++){
+            for (int j = 0; j < timechains.get(i).size(); j++){
+                double start =  timechains.get(i).get(j).getStart();
+                V value = timechains.get(i).get(j).getValue();
+                List<V> listValues = map.get(start);
+                if( listValues == null){
+                    listValues = new ArrayList<>();
+                    for(int k = 0; k < size; k++){
+                        listValues.add((V) factory.fromObjectArray("", null, null));
+                    }
+                }
+                listValues.add(i, value);
+                map.put(start, listValues);
             }
-            joinedTimeChain.add(new Segment<>(time, valueList));
-            time = timeChainsCopy.stream().min(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
-            double finalTime = time;
-            //timeChainsCopy.removeIf(value -> value.get(0).getEnd() <= finalTime);
-            if(time == endTime) stop = true;
         }
-
-        return joinedTimeChain;
+        List<Double> sortedList = new ArrayList<>(map.keySet());
+        Collections.sort(sortedList);
+        sortedList.stream().forEach(time->returnTimeChain.add(new Segment<>(time, map.get(time))));
+        return returnTimeChain;
     }
 
     public List<V> getAllValues(){
@@ -80,8 +90,7 @@ public class DataStoringTimeChain<V>{
     private void initTimeChains(){
         timechains = new ArrayList<>();
         for(int i = 0; i < size; i++){
-            //TODO: Think how to initialize the timechain
-            TimeChain<Double, V> timeChain = new TimeChain<Double, V>(100.0);
+            TimeChain<Double, V> timeChain = new TimeChain<Double, V>(Double.MAX_VALUE);
             timechains.add(timeChain);
         }
     }

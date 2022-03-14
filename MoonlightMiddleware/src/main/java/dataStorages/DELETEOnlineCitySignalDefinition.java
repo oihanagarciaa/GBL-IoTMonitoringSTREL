@@ -9,6 +9,9 @@ import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
 import eu.quanticol.moonlight.signal.DataHandler;
 import eu.quanticol.moonlight.signal.EnumerationHandler;
 import eu.quanticol.moonlight.signal.RecordHandler;
+import eu.quanticol.moonlight.signal.Segment;
+import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
+import eu.quanticol.moonlight.signal.online.TimeChain;
 import eu.quanticol.moonlight.signal.online.Update;
 import eu.quanticol.moonlight.space.DistanceStructure;
 import eu.quanticol.moonlight.space.LocationService;
@@ -43,7 +46,7 @@ public class DELETEOnlineCitySignalDefinition {
     public DELETEOnlineCitySignalDefinition(){
         this.size = 6;
         places = Arrays.asList("Hospital", "School", "MetroStop", "School", "MainSquare", "BusStop");
-        noiseLevel1 = Arrays.asList(60, 70, 40, 50, 90, 80);
+        noiseLevel1 = Arrays.asList(60, 60, 40, 50, 60, 60);
         noiseLevel2 = Arrays.asList(80, 80, 80, 80, 80, 80);
         rand = new Random();
 
@@ -75,9 +78,6 @@ public class DELETEOnlineCitySignalDefinition {
         OnlineSpaceTimeMonitor<Double, MoonLightRecord, Boolean> m =
                 onlineMonitorInit(f);
 
-        List<Update<Double, List<MoonLightRecord>>> updates =
-                new ArrayList<>();
-
         /*ALDATUTAKOA*/
         RecordHandler factory = new RecordHandler(new EnumerationHandler<>(String.class, places.toArray(new String[0])), DataHandler.INTEGER, DataHandler.INTEGER);
         List<MoonLightRecord> signalSP = new ArrayList<MoonLightRecord>();
@@ -85,28 +85,23 @@ public class DELETEOnlineCitySignalDefinition {
             signalSP.add(factory.fromObjectArray(places.get(i), noiseLevel1.get(i), rand.nextInt(45)));
         }
 
-        /*for(int i = 0; i < 10 ; i++){
-            Double j = Double.valueOf(i);
-            updates.add(new Update<Double, List<MoonLightRecord>>(j, j+1, signalSP));
-                System.out.println(j +"------"+ m.monitor(updates.get(i)).getValueAt(j));
-        }*/
-
-
-        updates.add(new Update<Double, List<MoonLightRecord>>(0.0, 1.0, signalSP));
-        System.out.println(0 +"------"+ m.monitor(updates.get(0)).getValueAt(0.0));
+        TimeChain<Double, List<MoonLightRecord>> timeChain = new TimeChain<>(20.0);
+        timeChain.add(new Segment<>(4.0, signalSP));
+        m.monitor(timeChain);
 
         List<MoonLightRecord> signalSP2 = new ArrayList<MoonLightRecord>();
-        for (int i = 0; i < size; i++) {
-            signalSP2.add(factory.fromObjectArray(places.get(i), 10, 3));
+        signalSP2.add(factory.fromObjectArray("", null, null));
+        for (int i = 1; i < size; i++) {
+            signalSP2.add(factory.fromObjectArray(places.get(i), noiseLevel2.get(i), 3));
         }
-        updates.add(new Update<Double, List<MoonLightRecord>>(3.0, 5.0, signalSP2));
 
-        System.out.println(1 +"------"+ m.monitor(updates.get(1)).getValueAt(1.0));
-        System.out.println(2 +"------"+ m.monitor(updates.get(1)).getValueAt(2.0));
-        System.out.println(3 +"------"+ m.monitor(updates.get(1)).getValueAt(3.0));
-        System.out.println(4 +"------"+ m.monitor(updates.get(1)).getValueAt(4.0));
-        System.out.println(5 +"------"+ m.monitor(updates.get(1)).getValueAt(5.0));
-
+        TimeChain<Double, List<MoonLightRecord>> timeChain2 = new TimeChain<>(Double.MAX_VALUE);
+        timeChain2.add(new Segment<>(11.0, signalSP2));
+        SpaceTimeSignal<Double, AbstractInterval<Boolean>> result = m.monitor(timeChain2);
+        System.out.println(0 +"------"+ result.getValueAt(0.0));
+        System.out.println(4 +"------"+ result.getValueAt(4.0));
+        System.out.println(11 +"------"+ result.getValueAt(11.0));
+        System.out.println(13 +"------"+ result.getValueAt(13.0));
 
 
         //updates.forEach(m::monitor);
