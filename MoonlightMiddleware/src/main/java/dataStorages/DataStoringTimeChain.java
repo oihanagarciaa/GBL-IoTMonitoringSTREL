@@ -41,28 +41,25 @@ public class DataStoringTimeChain<V>{
      */
     public TimeChain<Double, List<V>> getDataToMonitor(){
         //TODO: Create a single TimeChain with all the TimeChains
-        try{
-            List<V> valueList = new ArrayList<>();
-            double endTime = timechains.stream().max(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
-            TimeChain<Double, List<V>> joinedTimeChain = new TimeChain<>(endTime);
-            List<TimeChain<Double, V>> timeChainsCopy = List.copyOf(timechains);
-            boolean stop = false;
-            double time = timechains.stream().min(Comparator.comparing(TimeChain::getStart)).get().getStart();
+        List<V> valueList = new ArrayList<>();
+        double endTime = timechains.stream().max(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
+        TimeChain<Double, List<V>> joinedTimeChain = new TimeChain<>(endTime);
+        List<TimeChain<Double, V>> timeChainsCopy = List.copyOf(timechains);
+        boolean stop = false;
+        double time = timechains.stream().min(Comparator.comparing(TimeChain::getStart)).get().getStart();
 
-            while (stop == false){
-                for(int i = 0; i < size; i++){
-                    valueList.add(timeChainsCopy.get(i).get(0).getValue());
-                }
-                joinedTimeChain.add(new Segment<>(time, valueList));
-                time = timeChainsCopy.stream().min(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
-                double finalTime = time;
-                timeChainsCopy.removeIf(value -> value.get(0).getEnd() <= finalTime);
-                if(time == endTime) stop = true;
+        while (stop == false){
+            for(int i = 0; i < size; i++){
+                valueList.add(timeChainsCopy.get(i).get(0).getValue());
             }
-            return joinedTimeChain;
-        }catch (IndexOutOfBoundsException exception){
+            joinedTimeChain.add(new Segment<>(time, valueList));
+            time = timeChainsCopy.stream().min(Comparator.comparing(TimeChain::getEnd)).get().getEnd();
+            double finalTime = time;
+            //timeChainsCopy.removeIf(value -> value.get(0).getEnd() <= finalTime);
+            if(time == endTime) stop = true;
         }
-        return null;
+
+        return joinedTimeChain;
     }
 
     public List<V> getAllValues(){

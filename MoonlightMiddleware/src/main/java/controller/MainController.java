@@ -2,6 +2,7 @@ package controller;
 
 import dataStorages.Buffer;
 import DELETEdataConverters.DataConverter;
+import dataStorages.ConstantSizeBuffer;
 import dataStorages.FixedRateTimeBuffer;
 import DELETEdataConverters.MoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
@@ -47,8 +48,8 @@ public class MainController implements Controller {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new MoonlightRecordConverter();
             //TODO: how to initialize the service
-            //buffer = new ConstantSizeBuffer<>(3, service);
-            buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
+            buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
+            //buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }

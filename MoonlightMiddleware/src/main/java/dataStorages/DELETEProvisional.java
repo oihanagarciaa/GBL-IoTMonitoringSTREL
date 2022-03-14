@@ -4,6 +4,8 @@ import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.*;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 
+import java.util.Comparator;
+
 //TODO: DELETE this class
 public class DELETEProvisional {
     TimeChain<Double, MoonLightRecord> myTimeChain;
@@ -24,7 +26,6 @@ public class DELETEProvisional {
 
         System.out.println(myTimeChain.toUpdates().toString());
 
-
         /*System.out.println("TIME 4: "+myTimeChain.toUpdates().get(2));
         System.out.println(myTimeChain.subChain(0, 1, 3.0).toString());
         System.out.println(myTimeChain.get(2));
@@ -41,9 +42,6 @@ public class DELETEProvisional {
         });*/
     }
 
-    //TODO: TIME CHAIN Questions
-    // 1- Time chain can't change previous values?
-    // 2- A time chain for each sensor?
     public static void main(String[] args) {
         DELETEProvisional provisional = new DELETEProvisional();
     }

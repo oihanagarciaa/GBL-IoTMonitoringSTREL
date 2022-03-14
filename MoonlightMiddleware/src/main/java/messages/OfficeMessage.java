@@ -26,8 +26,6 @@ public class OfficeMessage extends Message<MoonLightRecord>{
         String[] topics = topic.split("/");
         id = Integer.parseInt(topics[topics.length-1]);
         //TODO: Change the way the time is set
-        time = 1;
-
         JSONObject obj = (JSONObject) JSONValue.parse(message);
         convertJSONtoMoonlightRecord(obj);
     }

@@ -51,11 +51,14 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
         }
     }
 
+    long t = 0;
     //TODO: Think where to declare the specific message type (new OfficeMessage...)
     @Override
     public void receive(String topic, String message) {
         Message messageClass = new OfficeMessage();
         messageClass.transformReceivedData(topic, message);
+        //TODO: Change the time set
+        messageClass.setTime(t++);
         controller.updateData(messageClass);
     }
 }
