@@ -8,14 +8,14 @@ import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class FixedRateTimeBuffer<E> implements Buffer<E>{
+public class FixedTimeBuffer<E> implements Buffer<E>{
     Timer timer;
     int size;
     Service<E, ?> service;
     DataStoringTimeChain<E> storingTimeChain;
     MainController controller;
 
-    public FixedRateTimeBuffer(MainController controller, int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
+    public FixedTimeBuffer(MainController controller, int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
         this.controller = controller;
 
         size = spatialModelSize;

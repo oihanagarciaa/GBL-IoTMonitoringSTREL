@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class OfficeMessage extends Message<MoonLightRecord>{
-
     RecordHandler factory;
     List<String> places;
 
@@ -28,6 +27,11 @@ public class OfficeMessage extends Message<MoonLightRecord>{
         //TODO: Change the way the time is set
         JSONObject obj = (JSONObject) JSONValue.parse(message);
         convertJSONtoMoonlightRecord(obj);
+    }
+
+    @Override
+    public MoonLightRecord getDefaulValue() {
+        return factory.fromObjectArray("", Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     public void convertJSONtoMoonlightRecord(JSONObject j){

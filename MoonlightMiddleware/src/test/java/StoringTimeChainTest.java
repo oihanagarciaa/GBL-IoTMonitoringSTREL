@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+//TODO: Time Chain learning test
 public class StoringTimeChainTest {
     int size = 6;
 

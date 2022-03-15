@@ -6,7 +6,6 @@ import eu.quanticol.moonlight.signal.RecordHandler;
 import eu.quanticol.moonlight.signal.Segment;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 import eu.quanticol.moonlight.signal.online.TimeSegment;
-import eu.quanticol.moonlight.signal.online.Update;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,12 +16,10 @@ import java.util.stream.Collectors;
  * @param <V> Values of a unique sensor
  */
 public class DataStoringTimeChain<V>{
-    List<TimeChain<Double, V>> timechains;
-    List<Update<Double, V>> updates = new ArrayList<>();
+    List<TimeChain<Double, V>> sensorValuesTimeChains;
     private final int size;
-    V defaultValue;
 
-    //TODO: add default value
+    //TODO: add default value (?)
     public DataStoringTimeChain(int size/*, V defaultValue*/){
         this.size = size;
         //this.defaultValue = defaultValue;
@@ -30,11 +27,12 @@ public class DataStoringTimeChain<V>{
     }
 
     public void saveNewValue(int id, double time, V value){
-        if(id < 0 || id > timechains.size()){
+        //TODO: If null InvalidArgumentException
+        if(id < 0 || id > sensorValuesTimeChains.size()){//TODO: change this if and throw exception
             throw new UnsupportedOperationException("Not valid ID");
         }
         else{
-            timechains.get(id).add(new TimeSegment<>(time, value));
+            sensorValuesTimeChains.get(id).add(new TimeSegment<>(time, value));
         }
     }
 
@@ -58,9 +56,9 @@ public class DataStoringTimeChain<V>{
         Map<Double, Map<Integer, V>> superMap = new HashMap<>();
 
         for(int i = 0; i < size; i++) {
-            for (int j = 0; j < timechains.get(i).size(); j++) {
-                double start = timechains.get(i).get(j).getStart();
-                V value = timechains.get(i).get(j).getValue();
+            for (int j = 0; j < sensorValuesTimeChains.get(i).size(); j++) {
+                double start = sensorValuesTimeChains.get(i).get(j).getStart();
+                V value = sensorValuesTimeChains.get(i).get(j).getValue();
 
                 Map<Integer, V> posValueMap = superMap.get(start);
                 if (posValueMap == null) {
@@ -71,7 +69,7 @@ public class DataStoringTimeChain<V>{
             }
         }
 
-        List<V> listValues = initDefaultValues();
+        List<V> listValues = new ArrayList<>();// = initDefaultValues();
 
         List<Double> sortedList = new ArrayList<>(superMap.keySet());
         Collections.sort(sortedList);
@@ -80,55 +78,38 @@ public class DataStoringTimeChain<V>{
             posValueMap.keySet().stream().forEach(index -> listValues.set(index, posValueMap.get(index)));
             List<V> copy = listValues.stream().collect(Collectors.toList());;
             returnTimeChain.add(new Segment<>(time, copy));
-            //returnTimeChain.add(new Segment<>(time, map.get(time)));
         });
-        /*List<V> listValues = initDefaultValues();
 
-
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < timechains.get(i).size(); j++){
-                double start =  timechains.get(i).get(j).getStart();
-                V value = timechains.get(i).get(j).getValue();
-                 = map.get(start);
-
-                listValues.add(i, value);
-                map.put(start, listValues);
-            }
-        }
-
-        List<Double> sortedList = new ArrayList<>(map.keySet());
-        Collections.sort(sortedList);
-        sortedList.stream().forEach(time->returnTimeChain.add(new Segment<>(time, map.get(time))));*/
         return returnTimeChain;
     }
 
     public List<V> getAllValues(){
         List<V> listRecords = new ArrayList<>();
         for(int i = 0; i < size; i++){
-            for (int j = 0; j < timechains.get(i).size(); j++){
-                listRecords.add(timechains.get(i).get(j).getValue());
+            for (int j = 0; j < sensorValuesTimeChains.get(i).size(); j++){
+                listRecords.add(sensorValuesTimeChains.get(i).get(j).getValue());
             }
         }
         return listRecords;
     }
 
     public void deleteValues(){
-        timechains.removeAll(timechains);
+        sensorValuesTimeChains.removeAll(sensorValuesTimeChains);
         initTimeChains();
     }
 
     private void initTimeChains(){
-        timechains = new ArrayList<>();
+        sensorValuesTimeChains = new ArrayList<>();
         for(int i = 0; i < size; i++){
             TimeChain<Double, V> timeChain = new TimeChain<Double, V>(Double.MAX_VALUE);
-            timechains.add(timeChain);
+            sensorValuesTimeChains.add(timeChain);
         }
     }
 
-    private List<V> initDefaultValues(){
+    private List<V> initDefaultValues(V defaultValue){
         List<V> listValues = new ArrayList<>();
-        for(int k = 0; k < size; k++){
-            listValues.add((V) factory.fromObjectArray("", null, null)/*null*/);
+        for(int i = 0; i < size; i++){
+            listValues.add(defaultValue);
         }
         return listValues;
     }

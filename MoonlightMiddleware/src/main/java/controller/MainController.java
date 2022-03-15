@@ -3,7 +3,6 @@ package controller;
 import dataStorages.Buffer;
 import DELETEdataConverters.DataConverter;
 import dataStorages.ConstantSizeBuffer;
-import dataStorages.FixedRateTimeBuffer;
 import DELETEdataConverters.MoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
@@ -28,9 +27,8 @@ import java.util.stream.Collectors;
  * Main entry point of the middleware
  */
 public class MainController implements Controller {
+    //TODO: If I want to access a variable from a test make it protected
     Subscriber<String> subscriber;
-
-
     DataConverter<MoonLightRecord, String> dataConverter;
     String broker;
     Service<MoonLightRecord, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
@@ -47,7 +45,7 @@ public class MainController implements Controller {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             dataConverter = new MoonlightRecordConverter();
-            //TODO: how to initialize the service
+            //TODO: how to initialize the buffer
             buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
             //buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
         } else {

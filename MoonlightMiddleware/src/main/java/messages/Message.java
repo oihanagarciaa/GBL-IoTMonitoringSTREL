@@ -1,24 +1,21 @@
 package messages;
 
+/**
+ * Object oriented
+ */
 public abstract class Message<E> {
-    int id;
-    long time;
-    E valueElement;
+    private int id;
+    private long time;
+    private E valueElement;
+
+    public void setMessageData(int id, long time, E element){
+        this.id = id;
+        this.time = time;
+        this.valueElement = element;
+    }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setTime(long time) {
-        this.time = time;
-    }
-
-    public void setValueElement(E valueElement) {
-        this.valueElement = valueElement;
     }
 
     public long getTime() {
@@ -30,4 +27,6 @@ public abstract class Message<E> {
     }
 
     abstract public void transformReceivedData(String topic, String message);
+
+    abstract public E getDefaulValue();
 }
