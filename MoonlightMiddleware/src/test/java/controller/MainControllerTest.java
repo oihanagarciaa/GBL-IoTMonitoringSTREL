@@ -1,6 +1,5 @@
-import controller.ConnType;
-import controller.Controller;
-import controller.MainController;
+package controller;
+
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.domain.DoubleDistance;
 import eu.quanticol.moonlight.formula.AtomicFormula;
@@ -17,9 +16,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import services.MonitorType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -38,21 +35,6 @@ class MainControllerTest {
     }
 
     @Test
-    void testTypicalDataReceived() {
-        MainController controller = controllerInit();
-        MainController spy = spy(controller);
-
-        spy.run();
-
-        String expectedResult = "test";
-        List<String> l = new ArrayList<>();
-        l.add("test");
-        doReturn(l).when(spy).getResults();
-
-        assertEquals(expectedResult, spy.getResults().get(0));
-    }
-
-    @Test
     void updateDataMainControllerTest(){
         MainController controller = controllerInitRealValues();
         controller.initializeService();
@@ -62,10 +44,10 @@ class MainControllerTest {
         for(int i = 0; i < 3; i++){
             controller.updateData(message);
         }
-        //TODO: Leave it like this?
+        assertEquals(3, controller.buffer.get().size());
     }
 
-    public static MainController controllerInit() {
+    private static MainController controllerInit() {
         MainController controller = new MainController();
         String sourceId = "tcp://localhost:1883";
         ConnType connType = ConnType.MQTT;
@@ -85,7 +67,7 @@ class MainControllerTest {
         return controller;
     }
 
-    public static MainController controllerInitRealValues(){
+    private static MainController controllerInitRealValues(){
         MainController c = new MainController();
         c.setMonitorType(MonitorType.ONLINE_MOONLIGHT);
         c.setConnectionType(ConnType.MQTT);
@@ -98,7 +80,7 @@ class MainControllerTest {
         return c;
     }
 
-    public static SpatialModel<Double> buildSpatialModel(int size){
+    private static SpatialModel<Double> buildSpatialModel(int size){
         HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         cityMap.put(new Pair<>(0, 2), 4.0);
         cityMap.put(new Pair<>(2, 0), 4.0);
@@ -113,12 +95,12 @@ class MainControllerTest {
         return Utils.createSpatialModel(size, cityMap);
     }
 
-    public static Formula formula() {
+    private static Formula formula() {
         Formula controlPeople = new AtomicFormula("manyPeople");
         return controlPeople;
     }
 
-    public static Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> getOnlineAtoms() {
+    private static Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> getOnlineAtoms() {
         Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = new HashMap<>();
         atoms.put("manyPeople", a -> booleanInterval(a.get(2, Integer.class) < 10));
         return atoms;

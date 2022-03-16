@@ -2,54 +2,53 @@ import dataConverters.DataConverter;
 import dataConverters.DELETEMoonlightRecordConverter;
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.online.Update;
+import messages.Message;
+import messages.OfficeMessage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class OnlineMoonlightConverterTest {
+class OfficeMessageTest {
 
     @Test
-    void convertWithoutInit(){
-        DELETEMoonlightRecordConverter converter = new DELETEMoonlightRecordConverter();
-        assertThrows(UnsupportedOperationException.class, () -> {
-            //converter.fromMessageToMonitorData("");
-        });
+    void transformData(){
+        Message message = new OfficeMessage();
+        message.transformReceivedData("asdfv/2", basicValidJSON());
+        assertEquals(2, message.getId());
+        //TODO: test time
+        assertEquals(MoonLightRecord.class, message.getValueElement().getClass());
     }
 
     @Test
-    void convertTest(){
-        DELETEMoonlightRecordConverter converter = new DELETEMoonlightRecordConverter();
-        DELETEMoonlightRecordConverter spyConverter = spy(converter);
-
-        //spyConverter.initDataConverter(Integer.MIN_VALUE);
-        MoonLightRecord uExpected = mock(MoonLightRecord.class);
-        String s = "";
-        //doReturn(uExpected).when(spyConverter).fromMessageToMonitorData(s);
-
-        //MoonLightRecord uReturned = spyConverter.fromMessageToMonitorData(s);
-
-        //assertEquals(uExpected, uReturned);
+    void transformWrongData(){
+        Message message = new OfficeMessage();
+        assertThrows(UnsupportedOperationException.class,
+                ()->message.transformReceivedData(
+                        "asdfv/2", "{ \"asda\":4}"));
     }
 
-    @Disabled("Maybe I will delete the converter")
     @Test
-    void convertJSON(){
-        DataConverter dataConverter = new DELETEMoonlightRecordConverter();
-        //dataConverter.initDataConverter(5);
-        //Object u = dataConverter.fromMessageToMonitorData("{ \"place\": 2, \"noise\": 300, \"people\": 10}");
-        //assertEquals(u.getClass(), Update.class);
+    void transformWrongTopic(){
+        Message message = new OfficeMessage();
+        assertThrows(UnsupportedOperationException.class,
+                ()->message.transformReceivedData(
+                        "asdfv", basicValidJSON()));
     }
 
-    /**
-     * If the JSON file is not correct, the program must continue working, treat exceptions
-     */
-    @Disabled("we need to deal with failures in some way")
     @Test
-    void failingJSON(){
-        DataConverter dataConverter = new DELETEMoonlightRecordConverter();
-        //dataConverter.initDataConverter(5);
-        //dataConverter.fromMessageToMonitorData(/*2,*/ "asdfghjk");
+    void getDefaultValueTest(){
+        Message message = new OfficeMessage();
+        MoonLightRecord moonLightRecord = (MoonLightRecord) message.getDefaulValue();
+        assertEquals(MoonLightRecord.class, moonLightRecord.getClass());
+    }
+
+    private static String basicValidJSON() {
+        return "{\n" +
+                "            \"place\": 3\n" +
+                "            \"noise\": 40\n" +
+                "            \"people\": 30\n" +
+                "}";
     }
 }
