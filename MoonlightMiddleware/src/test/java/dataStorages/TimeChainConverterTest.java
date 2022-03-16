@@ -1,4 +1,7 @@
-import dataStorages.DataStoringTimeChain;
+package dataStorages;
+
+import dataConverters.TimeChainConverter;
+import eu.quanticol.moonlight.signal.online.TimeChain;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -6,9 +9,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StoringTimeChainTest {
+public class TimeChainConverterTest {
     @Test
-    void basicControllerInit() {
+    void timeChainConverter() {
         int size = 3;
         DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size, Integer.MAX_VALUE);
 
@@ -17,13 +20,17 @@ public class StoringTimeChainTest {
         dataStoringTimeChain.saveNewValue(1, 2.0, 9);
         dataStoringTimeChain.saveNewValue(0, 4.0, 15);
 
+        List<TimeChain<Double, Integer>> timeChainList = dataStoringTimeChain.timeChainList;
+
+        TimeChainConverter<Integer> timeChainConverter = new TimeChainConverter<>(size, Integer.MAX_VALUE);
+        TimeChain<Double, List<Integer>> result = timeChainConverter.fromListToTimeChain(timeChainList, 5.0);
         assertEquals(4.0,
-                dataStoringTimeChain.getDataToMonitor().getLast().getStart());
+                result.getLast().getStart());
         List<Integer> finalList = new ArrayList<>();
         finalList.add(15);
         finalList.add(9);
         finalList.add(7);
         assertEquals(finalList,
-                dataStoringTimeChain.getDataToMonitor().getLast().getValue());
+                result.getLast().getValue());
     }
 }
