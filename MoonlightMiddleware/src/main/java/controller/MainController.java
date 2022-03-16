@@ -2,12 +2,18 @@ package controller;
 
 import dataStorages.Buffer;
 import dataStorages.ConstantSizeBuffer;
-import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.formula.Formula;
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
-import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.SpatialModel;
+
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+
 import messages.Message;
 import services.MonitorType;
 import services.OnlineMoonlightService;
@@ -28,14 +34,14 @@ public class MainController implements Controller {
     //TODO: If I want to access a variable from a test make it protected
     Subscriber<String> subscriber;
     String broker;
-    Service<MoonLightRecord, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
+    Service<MoonLightRecord, SpaceTimeSignal<Double, Box<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
     protected Buffer<MoonLightRecord> buffer;
     private SpatialModel<Double> model;
     private Formula formula;
-    private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
-    private Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
+    private SpaceTimeSignal<Double, Box<Boolean>> result;
+    private Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms;
     private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
     public void initializeService() throws UnsupportedOperationException{
@@ -99,7 +105,7 @@ public class MainController implements Controller {
     }
 
     @Override
-    public void setAtomicFormulas(Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms) {
+    public void setAtomicFormulas(Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms) {
         this.atoms = atoms;
     }
 

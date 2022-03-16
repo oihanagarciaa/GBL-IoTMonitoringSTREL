@@ -1,14 +1,16 @@
 package controller;
 
-import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.domain.DoubleDistance;
+import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.AtomicFormula;
-import eu.quanticol.moonlight.formula.Formula;
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.SpatialModel;
-import eu.quanticol.moonlight.util.Pair;
 import eu.quanticol.moonlight.util.Utils;
+
 import messages.Message;
 import messages.OfficeMessage;
 import org.junit.jupiter.api.Test;
@@ -54,7 +56,7 @@ class MainControllerTest {
         MonitorType monitorType = MonitorType.ONLINE_MOONLIGHT;
         Formula f = mock(Formula.class);
         SpatialModel<Double> model = mock(SpatialModel.class);
-        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = mock(Map.class);
+        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = mock(Map.class);
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distance = mock(HashMap.class);
 
         controller.setDataSource(sourceId);
@@ -100,22 +102,22 @@ class MainControllerTest {
         return controlPeople;
     }
 
-    private static Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> getOnlineAtoms() {
-        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = new HashMap<>();
+    private static Map<String, Function<MoonLightRecord, Box<Boolean>>> getOnlineAtoms() {
+        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = new HashMap<>();
         atoms.put("manyPeople", a -> booleanInterval(a.get(2, Integer.class) < 10));
         return atoms;
     }
 
-    private static AbstractInterval<Boolean> booleanInterval(boolean cond) {
-        return cond ? new AbstractInterval<>(true, true) :
-                new AbstractInterval<>(false, false);
+    private static Box<Boolean> booleanInterval(boolean cond) {
+        return cond ? new Box<>(true, true) :
+                new Box<>(false, false);
     }
 
     private static HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> setDistanceFunctions(SpatialModel<Double> city) {
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
         distanceFunctions.put("distance",
-                m -> new DistanceStructure<Double, Double>(x -> x,
-                        new DoubleDistance(), 60.0, Double.MAX_VALUE, city));
+                m -> new DefaultDistanceStructure<Double, Double>(x -> x,
+                        new DoubleDomain(), 60.0, Double.MAX_VALUE, city));
         return distanceFunctions;
     }
 

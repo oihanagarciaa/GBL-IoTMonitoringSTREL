@@ -1,7 +1,7 @@
 package dataStorages;
 
 import dataConverters.TimeChainSplitter;
-import eu.quanticol.moonlight.signal.online.TimeChain;
+import eu.quanticol.moonlight.online.signal.TimeChain;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

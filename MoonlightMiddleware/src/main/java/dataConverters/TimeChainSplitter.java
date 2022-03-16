@@ -1,6 +1,6 @@
 package dataConverters;
 
-import eu.quanticol.moonlight.signal.online.TimeChain;
+import eu.quanticol.moonlight.online.signal.TimeChain;
 
 import java.util.ArrayList;
 import java.util.List;

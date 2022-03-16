@@ -1,10 +1,10 @@
 package controller;
 
-import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.formula.Formula;
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.SpatialModel;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
 import services.MonitorType;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public interface Controller {
     void setMonitorType(MonitorType monitorType);
     void setFormula(Formula formula);
     void setSpatialModel(SpatialModel<Double> model);
-    void setAtomicFormulas(Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms);
+    void setAtomicFormulas(Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms);
     void setDistanceFunctions(HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions);
 
     /**

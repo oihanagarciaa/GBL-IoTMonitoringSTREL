@@ -2,8 +2,8 @@ package dataStorages;
 
 import dataConverters.TimeChainConverter;
 import dataConverters.TimeChainSplitter;
-import eu.quanticol.moonlight.signal.online.TimeChain;
-import eu.quanticol.moonlight.signal.online.TimeSegment;
+import eu.quanticol.moonlight.online.signal.TimeChain;
+import eu.quanticol.moonlight.online.signal.TimeSegment;
 
 import java.util.*;
 

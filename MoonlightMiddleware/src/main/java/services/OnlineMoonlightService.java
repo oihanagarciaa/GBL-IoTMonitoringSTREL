@@ -1,16 +1,18 @@
 package services;
 
+import eu.quanticol.moonlight.core.space.*;
 import eu.quanticol.moonlight.domain.BooleanDomain;
-import eu.quanticol.moonlight.formula.Formula;
-import eu.quanticol.moonlight.signal.online.TimeChain;
-import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.LocationService;
-import eu.quanticol.moonlight.space.SpatialModel;
-import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.monitoring.online.OnlineSpaceTimeMonitor;
-import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
-import eu.quanticol.moonlight.signal.online.Update;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import eu.quanticol.moonlight.online.monitoring.OnlineSpatialTemporalMonitor;
+import eu.quanticol.moonlight.online.signal.TimeChain;
+import eu.quanticol.moonlight.online.signal.Update;
 import eu.quanticol.moonlight.space.StaticLocationService;
 
 import java.util.List;
@@ -18,20 +20,20 @@ import java.util.Map;
 import java.util.function.Function;
 
 public class OnlineMoonlightService implements Service<MoonLightRecord,
-        SpaceTimeSignal<Double, AbstractInterval<Boolean>>>{
+        SpaceTimeSignal<Double, Box<Boolean>>>{
 
     private final Formula formula;
     private final SpatialModel<Double> spatialModel;
-    private final Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms;
+    private final Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms;
     private final Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
     private final LocationService<Double, Double> locSvc;
 
-    private OnlineSpaceTimeMonitor<?, MoonLightRecord, Boolean> onlineMonitor;
+    private OnlineSpatialTemporalMonitor<?, MoonLightRecord, Boolean> onlineMonitor;
 
-    private SpaceTimeSignal<Double, AbstractInterval<Boolean>> results;
+    private SpaceTimeSignal<Double, Box<Boolean>> results;
 
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
-            Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms,
+            Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms,
             Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
         this.formula = formula;
         this.spatialModel = model;
@@ -57,7 +59,7 @@ public class OnlineMoonlightService implements Service<MoonLightRecord,
 
     @Override
     public void init() {
-        onlineMonitor = new OnlineSpaceTimeMonitor<>(
+        onlineMonitor = new OnlineSpatialTemporalMonitor<>(
                 formula, spatialModel.size(), new BooleanDomain(),
                 locSvc, atoms, distanceFunctions);
     }
@@ -69,7 +71,7 @@ public class OnlineMoonlightService implements Service<MoonLightRecord,
 
 
     @Override
-    public SpaceTimeSignal<Double, AbstractInterval<Boolean>> getResponseFromService() {
+    public SpaceTimeSignal<Double, Box<Boolean>> getResponseFromService() {
         return results;
     }
 

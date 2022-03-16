@@ -1,14 +1,14 @@
-import eu.quanticol.moonlight.domain.AbstractInterval;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.base.DataHandler;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.formula.AtomicFormula;
-import eu.quanticol.moonlight.formula.Formula;
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.signal.DataHandler;
-import eu.quanticol.moonlight.signal.RecordHandler;
-import eu.quanticol.moonlight.signal.online.SpaceTimeSignal;
-import eu.quanticol.moonlight.signal.online.Update;
-import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.SpatialModel;
-import eu.quanticol.moonlight.util.Pair;
+import eu.quanticol.moonlight.offline.signal.RecordHandler;
+import eu.quanticol.moonlight.online.signal.Update;
 import eu.quanticol.moonlight.util.Utils;
 import org.junit.jupiter.api.Test;
 import services.OnlineMoonlightService;
@@ -53,7 +53,7 @@ class OnlineMoonlightServiceTest {
         HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         model = Utils.createSpatialModel(6, cityMap);
 
-        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = new HashMap<>();
+        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = new HashMap<>();
         atoms.put("manyPeople", a -> booleanInterval(a.get(0, Integer.class) < 30));
 
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
@@ -69,13 +69,13 @@ class OnlineMoonlightServiceTest {
         }
         Update<Double, List<MoonLightRecord>> update = new Update<>(0.0, 1.0, signalSP);
         onlineMoonlightService.run(update);
-        SpaceTimeSignal<Double, AbstractInterval<Boolean>> signal = onlineMoonlightService.getResponseFromService();
+        SpaceTimeSignal<Double, Box<Boolean>> signal = onlineMoonlightService.getResponseFromService();
         System.out.println(signal);
         assertNotNull(signal);
     }
-    private static AbstractInterval<Boolean> booleanInterval(boolean cond) {
-        return cond ? new AbstractInterval<>(true, true) :
-                new AbstractInterval<>(false, false);
+    private static Box<Boolean> booleanInterval(boolean cond) {
+        return cond ? new Box<>(true, true) :
+                new Box<>(false, false);
     }
 
 }

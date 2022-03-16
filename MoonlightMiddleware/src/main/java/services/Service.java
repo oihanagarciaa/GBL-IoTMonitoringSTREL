@@ -1,7 +1,7 @@
 package services;
 
-import eu.quanticol.moonlight.signal.online.TimeChain;
-import eu.quanticol.moonlight.signal.online.Update;
+import eu.quanticol.moonlight.online.signal.TimeChain;
+import eu.quanticol.moonlight.online.signal.Update;
 
 import java.util.List;
 

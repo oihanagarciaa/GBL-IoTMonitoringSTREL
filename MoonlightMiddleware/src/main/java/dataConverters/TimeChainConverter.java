@@ -1,7 +1,7 @@
 package dataConverters;
 
-import eu.quanticol.moonlight.signal.Segment;
-import eu.quanticol.moonlight.signal.online.TimeChain;
+import eu.quanticol.moonlight.offline.signal.Segment;
+import eu.quanticol.moonlight.online.signal.TimeChain;
 
 import java.util.*;
 import java.util.stream.Collectors;

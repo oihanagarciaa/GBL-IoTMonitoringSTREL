@@ -2,13 +2,15 @@ package main;
 
 import controller.ConnType;
 import controller.MainController;
-import eu.quanticol.moonlight.domain.AbstractInterval;
-import eu.quanticol.moonlight.domain.DoubleDistance;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
+import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.*;
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.space.DistanceStructure;
-import eu.quanticol.moonlight.space.SpatialModel;
-import eu.quanticol.moonlight.util.Pair;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
 import services.MonitorType;
 
@@ -105,24 +107,24 @@ public class Principal {
         return controlPeople;
     }
 
-    public static Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> getOnlineAtoms() {
-        Map<String, Function<MoonLightRecord, AbstractInterval<Boolean>>> atoms = new HashMap<>();
+    public static Map<String, Function<MoonLightRecord, Box<Boolean>>> getOnlineAtoms() {
+        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = new HashMap<>();
         atoms.put("noiseLevel", a -> booleanInterval(a.get(1, Integer.class)< MAX_DECIBELS));
         atoms.put("isSchool", a -> booleanInterval("School".equals(a.get(0, String.class))));
         atoms.put("manyPeople", a -> booleanInterval(a.get(2, Integer.class) < MAX_PERSONS));
         return atoms;
     }
 
-    private static AbstractInterval<Boolean> booleanInterval(boolean cond) {
-        return cond ? new AbstractInterval<>(true, true) :
-                new AbstractInterval<>(false, false);
+    private static Box<Boolean> booleanInterval(boolean cond) {
+        return cond ? new Box<>(true, true) :
+                new Box<>(false, false);
     }
 
     private static HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> setDistanceFunctions(SpatialModel<Double> city) {
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
         distanceFunctions.put("distance",
-                m -> new DistanceStructure<Double, Double>(x -> x,
-                        new DoubleDistance(), SECURITY_DISTANCE, Double.MAX_VALUE, city));
+                m -> new DefaultDistanceStructure<Double, Double>(x -> x,
+                        new DoubleDomain(), SECURITY_DISTANCE, Double.MAX_VALUE, city));
         return distanceFunctions;
     }
 }

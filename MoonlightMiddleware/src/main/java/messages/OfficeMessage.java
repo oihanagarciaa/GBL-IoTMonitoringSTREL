@@ -1,9 +1,9 @@
 package messages;
 
-import eu.quanticol.moonlight.io.MoonLightRecord;
-import eu.quanticol.moonlight.signal.DataHandler;
-import eu.quanticol.moonlight.signal.EnumerationHandler;
-import eu.quanticol.moonlight.signal.RecordHandler;
+import eu.quanticol.moonlight.core.base.DataHandler;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.offline.signal.EnumerationHandler;
+import eu.quanticol.moonlight.offline.signal.RecordHandler;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 

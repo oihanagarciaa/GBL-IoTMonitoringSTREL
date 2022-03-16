@@ -1,4 +1,4 @@
-import eu.quanticol.moonlight.io.MoonLightRecord;
+import eu.quanticol.moonlight.core.base.MoonLightRecord;
 import messages.Message;
 import messages.OfficeMessage;
 import org.junit.jupiter.api.Test;
