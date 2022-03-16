@@ -1,15 +1,10 @@
 package dataStorages;
 
 import dataConverters.TimeChainConverter;
-import eu.quanticol.moonlight.signal.DataHandler;
-import eu.quanticol.moonlight.signal.EnumerationHandler;
-import eu.quanticol.moonlight.signal.RecordHandler;
-import eu.quanticol.moonlight.signal.Segment;
 import eu.quanticol.moonlight.signal.online.TimeChain;
 import eu.quanticol.moonlight.signal.online.TimeSegment;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * All the values of the sensors will be stored here
