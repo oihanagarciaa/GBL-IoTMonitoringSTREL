@@ -1,19 +1,19 @@
-package DELETEdataConverters;
+package dataConverters;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 
-public class MoonlightRecordConverter implements DataConverter
+public class DELETEMoonlightRecordConverter implements DataConverter
         <MoonLightRecord, String> {
 
     MoonLightRecord moonLightRecord;
-    OfficeMoolightRecordParser converter;
+    DELETEOfficeMoolightRecordParser converter;
 
-    public MoonlightRecordConverter(){
-        converter = new OfficeMoolightRecordParser();
+    public DELETEMoonlightRecordConverter(){
+        converter = new DELETEOfficeMoolightRecordParser();
     }
 
     @Override
-    public MoonLightRecord fromMessageToMonitorData(String message) {
+    public MoonLightRecord fromMessageToData(String message) {
         moonLightRecord = converter.getAndConvertMoonLightRecords(message);
         return moonLightRecord;
     }

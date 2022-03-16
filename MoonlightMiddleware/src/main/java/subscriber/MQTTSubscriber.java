@@ -58,7 +58,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
         Message messageClass = new OfficeMessage();
         messageClass.transformReceivedData(topic, message);
         //TODO: Change the time set
-        messageClass.setTime(t++);
+        //messageClass.setTime(t++);
         controller.updateData(messageClass);
     }
 }

@@ -1,4 +1,4 @@
-package DELETEdataConverters;
+package dataConverters;
 
 import eu.quanticol.moonlight.io.MoonLightRecord;
 import eu.quanticol.moonlight.signal.RecordHandler;
@@ -9,11 +9,11 @@ import java.util.Arrays;
 import java.util.List;
 
 //TODO: DELETE
-public class OfficeMoolightRecordParser {
+public class DELETEOfficeMoolightRecordParser {
     RecordHandler factory;
     List<String> places;
 
-    public OfficeMoolightRecordParser(){
+    public DELETEOfficeMoolightRecordParser(){
         places = Arrays.asList("Hospital", "School", "MetroStop", "School", "MainSquare", "BusStop");
     }
 

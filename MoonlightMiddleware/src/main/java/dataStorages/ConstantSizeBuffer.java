@@ -4,7 +4,6 @@ import messages.Message;
 import services.Service;
 
 import java.util.Collection;
-import java.util.List;
 
 public class ConstantSizeBuffer<E> implements Buffer<E>{
     private final int maxCapacity;
@@ -18,7 +17,8 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
         maxCapacity = bufferSize;
         connectedService = serviceToConnect;
 
-        storingTimeChain = new DataStoringTimeChain<>(spatialModelSize);
+        //TODO: Change the null value
+        storingTimeChain = new DataStoringTimeChain<>(spatialModelSize, null);
     }
 
     private boolean bufferIsFull() {
@@ -45,6 +45,6 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
     @Override
     public void flush() {
         counter = 0;
-        storingTimeChain.deleteValues();
+        //storingTimeChain.deleteValues();
     }
 }

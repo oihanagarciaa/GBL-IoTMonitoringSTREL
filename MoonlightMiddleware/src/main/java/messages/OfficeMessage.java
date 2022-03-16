@@ -22,20 +22,27 @@ public class OfficeMessage extends Message<MoonLightRecord>{
 
     @Override
     public void transformReceivedData(String topic, String message) {
-        String[] topics = topic.split("/");
-        id = Integer.parseInt(topics[topics.length-1]);
+        int id = getIdFromTopic(topic);
         //TODO: Change the way the time is set
         JSONObject obj = (JSONObject) JSONValue.parse(message);
-        convertJSONtoMoonlightRecord(obj);
+        MoonLightRecord moonLightRecord = convertJSONtoMoonlightRecord(obj);
+        this.setMessageData(id, 0.0, moonLightRecord);
     }
 
-    @Override
-    public MoonLightRecord getDefaulValue() {
-        return factory.fromObjectArray("", Integer.MAX_VALUE, Integer.MAX_VALUE);
+    private int getIdFromTopic(String topic) throws UnsupportedOperationException{
+        int id;
+        try{
+            String[] topics = topic.split("/");
+            id = Integer.parseInt(topics[topics.length-1]);
+        }catch (NumberFormatException e){
+            throw new UnsupportedOperationException("Wrong topic format");
+        }
+        return id;
     }
 
-    public void convertJSONtoMoonlightRecord(JSONObject j){
+    private MoonLightRecord convertJSONtoMoonlightRecord(JSONObject j) throws UnsupportedOperationException{
         //TODO: update converter
+        MoonLightRecord valueElement;
         /*For the moment I suppose that the JSON file is like:
          {
             "place": 3
@@ -46,7 +53,6 @@ public class OfficeMessage extends Message<MoonLightRecord>{
             long place = (long) j.get("place");
             long noise = (long) j.get("noise");
             long people = (long) j.get("people");
-
             valueElement = factory.fromObjectArray(places.get(
                     Math.toIntExact(place)), Math.toIntExact(noise), Math.toIntExact(people));
 
@@ -54,5 +60,11 @@ public class OfficeMessage extends Message<MoonLightRecord>{
         }catch (NullPointerException e){
             throw new UnsupportedOperationException("Invalid data format");
         }
+        return valueElement;
+    }
+
+    @Override
+    public MoonLightRecord getDefaulValue() {
+        return factory.fromObjectArray("", Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 }

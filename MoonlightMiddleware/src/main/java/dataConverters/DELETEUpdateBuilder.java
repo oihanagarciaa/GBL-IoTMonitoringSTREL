@@ -1,4 +1,4 @@
-package DELETEdataConverters;
+package dataConverters;
 
 import dataStorages.DataStoringTimeChain;
 import eu.quanticol.moonlight.signal.online.Update;
@@ -11,13 +11,13 @@ import java.util.List;
  * - When all the locations are present,
  * - it aggregates them into a single Update
  */
-public class UpdateBuilder<E> {
+public class DELETEUpdateBuilder<E> {
     DataStoringTimeChain<E> dataStoringTimeChain;
     private final int numberOfLocations;
     //private List<E> data;
 
-    public UpdateBuilder(int numberOfLocations) {
-        dataStoringTimeChain = new DataStoringTimeChain<>(numberOfLocations);
+    public DELETEUpdateBuilder(int numberOfLocations) {
+        //dataStoringTimeChain = new DataStoringTimeChain<>(numberOfLocations);
         this.numberOfLocations = numberOfLocations;
         //data = new ArrayList<>(numberOfLocations);
     }

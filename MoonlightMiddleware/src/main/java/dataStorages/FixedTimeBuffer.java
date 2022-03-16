@@ -21,7 +21,8 @@ public class FixedTimeBuffer<E> implements Buffer<E>{
         size = spatialModelSize;
         service = serviceToConnect;
 
-        storingTimeChain = new DataStoringTimeChain<>(size);
+        //TODO: Change the null
+        storingTimeChain = new DataStoringTimeChain<>(size, null);
 
         timer = new Timer("Timer");
         timer.scheduleAtFixedRate(new TaskMonitorAndFlush(), 0, timePeriod);
@@ -49,6 +50,7 @@ public class FixedTimeBuffer<E> implements Buffer<E>{
 
     @Override
     public void flush() {
-        storingTimeChain.deleteValues();
+        //TODO: ?¿???¿?
+        //storingTimeChain.deleteValues();
     }
 }

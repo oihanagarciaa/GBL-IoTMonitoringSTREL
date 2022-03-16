@@ -1,9 +1,9 @@
 package controller;
 
 import dataStorages.Buffer;
-import DELETEdataConverters.DataConverter;
+import dataConverters.DataConverter;
 import dataStorages.ConstantSizeBuffer;
-import DELETEdataConverters.MoonlightRecordConverter;
+import dataConverters.DELETEMoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
@@ -34,7 +34,7 @@ public class MainController implements Controller {
     Service<MoonLightRecord, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
-    Buffer<MoonLightRecord> buffer;
+    protected Buffer<MoonLightRecord> buffer;
     private SpatialModel<Double> model;
     private Formula formula;
     private SpaceTimeSignal<Double, AbstractInterval<Boolean>> result;
@@ -44,7 +44,7 @@ public class MainController implements Controller {
     public void initializeService() throws UnsupportedOperationException{
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
-            dataConverter = new MoonlightRecordConverter();
+            dataConverter = new DELETEMoonlightRecordConverter();
             //TODO: how to initialize the buffer
             buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
             //buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);

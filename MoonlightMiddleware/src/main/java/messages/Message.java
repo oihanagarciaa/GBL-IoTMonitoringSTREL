@@ -5,10 +5,10 @@ package messages;
  */
 public abstract class Message<E> {
     private int id;
-    private long time;
+    private double time;
     private E valueElement;
 
-    public void setMessageData(int id, long time, E element){
+    public void setMessageData(int id, double time, E element){
         this.id = id;
         this.time = time;
         this.valueElement = element;
@@ -18,7 +18,7 @@ public abstract class Message<E> {
         return id;
     }
 
-    public long getTime() {
+    public double getTime() {
         return time;
     }
 

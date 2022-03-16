@@ -1,4 +1,4 @@
-package DELETEdataConverters;
+package dataConverters;
 
 /**
  * Interface to convert the received message into the desired data
@@ -8,11 +8,10 @@ package DELETEdataConverters;
 public interface DataConverter<U, M> {
 
     /**
-     *
      * @param message The message arrived from the broker
      * @return Returns the Update
      */
-    U fromMessageToMonitorData(M message);
+    U fromMessageToData(M message);
 
     //void initDataConverter(int size);
 }
