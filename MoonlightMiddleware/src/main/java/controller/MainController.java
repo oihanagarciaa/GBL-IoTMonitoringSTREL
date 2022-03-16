@@ -1,9 +1,7 @@
 package controller;
 
 import dataStorages.Buffer;
-import dataConverters.DataConverter;
 import dataStorages.ConstantSizeBuffer;
-import dataConverters.DELETEMoonlightRecordConverter;
 import eu.quanticol.moonlight.domain.AbstractInterval;
 import eu.quanticol.moonlight.formula.Formula;
 import eu.quanticol.moonlight.io.MoonLightRecord;
@@ -29,7 +27,6 @@ import java.util.stream.Collectors;
 public class MainController implements Controller {
     //TODO: If I want to access a variable from a test make it protected
     Subscriber<String> subscriber;
-    DataConverter<MoonLightRecord, String> dataConverter;
     String broker;
     Service<MoonLightRecord, SpaceTimeSignal<Double, AbstractInterval<Boolean>>> service;
     private ConnType connectionType;
@@ -44,7 +41,6 @@ public class MainController implements Controller {
     public void initializeService() throws UnsupportedOperationException{
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
-            dataConverter = new DELETEMoonlightRecordConverter();
             //TODO: how to initialize the buffer
             buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
             //buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
