@@ -1,13 +1,11 @@
 package services;
 
+import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.space.*;
 import eu.quanticol.moonlight.domain.BooleanDomain;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
 import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
-import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.online.monitoring.OnlineSpatialTemporalMonitor;
@@ -19,21 +17,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class OnlineMoonlightService implements Service<MoonLightRecord,
+public class OnlineMoonlightService implements Service<Tuple,
         SpaceTimeSignal<Double, Box<Boolean>>>{
 
     private final Formula formula;
     private final SpatialModel<Double> spatialModel;
-    private final Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms;
+    private final Map<String, Function<Tuple, Box<Boolean>>> atoms;
     private final Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
     private final LocationService<Double, Double> locSvc;
 
-    private OnlineSpatialTemporalMonitor<?, MoonLightRecord, Boolean> onlineMonitor;
+    private OnlineSpatialTemporalMonitor<?, Tuple, Boolean> onlineMonitor;
 
     private SpaceTimeSignal<Double, Box<Boolean>> results;
 
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
-            Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms,
+            Map<String, Function<Tuple, Box<Boolean>>> atoms,
             Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
         this.formula = formula;
         this.spatialModel = model;
@@ -48,12 +46,12 @@ public class OnlineMoonlightService implements Service<MoonLightRecord,
     }
 
     @Override
-    public void run(Update<Double, List<MoonLightRecord>> update) {
+    public void run(Update<Double, List<Tuple>> update) {
         results = onlineMonitor.monitor(update);
     }
 
     @Override
-    public void run(TimeChain<Double, List<MoonLightRecord>> timeChain) {
+    public void run(TimeChain<Double, List<Tuple>> timeChain) {
         results = onlineMonitor.monitor(timeChain);
     }
 

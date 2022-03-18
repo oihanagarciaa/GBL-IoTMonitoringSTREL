@@ -1,7 +1,4 @@
-import eu.quanticol.moonlight.core.base.Box;
-import eu.quanticol.moonlight.core.base.DataHandler;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
-import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.base.*;
 import eu.quanticol.moonlight.core.formula.Formula;
 import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
@@ -53,21 +50,20 @@ class OnlineMoonlightServiceTest {
         HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         model = Utils.createSpatialModel(6, cityMap);
 
-        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = new HashMap<>();
-        atoms.put("manyPeople", a -> booleanInterval(a.get(0, Integer.class) < 30));
+        Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();
+        atoms.put("manyPeople", a -> booleanInterval((Integer) a.getIthValue(0) < 30));
 
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
 
         onlineMoonlightService = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
         onlineMoonlightService.init();
 
-        RecordHandler factory;
-        factory = new RecordHandler(DataHandler.INTEGER);
-        List<MoonLightRecord> signalSP = new ArrayList<>();
+        TupleType tupleType = TupleType.of(Integer.class);
+        List<Tuple> signalSP = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            signalSP.add(factory.fromObjectArray(20));
+            signalSP.add(Tuple.of(tupleType, 20));
         }
-        Update<Double, List<MoonLightRecord>> update = new Update<>(0.0, 1.0, signalSP);
+        Update<Double, List<Tuple>> update = new Update<>(0.0, 1.0, signalSP);
         onlineMoonlightService.run(update);
         SpaceTimeSignal<Double, Box<Boolean>> signal = onlineMoonlightService.getResponseFromService();
         System.out.println(signal);

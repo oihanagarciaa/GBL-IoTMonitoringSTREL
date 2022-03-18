@@ -36,7 +36,7 @@ public class DataStoringTimeChain<V>{
     public void saveNewValue(int id, double time, V value){
         timeChainList.get(id).add(new TimeSegment<>(time, value));
         //TODO: change time
-        this.time = time;
+        if(this.time < time) this.time = time;
     }
 
     //TODO: Think how to specify the time

@@ -39,13 +39,11 @@ public class DataStoringTimeChainTest {
     void getDataWithNoValues(){
         int size = 3;
         DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size, Integer.MAX_VALUE);
-        dataStoringTimeChain.saveNewValue(1, 2.0, 6);
-        dataStoringTimeChain.saveNewValue(1, 4.0, 8);
         TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor();
-        System.out.println("-> "+timeChain.getFirst().getValue());
-        //TODO: When I get data again it fails
-        //System.out.println(dataStoringTimeChain.getDataToMonitor());
-        //System.out.println(dataStoringTimeChain.timeChainList);
+        dataStoringTimeChain.saveNewValue(1, 1.0, 6);
+        dataStoringTimeChain.saveNewValue(1, 4.0, 8);
+        TimeChain<Double, List<Integer>> timeChain2 = dataStoringTimeChain.getDataToMonitor();
+        assertEquals(timeChain2.get(0).getStart(), 1.0);
     }
 
     private DataStoringTimeChain<Integer> initDataStoringTimeChain(){

@@ -2,7 +2,6 @@ package main;
 
 import eu.quanticol.moonlight.core.base.*;
 import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.signal.SignalDomain;
 import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.LocationService;
@@ -13,11 +12,7 @@ import eu.quanticol.moonlight.formula.*;
 import eu.quanticol.moonlight.formula.classic.NegationFormula;
 import eu.quanticol.moonlight.formula.classic.OrFormula;
 import eu.quanticol.moonlight.formula.spatial.EscapeFormula;
-import eu.quanticol.moonlight.offline.monitoring.SpatialTemporalMonitoring;
-import eu.quanticol.moonlight.offline.monitoring.spatialtemporal.SpatialTemporalMonitor;
-import eu.quanticol.moonlight.offline.signal.*;
 import eu.quanticol.moonlight.online.monitoring.OnlineSpatialTemporalMonitor;
-import eu.quanticol.moonlight.online.signal.TimeChain;
 import eu.quanticol.moonlight.online.signal.Update;
 import eu.quanticol.moonlight.util.Stopwatch;
 import eu.quanticol.moonlight.util.Utils;
@@ -147,9 +142,9 @@ public class DELETEOnlineCitySignalDefinition {
         Formula noiseLevel = new AtomicFormula("noiseLevel");
         Formula isSchool = new AtomicFormula("isSchool");
         Formula noiseNearby = new EscapeFormula("distance", noiseLevel);
-        //return new OrFormula(new NegationFormula(isSchool), noiseNearby);
+        return new OrFormula(new NegationFormula(isSchool), noiseNearby);
         //return noiseLevel;
-        return new EscapeFormula("distance", noiseLevel);
+        //return new EscapeFormula("distance", noiseLevel);
     }
 
     public static void main(String[] args) {

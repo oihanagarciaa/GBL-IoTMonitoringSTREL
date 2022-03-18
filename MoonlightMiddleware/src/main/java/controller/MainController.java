@@ -4,13 +4,12 @@ import dataStorages.Buffer;
 import dataStorages.ConstantSizeBuffer;
 
 import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
 import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 
@@ -34,14 +33,14 @@ public class MainController implements Controller {
     //TODO: If I want to access a variable from a test make it protected
     Subscriber<String> subscriber;
     String broker;
-    Service<MoonLightRecord, SpaceTimeSignal<Double, Box<Boolean>>> service;
+    Service<Tuple, SpaceTimeSignal<Double, Box<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
-    protected Buffer<MoonLightRecord> buffer;
+    protected Buffer<Tuple> buffer;
     private SpatialModel<Double> model;
     private Formula formula;
     private SpaceTimeSignal<Double, Box<Boolean>> result;
-    private Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms;
+    private Map<String, Function<Tuple, Box<Boolean>>> atoms;
     private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
     public void initializeService() throws UnsupportedOperationException{
@@ -49,7 +48,6 @@ public class MainController implements Controller {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             //TODO: how to initialize the buffer
             buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
-            //buffer = new FixedRateTimeBuffer<MoonLightRecord>(this, model.size(), service, 5000);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }
@@ -105,7 +103,7 @@ public class MainController implements Controller {
     }
 
     @Override
-    public void setAtomicFormulas(Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms) {
+    public void setAtomicFormulas(Map<String, Function<Tuple, Box<Boolean>>> atoms) {
         this.atoms = atoms;
     }
 

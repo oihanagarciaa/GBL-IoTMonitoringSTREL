@@ -1,4 +1,5 @@
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.base.Tuple;
+import eu.quanticol.moonlight.core.base.TupleType;
 import messages.Message;
 import messages.OfficeMessage;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,10 @@ class OfficeMessageTest {
         Message message = new OfficeMessage();
         message.transformReceivedData("asdfv/2", basicValidJSON());
         assertEquals(2, message.getId());
+        Tuple tuple = (Tuple) message.getValueElement();
+        assertEquals(40, (Integer) tuple.getIthValue(1));
+        assertEquals(30, (Integer) tuple.getIthValue(2));
         //TODO: test time
-        assertEquals(MoonLightRecord.class, message.getValueElement().getClass());
     }
 
     @Test
@@ -35,8 +38,8 @@ class OfficeMessageTest {
     @Test
     void getDefaultValueTest(){
         Message message = new OfficeMessage();
-        MoonLightRecord moonLightRecord = (MoonLightRecord) message.getDefaulValue();
-        assertEquals(MoonLightRecord.class, moonLightRecord.getClass());
+        Tuple tuple = (Tuple) message.getDefaulValue();
+        assertEquals(Integer.MAX_VALUE, (Integer) tuple.getIthValue(2));
     }
 
     private static String basicValidJSON() {
@@ -44,6 +47,7 @@ class OfficeMessageTest {
                 "            \"place\": 3\n" +
                 "            \"noise\": 40\n" +
                 "            \"people\": 30\n" +
+                "            \"time\": 1.0\n" +
                 "}";
     }
 }

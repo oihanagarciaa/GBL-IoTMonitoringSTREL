@@ -1,7 +1,7 @@
 package controller;
 
 import eu.quanticol.moonlight.core.base.Pair;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
 import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
@@ -56,7 +56,7 @@ class MainControllerTest {
         MonitorType monitorType = MonitorType.ONLINE_MOONLIGHT;
         Formula f = mock(Formula.class);
         SpatialModel<Double> model = mock(SpatialModel.class);
-        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = mock(Map.class);
+        Map<String, Function<Tuple, Box<Boolean>>> atoms = mock(Map.class);
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distance = mock(HashMap.class);
 
         controller.setDataSource(sourceId);
@@ -102,9 +102,9 @@ class MainControllerTest {
         return controlPeople;
     }
 
-    private static Map<String, Function<MoonLightRecord, Box<Boolean>>> getOnlineAtoms() {
-        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = new HashMap<>();
-        atoms.put("manyPeople", a -> booleanInterval(a.get(2, Integer.class) < 10));
+    private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
+        Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();
+        atoms.put("manyPeople", a -> booleanInterval((Integer) a.getIthValue(2) < 10));
         return atoms;
     }
 
@@ -126,6 +126,7 @@ class MainControllerTest {
                 "            \"place\": 3\n" +
                 "            \"noise\": 40\n" +
                 "            \"people\": 30\n" +
+                "            \"time\": 1.0\n" +
                 "}";
     }
 }

@@ -4,7 +4,7 @@ import controller.ConnType;
 import controller.MainController;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
-import eu.quanticol.moonlight.core.base.MoonLightRecord;
+import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
 import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
 import eu.quanticol.moonlight.domain.DoubleDomain;
@@ -107,11 +107,11 @@ public class Principal {
         return controlPeople;
     }
 
-    public static Map<String, Function<MoonLightRecord, Box<Boolean>>> getOnlineAtoms() {
-        Map<String, Function<MoonLightRecord, Box<Boolean>>> atoms = new HashMap<>();
-        atoms.put("noiseLevel", a -> booleanInterval(a.get(1, Integer.class)< MAX_DECIBELS));
-        atoms.put("isSchool", a -> booleanInterval("School".equals(a.get(0, String.class))));
-        atoms.put("manyPeople", a -> booleanInterval(a.get(2, Integer.class) < MAX_PERSONS));
+    public static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
+        Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();
+        atoms.put("noiseLevel", a -> booleanInterval((Integer) a.getIthValue(1)< MAX_DECIBELS));
+        atoms.put("isSchool", a -> booleanInterval("School".equals(a.getIthValue(0))));
+        atoms.put("manyPeople", a -> booleanInterval((Integer) a.getIthValue(2) < MAX_PERSONS));
         return atoms;
     }
 

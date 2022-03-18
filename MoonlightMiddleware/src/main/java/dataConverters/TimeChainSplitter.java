@@ -11,7 +11,6 @@ public class TimeChainSplitter<V>{
     public TimeChainSplitter(){
     }
 
-    //TODO: Think how to define the end and start times
     public List<TimeChain<Double, V>>[] splitTimeChain(List<TimeChain<Double, V>> timeChainList, double time){
         timeEnd = time;
         List<TimeChain<Double, V>> [] timeChains = new List[2];
@@ -39,6 +38,7 @@ public class TimeChainSplitter<V>{
         for (int i = 0; i < timeChainList.size(); i++){
             TimeChain<Double, V> timeChain = timeChainList.get(i);
             int from = getLastStart(timeChain);
+            if(from < 0) from = 0;
             try {
                 splitedTimeChain.add(timeChain.subChain(from, timeChain.size(), Double.MAX_VALUE));
             } catch (IllegalArgumentException e){
@@ -49,7 +49,7 @@ public class TimeChainSplitter<V>{
     }
 
     private int getLastStart(TimeChain<Double, V> timeChainList){
-        int lastStart = 0;
+        int lastStart = -1;
         for (int i = 0; i < timeChainList.size(); i++){
             if(timeChainList.get(i).getStart() < timeEnd){
                 lastStart = i;

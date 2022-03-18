@@ -1,5 +1,7 @@
 package dataStorages;
 
+import eu.quanticol.moonlight.core.base.Tuple;
+import eu.quanticol.moonlight.core.base.TupleType;
 import messages.Message;
 import services.Service;
 
@@ -7,6 +9,7 @@ import java.util.Collection;
 
 public class ConstantSizeBuffer<E> implements Buffer<E>{
     private final int maxCapacity;
+    //TODO: Make this generic
     DataStoringTimeChain<E> storingTimeChain;
     private final Service<E, ?> connectedService;
     int counter;
@@ -18,7 +21,9 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
         connectedService = serviceToConnect;
 
         //TODO: Change the null value
-        storingTimeChain = new DataStoringTimeChain<>(spatialModelSize, null);
+        storingTimeChain = new DataStoringTimeChain<>(spatialModelSize,
+                (E) Tuple.of(TupleType.of(String.class, Integer.class, Integer.class),
+                        "", Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 
     private boolean bufferIsFull() {
@@ -39,7 +44,7 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
 
     @Override
     public Collection<E> get() {
-        return storingTimeChain.getAllValues();
+        return (Collection<E>)storingTimeChain.getAllValues();
     }
 
     @Override

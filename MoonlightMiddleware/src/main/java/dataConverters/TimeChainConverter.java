@@ -56,7 +56,7 @@ public class TimeChainConverter<V> {
         sortedList.stream().forEach(time->{
             Map<Integer, V> posValueMap = valuesMap.get(time);
             posValueMap.keySet().stream().forEach(index -> listValues.set(index, posValueMap.get(index)));
-            List<V> copy = listValues.stream().collect(Collectors.toList());;
+            List<V> copy = listValues.stream().collect(Collectors.toList());
             //TODO: Sometimes throws a exception
             returnTimeChain.add(new Segment<>(time, copy));
         });
