@@ -1,6 +1,5 @@
 package dataStorages;
 
-import dataStorages.DataStoringTimeChain;
 import eu.quanticol.moonlight.online.signal.TimeChain;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,6 @@ public class DataStoringTimeChainTest {
 
     @Test
     void getDataToMonitorTest(){
-        int size = 3;
         DataStoringTimeChain<Integer> dataStoringTimeChain = initDataStoringTimeChain();
         TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor();
         assertEquals(5.0, timeChain.getEnd());
@@ -38,7 +36,7 @@ public class DataStoringTimeChainTest {
     @Test
     void getDataWithNoValues(){
         int size = 3;
-        DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size, Integer.MAX_VALUE);
+        DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size);
         TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor();
         dataStoringTimeChain.saveNewValue(1, 1.0, 6);
         dataStoringTimeChain.saveNewValue(1, 4.0, 8);
@@ -48,7 +46,7 @@ public class DataStoringTimeChainTest {
 
     private DataStoringTimeChain<Integer> initDataStoringTimeChain(){
         int size = 3;
-        DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size, Integer.MAX_VALUE);
+        DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size);
 
         dataStoringTimeChain.saveNewValue(1, 1.0, 6);
         dataStoringTimeChain.saveNewValue(2, 0.0, 7);

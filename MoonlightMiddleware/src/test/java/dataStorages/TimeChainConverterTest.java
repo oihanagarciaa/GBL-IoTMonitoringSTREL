@@ -13,7 +13,7 @@ public class TimeChainConverterTest {
     @Test
     void timeChainConverter() {
         int size = 3;
-        DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size, Integer.MAX_VALUE);
+        DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size);
 
         dataStoringTimeChain.saveNewValue(1, 1.0, 6);
         dataStoringTimeChain.saveNewValue(2, 0.0, 7);
@@ -22,8 +22,8 @@ public class TimeChainConverterTest {
 
         List<TimeChain<Double, Integer>> timeChainList = dataStoringTimeChain.timeChainList;
 
-        TimeChainConverter<Integer> timeChainConverter = new TimeChainConverter<>(size, Integer.MAX_VALUE);
-        TimeChain<Double, List<Integer>> result = timeChainConverter.fromListToTimeChain(timeChainList, 5.0);
+        TimeChainConverter<Integer> timeChainConverter = new TimeChainConverter<>(size);
+        TimeChain<Double, List<Integer>> result = timeChainConverter.fromListToTimeChain(timeChainList, 5.0, Integer.MAX_VALUE);
         assertEquals(4.0,
                 result.getLast().getStart());
         List<Integer> finalList = new ArrayList<>();

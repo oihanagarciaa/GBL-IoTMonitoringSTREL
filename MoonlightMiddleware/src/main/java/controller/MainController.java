@@ -3,13 +3,11 @@ package controller;
 import dataStorages.Buffer;
 import dataStorages.ConstantSizeBuffer;
 
+import dataStorages.FixedTimeBuffer;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
 import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
-import eu.quanticol.moonlight.core.space.DistanceStructure;
-import eu.quanticol.moonlight.core.space.SpatialModel;
-import eu.quanticol.moonlight.core.formula.Formula;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 
@@ -48,6 +46,7 @@ public class MainController implements Controller {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             //TODO: how to initialize the buffer
             buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
+            //buffer = new FixedTimeBuffer<>(this, model.size(),service, 10000);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }

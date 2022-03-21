@@ -28,5 +28,5 @@ public abstract class Message<E> {
 
     abstract public void transformReceivedData(String topic, String message);
 
-    abstract public E getDefaulValue();
+    abstract public E getDefaultValue();
 }

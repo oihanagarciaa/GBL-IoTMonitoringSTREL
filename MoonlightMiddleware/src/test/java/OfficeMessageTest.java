@@ -1,5 +1,4 @@
 import eu.quanticol.moonlight.core.base.Tuple;
-import eu.quanticol.moonlight.core.base.TupleType;
 import messages.Message;
 import messages.OfficeMessage;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ class OfficeMessageTest {
     @Test
     void getDefaultValueTest(){
         Message message = new OfficeMessage();
-        Tuple tuple = (Tuple) message.getDefaulValue();
+        Tuple tuple = (Tuple) message.getDefaultValue();
         assertEquals(Integer.MAX_VALUE, (Integer) tuple.getIthValue(2));
     }
 

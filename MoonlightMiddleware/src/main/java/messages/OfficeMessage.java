@@ -68,7 +68,7 @@ public class OfficeMessage extends Message<Tuple>{
     }
 
     @Override
-    public Tuple getDefaulValue() {
+    public Tuple getDefaultValue() {
         return Tuple.of(tupleType, "", Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 }

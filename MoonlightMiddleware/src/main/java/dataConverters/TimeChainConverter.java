@@ -11,19 +11,17 @@ import java.util.stream.Collectors;
  * Converts all the TimeChains into a single one
  */
 public class TimeChainConverter<V> {
-    private final V defaultValue;
     private final int size;
     private double previousTime;
 
-    public TimeChainConverter(int size, V defaultValue){
-        this.defaultValue = defaultValue;
+    public TimeChainConverter(int size){
         this.size = size;
         this.previousTime = 0;
     }
 
-    public TimeChain<Double, List<V>> fromListToTimeChain(List<TimeChain<Double, V>> timeChainList, double finalTime) {
+    public TimeChain<Double, List<V>> fromListToTimeChain(List<TimeChain<Double, V>> timeChainList, double finalTime, V defaultValue) {
         Map<Double, Map<Integer, V>> valuesMap = createAValueMap(timeChainList);
-        return createOneTimeChain(valuesMap, finalTime);
+        return createOneTimeChain(valuesMap, finalTime, defaultValue);
     }
 
     private Map<Double, Map<Integer, V>> createAValueMap(List<TimeChain<Double, V>> timeChainList){
@@ -47,7 +45,7 @@ public class TimeChainConverter<V> {
     }
 
     //TODO: Think how to do this better
-    private TimeChain<Double, List<V>> createOneTimeChain(Map<Double, Map<Integer, V>> valuesMap, double finalTime){
+    private TimeChain<Double, List<V>> createOneTimeChain(Map<Double, Map<Integer, V>> valuesMap, double finalTime, V defaultValue){
         TimeChain<Double, List<V>> returnTimeChain = new TimeChain<>(finalTime);
         List<V> listValues = initDefaultValues(defaultValue);
 

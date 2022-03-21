@@ -16,7 +16,7 @@ public class Dummy {
         int qos             = 0;
         String broker       = "tcp://localhost:1883";
         String topic     = "institute/thingy/";
-
+        double time = 0.0;
         try (MemoryPersistence persistence = new MemoryPersistence()){
             try(MqttClient sampleClient = new MqttClient(broker, clientId, persistence)) {
                 MqttConnectOptions connOpts = new MqttConnectOptions();
@@ -37,14 +37,15 @@ public class Dummy {
                         n = 50+rand.nextInt(30);
                         p = 20+rand.nextInt(10);
                         String s = "{\n" +
-                                "            \"id\": "+i+"\n" +
                                 "            \"place\":"+ i+"\n" +
                                 "            \"noise\":"+ n+"\n" +
                                 "            \"people\":"+ p+"\n" +
+                                "            \"time\": "+time+"\n" +
                                 "         }";
-
+                        System.out.println("SENDING: "+i);
                         sampleClient.publish(topic+i,new MqttMessage(s.getBytes()));
                         Thread.sleep(1000);
+                        time++;
                         if(i > 10){
                             break;
                         }

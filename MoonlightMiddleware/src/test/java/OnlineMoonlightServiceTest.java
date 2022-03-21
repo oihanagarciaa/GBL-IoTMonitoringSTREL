@@ -4,7 +4,6 @@ import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.formula.AtomicFormula;
-import eu.quanticol.moonlight.offline.signal.RecordHandler;
 import eu.quanticol.moonlight.online.signal.Update;
 import eu.quanticol.moonlight.util.Utils;
 import org.junit.jupiter.api.Test;

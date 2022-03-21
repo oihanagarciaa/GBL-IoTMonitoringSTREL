@@ -15,13 +15,21 @@ import java.util.*;
 public class DataStoringTimeChain<V>{
     protected List<TimeChain<Double, V>> timeChainList;
     private final int size;
+    private int[] locations;
+    private boolean allElements;
     private final TimeChainConverter<V> timeChainConverter;
     private final TimeChainSplitter<V> timeChainSplitter;
+    private V defaultValue;
 
-    public DataStoringTimeChain(int size, V defaultValue){
-        timeChainConverter = new TimeChainConverter<>(size, defaultValue);
+    public DataStoringTimeChain(int size){
+        timeChainConverter = new TimeChainConverter<>(size);
         timeChainSplitter = new TimeChainSplitter<>();
         this.size = size;
+        locations = new int[size];
+        for (int i = 0; i < size; i++){
+            locations[i] = 0;
+        }
+        allElements = false;
         initTimeChains();
     }
 
@@ -35,6 +43,8 @@ public class DataStoringTimeChain<V>{
 
     public void saveNewValue(int id, double time, V value){
         timeChainList.get(id).add(new TimeSegment<>(time, value));
+        if(!allElements) locations[id] = 1;
+        allValuesPresent();
         //TODO: change time
         if(this.time < time) this.time = time;
     }
@@ -44,7 +54,11 @@ public class DataStoringTimeChain<V>{
     public TimeChain<Double, List<V>> getDataToMonitor(){
         double time = this.time-1;
         List<TimeChain<Double, V>> monitorTimeChain = getTimeChainToMonitor(time);
-        return timeChainConverter.fromListToTimeChain(monitorTimeChain, time);
+        return timeChainConverter.fromListToTimeChain(monitorTimeChain, time, defaultValue);
+    }
+
+    public void setDefaultValue(V defaultValue){
+        this.defaultValue = defaultValue;
     }
 
     private List<TimeChain<Double,V>> getTimeChainToMonitor(double time) {
@@ -62,5 +76,16 @@ public class DataStoringTimeChain<V>{
             }
         }
         return listRecords;
+    }
+
+    public boolean allValuesPresent(){
+        if (allElements) return true;
+        else {
+            for (int i = 0; i < size; i++){
+                if (locations[i] == 0) return false;
+            }
+            allElements = true;
+        }
+        return true;
     }
 }
