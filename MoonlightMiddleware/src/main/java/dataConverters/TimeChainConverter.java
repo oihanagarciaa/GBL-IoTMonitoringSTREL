@@ -47,6 +47,8 @@ public class TimeChainConverter<V> {
     //TODO: Think how to do this better
     private TimeChain<Double, List<V>> createOneTimeChain(Map<Double, Map<Integer, V>> valuesMap, double finalTime, V defaultValue){
         TimeChain<Double, List<V>> returnTimeChain = new TimeChain<>(finalTime);
+        //TODO: see if I can add values in order
+        // quit .set(index, ...) -> add .add(...)
         List<V> listValues = initDefaultValues(defaultValue);
 
         List<Double> sortedList = new ArrayList<>(valuesMap.keySet());

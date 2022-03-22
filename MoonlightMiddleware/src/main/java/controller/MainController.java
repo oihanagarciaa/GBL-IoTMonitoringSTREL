@@ -3,7 +3,6 @@ package controller;
 import dataStorages.Buffer;
 import dataStorages.ConstantSizeBuffer;
 
-import dataStorages.FixedTimeBuffer;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
@@ -28,10 +27,10 @@ import java.util.stream.Collectors;
  * Main entry point of the middleware
  */
 public class MainController implements Controller {
-    //TODO: If I want to access a variable from a test make it protected
-    Subscriber<String> subscriber;
-    String broker;
-    Service<Tuple, SpaceTimeSignal<Double, Box<Boolean>>> service;
+    //If I want to access a variable from a test make it protected
+    private Subscriber<String> subscriber;
+    private String broker;
+    private Service<Tuple, SpaceTimeSignal<Double, Box<Boolean>>> service;
     private ConnType connectionType;
     private MonitorType monitorType;
     protected Buffer<Tuple> buffer;
@@ -45,6 +44,7 @@ public class MainController implements Controller {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             //TODO: how to initialize the buffer
+            // I will choose between two buffers or just stay with the FixedTimeBuffer?
             buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
             //buffer = new FixedTimeBuffer<>(this, model.size(),service, 10000);
         } else {
@@ -73,6 +73,7 @@ public class MainController implements Controller {
     public void updateResponse() {
         result = service.getResponseFromService();
         //TODO: Quit print line
+        // Send it to a client/dashboard
         System.out.println(getResults());
     }
 

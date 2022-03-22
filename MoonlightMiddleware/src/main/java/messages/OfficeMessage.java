@@ -61,14 +61,15 @@ public class OfficeMessage extends Message<Tuple>{
 
         //TODO: make the try catch cleaner
         }catch (NullPointerException e){
-            throw new UnsupportedOperationException("Invalid data format");
+            throw new UnsupportedOperationException("Invalid data (JSON) format");
         }
         this.value = valueElement;
         this.time = time;
     }
 
+    //TODO: Maybe quit the default value
     @Override
     public Tuple getDefaultValue() {
-        return Tuple.of(tupleType, "", Integer.MAX_VALUE, Integer.MAX_VALUE);
+        return Tuple.of(tupleType, "", 0, 0);
     }
 }

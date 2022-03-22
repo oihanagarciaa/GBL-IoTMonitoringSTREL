@@ -38,7 +38,7 @@ class OfficeMessageTest {
     void getDefaultValueTest(){
         Message message = new OfficeMessage();
         Tuple tuple = (Tuple) message.getDefaultValue();
-        assertEquals(Integer.MAX_VALUE, (Integer) tuple.getIthValue(2));
+        assertEquals(0, (Integer) tuple.getIthValue(2));
     }
 
     private static String basicValidJSON() {
