@@ -17,7 +17,6 @@ import services.Service;
 import subscriber.MQTTSubscriber;
 import subscriber.Subscriber;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -45,8 +44,10 @@ public class MoonlightServiceBuilder {
                                    Map<String, Function<Tuple, Box<Boolean>>> atoms,
                                    Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distFunctions)
     {
+        //TODO: Quit the MQTT and move it to the sensors service
         setConnectionType(ConnType.MQTT);
         setDataSource("tcp://localhost:1883");
+
         setMonitorType(MonitorType.ONLINE_MOONLIGHT);
         setSpatialModel(spatialModel);
         setFormula(formula);
