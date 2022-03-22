@@ -1,6 +1,6 @@
 package dataStorages;
 
-import controller.MainController;
+import controller.MoonlightServiceBuilder;
 import messages.Message;
 import services.Service;
 
@@ -13,10 +13,10 @@ public class FixedTimeBuffer<E> implements Buffer<E>{
     private final int size;
     private final Service<E, ?> service;
     private final DataStoringTimeChain<E> storingTimeChain;
-    private MainController controller;
+    private MoonlightServiceBuilder controller;
     private E defaultValue;
 
-    public FixedTimeBuffer(MainController controller, int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
+    public FixedTimeBuffer(MoonlightServiceBuilder controller, int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
         this.controller = controller;
 
         size = spatialModelSize;

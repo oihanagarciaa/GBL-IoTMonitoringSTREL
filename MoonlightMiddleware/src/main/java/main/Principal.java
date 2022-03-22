@@ -1,7 +1,7 @@
 package main;
 
 import controller.ConnType;
-import controller.MainController;
+import controller.MoonlightServiceBuilder;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.base.Tuple;
@@ -24,13 +24,13 @@ public class Principal {
     static final int MAX_PERSONS = 24;
     static final int MAX_DECIBELS = 70;
 
-    private static MainController c;
+    private static MoonlightServiceBuilder c;
 
     //TODO: the client has to set up the controller
     public static void main(String[] args) {
 
-        c = new MainController();
-        initMainController();
+        SpatialModel<Double> spatialModel = buildSpatialModel(6);
+        c = new MoonlightServiceBuilder(spatialModel, formula(), getOnlineAtoms(), setDistanceFunctions(spatialModel));
         c.run();
         /*Thread thread = new Thread(){
             final SecureRandom rand = new SecureRandom();
@@ -68,17 +68,6 @@ public class Principal {
             Thread.currentThread().interrupt();
         }*/
 
-    }
-
-    private static void initMainController() {
-        c.setMonitorType(MonitorType.ONLINE_MOONLIGHT);
-        c.setConnectionType(ConnType.MQTT);
-        c.setDataSource("tcp://localhost:1883");
-        SpatialModel<Double> spatialModel = buildSpatialModel(6);
-        c.setSpatialModel(spatialModel);
-        c.setFormula(formula());
-        c.setAtomicFormulas(getOnlineAtoms());
-        c.setDistanceFunctions(setDistanceFunctions(spatialModel));
     }
 
     public static SpatialModel<Double> buildSpatialModel(int size){

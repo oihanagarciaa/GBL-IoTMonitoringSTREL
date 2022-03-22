@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * Main entry point of the middleware
  */
-public class MainController implements Controller {
+public class MoonlightServiceBuilder {
     //If I want to access a variable from a test make it protected
     private Subscriber<String> subscriber;
     private String broker;
@@ -38,9 +38,23 @@ public class MainController implements Controller {
     private Formula formula;
     private SpaceTimeSignal<Double, Box<Boolean>> result;
     private Map<String, Function<Tuple, Box<Boolean>>> atoms;
-    private HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
+    private Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
-    public void initializeService() throws UnsupportedOperationException{
+    public MoonlightServiceBuilder(SpatialModel<Double> spatialModel,
+                                   Formula formula,
+                                   Map<String, Function<Tuple, Box<Boolean>>> atoms,
+                                   Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distFunctions)
+    {
+        setConnectionType(ConnType.MQTT);
+        setDataSource("tcp://localhost:1883");
+        setMonitorType(MonitorType.ONLINE_MOONLIGHT);
+        setSpatialModel(spatialModel);
+        setFormula(formula);
+        setAtomicFormulas(atoms);
+        setDistanceFunctions(distFunctions);
+    }
+
+    public void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, model, atoms, distanceFunctions);
             //TODO: how to initialize the buffer
@@ -77,42 +91,34 @@ public class MainController implements Controller {
         System.out.println(getResults());
     }
 
-    @Override
     public void setDataSource(String sourceBrokerId) {
         broker = sourceBrokerId;
     }
 
-    @Override
     public void setConnectionType(ConnType connectionType) {
         this.connectionType = connectionType;
     }
 
-    @Override
     public void setMonitorType(MonitorType monitorType) {
         this.monitorType = monitorType;
     }
 
-    @Override
     public void setFormula(Formula formula) {
         this.formula = formula;
     }
 
-    @Override
     public void setSpatialModel(SpatialModel<Double> model) {
         this.model = model;
     }
 
-    @Override
     public void setAtomicFormulas(Map<String, Function<Tuple, Box<Boolean>>> atoms) {
         this.atoms = atoms;
     }
 
-    @Override
-    public void setDistanceFunctions(HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
+    public void setDistanceFunctions(Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
         this.distanceFunctions = distanceFunctions;
     }
 
-    @Override
     public boolean run() {
         try {
             initializeService();
@@ -123,7 +129,6 @@ public class MainController implements Controller {
         }
     }
 
-    @Override
     public List<String> getResults() {
         return result.getSegments().toList().stream() // converts signal to a list
                      .map(Object::toString) // convert signal segments to strings

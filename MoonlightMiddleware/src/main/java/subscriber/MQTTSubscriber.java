@@ -1,6 +1,6 @@
 package subscriber;
 
-import controller.MainController;
+import controller.MoonlightServiceBuilder;
 import messages.Message;
 import messages.OfficeMessage;
 import org.eclipse.paho.client.mqttv3.*;
@@ -10,12 +10,12 @@ import java.util.UUID;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     //TODO: To change to a generic controller I have to add updateData(...) to the interface
-    final private MainController controller;
+    final private MoonlightServiceBuilder controller;
     private static final String clientId = UUID.randomUUID().toString();
     private static int qos = 0;
     MqttClient sampleClient;
 
-    public MQTTSubscriber(String broker, MainController controller){
+    public MQTTSubscriber(String broker, MoonlightServiceBuilder controller){
         this.controller = controller;
         try(MemoryPersistence persistence = new MemoryPersistence()) {
             sampleClient = new MqttClient(broker, clientId, persistence);

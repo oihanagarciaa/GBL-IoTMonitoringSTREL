@@ -27,21 +27,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-class MainControllerTest {
+class MoonlightServiceBuilderTest {
 
     @Test
     void basicControllerInit() {
-        Controller controller = controllerInit();
+        MoonlightServiceBuilder serviceBuilder = builderInit();
 
-        assertTrue(controller.run());
+        assertTrue(serviceBuilder.run());
     }
 
     @Test
     void updateDataMainControllerTest(){
-        MainController controller = controllerInitRealValues();
+        MoonlightServiceBuilder controller = controllerInitRealValues();
         controller.initializeService();
         controller.run();
-        Message message = new OfficeMessage();
+        Message<Tuple> message = new OfficeMessage();
         message.transformReceivedData("asdasd/4", basicValidJSON());
         for(int i = 0; i < 3; i++){
             controller.updateData(message);
@@ -49,37 +49,35 @@ class MainControllerTest {
         assertEquals(3, controller.buffer.get().size());
     }
 
-    private static MainController controllerInit() {
-        MainController controller = new MainController();
-        String sourceId = "tcp://localhost:1883";
-        ConnType connType = ConnType.MQTT;
-        MonitorType monitorType = MonitorType.ONLINE_MOONLIGHT;
+    private static MoonlightServiceBuilder builderInit() {
+        //String sourceId = "tcp://localhost:1883";
+//        ConnType connType = ConnType.MQTT;
+//        MonitorType monitorType = MonitorType.ONLINE_MOONLIGHT;
         Formula f = mock(Formula.class);
         SpatialModel<Double> model = mock(SpatialModel.class);
         Map<String, Function<Tuple, Box<Boolean>>> atoms = mock(Map.class);
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distance = mock(HashMap.class);
+        return new MoonlightServiceBuilder(model, f, atoms, distance);
 
-        controller.setDataSource(sourceId);
-        controller.setConnectionType(connType);
-        controller.setMonitorType(monitorType);
-        controller.setFormula(f);
-        controller.setSpatialModel(model);
-        controller.setAtomicFormulas(atoms);
-        controller.setDistanceFunctions(distance);
-        return controller;
+        //controller.setDataSource(sourceId);
+//        controller.setConnectionType(connType);
+//        controller.setMonitorType(monitorType);
+//        controller.setFormula(f);
+//        controller.setSpatialModel(model);
+//        controller.setAtomicFormulas(atoms);
+        //controller.setDistanceFunctions(distance);
     }
 
-    private static MainController controllerInitRealValues(){
-        MainController c = new MainController();
-        c.setMonitorType(MonitorType.ONLINE_MOONLIGHT);
-        c.setConnectionType(ConnType.MQTT);
-        c.setDataSource("tcp://localhost:1883");
+    private static MoonlightServiceBuilder controllerInitRealValues(){
+//        c.setMonitorType(MonitorType.ONLINE_MOONLIGHT);
+//        c.setConnectionType(ConnType.MQTT);
+//        c.setDataSource("tcp://localhost:1883");
         SpatialModel<Double> spatialModel = buildSpatialModel(6);
-        c.setSpatialModel(spatialModel);
-        c.setFormula(formula());
-        c.setAtomicFormulas(getOnlineAtoms());
-        c.setDistanceFunctions(setDistanceFunctions(spatialModel));
-        return c;
+//        c.setSpatialModel(spatialModel);
+//        c.setFormula(formula());
+//        c.setAtomicFormulas(getOnlineAtoms());
+//        c.setDistanceFunctions();
+        return  new MoonlightServiceBuilder(spatialModel, formula(), getOnlineAtoms(), setDistanceFunctions(spatialModel));
     }
 
     private static SpatialModel<Double> buildSpatialModel(int size){

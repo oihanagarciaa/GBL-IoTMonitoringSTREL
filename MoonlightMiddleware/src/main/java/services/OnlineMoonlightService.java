@@ -12,6 +12,7 @@ import eu.quanticol.moonlight.online.monitoring.OnlineSpatialTemporalMonitor;
 import eu.quanticol.moonlight.online.signal.TimeChain;
 import eu.quanticol.moonlight.online.signal.Update;
 import eu.quanticol.moonlight.space.StaticLocationService;
+import messages.Message;
 
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,11 @@ public class OnlineMoonlightService implements Service<Tuple,
     @Override
     public void run(Update<Double, List<Tuple>> update) {
         results = onlineMonitor.monitor(update);
+    }
+
+    @Override
+    public void receive(Message message) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

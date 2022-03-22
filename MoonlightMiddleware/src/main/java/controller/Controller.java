@@ -14,6 +14,7 @@ import java.util.function.Function;
 
 /**
  *  The interface between the user/client and the middleware
+ *
  *  It provides the setup methods for clarifying the data and services
  *  on which the Middleware should work
  */
