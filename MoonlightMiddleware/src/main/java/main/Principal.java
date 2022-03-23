@@ -1,7 +1,6 @@
 package main;
 
-import controller.ConnType;
-import controller.MoonlightServiceBuilder;
+import builders.MoonlightServiceBuilder;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.base.Tuple;
@@ -12,7 +11,6 @@ import eu.quanticol.moonlight.formula.*;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
-import services.MonitorType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,42 +30,6 @@ public class Principal {
         SpatialModel<Double> spatialModel = buildSpatialModel(6);
         c = new MoonlightServiceBuilder(spatialModel, formula(), getOnlineAtoms(), setDistanceFunctions(spatialModel));
         c.run();
-        /*Thread thread = new Thread(){
-            final SecureRandom rand = new SecureRandom();
-            @Override
-            public void run() {
-                try{
-
-                    int i, n, p;
-                    do {
-                            i = rand.nextInt(6);
-                            n = 50+rand.nextInt(30);
-                            p = 20+rand.nextInt(10);
-                            String s = "{\n" +
-                                    "            \"id\": "+i+"\n" +
-                                    "            \"place\":"+ i+"\n" +
-                                    "            \"noise\":"+ n+"\n" +
-                                    "            \"people\":"+ p+"\n" +
-                                    "         }";
-                            c.updateData(s);
-                            System.out.println("RESULTS:\n"+c.getResults()+"\n- - - - - - - - - - - - - - - - - - - -");
-                            Thread.sleep(500);
-                    }while (true);
-                }catch(InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        };
-        Scanner teclado = new Scanner(System.in);
-        thread.start();
-        teclado.nextLine();
-        thread.interrupt();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }*/
-
     }
 
     public static SpatialModel<Double> buildSpatialModel(int size){
@@ -85,7 +47,6 @@ public class Principal {
         return Utils.createSpatialModel(size, cityMap);
     }
 
-    //TODO: Escape formula gets stuck
     public static Formula formula() {
         Formula controlPeople = new AtomicFormula("manyPeople");
         /*Formula isSchool = new AtomicFormula("isSchool");

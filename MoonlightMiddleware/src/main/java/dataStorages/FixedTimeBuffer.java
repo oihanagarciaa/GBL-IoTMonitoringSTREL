@@ -1,6 +1,6 @@
 package dataStorages;
 
-import controller.MoonlightServiceBuilder;
+import builders.MoonlightServiceBuilder;
 import messages.Message;
 import services.Service;
 

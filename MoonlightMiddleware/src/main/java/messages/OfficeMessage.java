@@ -8,7 +8,7 @@ import org.json.simple.JSONValue;
 import java.util.Arrays;
 import java.util.List;
 
-public class OfficeMessage extends Message<Tuple>{
+public class OfficeMessage implements Message {
     private TupleType tupleType;
     private final List<String> places;
     private int id;
@@ -20,7 +20,6 @@ public class OfficeMessage extends Message<Tuple>{
         tupleType = TupleType.of(String.class, Integer.class, Integer.class);
     }
 
-    @Override
     public void transformReceivedData(String topic, String message) {
         getIdFromTopic(topic);
         //TODO: Change the way the time is set
@@ -67,9 +66,23 @@ public class OfficeMessage extends Message<Tuple>{
         this.time = time;
     }
 
-    //TODO: Maybe quit the default value
-    @Override
-    public Tuple getDefaultValue() {
-        return Tuple.of(tupleType, "", 0, 0);
+    private Tuple valueElement;
+
+    public void setMessageData(int id, double time, Tuple element){
+        this.id = id;
+        this.time = time;
+        this.valueElement = element;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public double getTime() {
+        return time;
+    }
+
+    public Tuple getValueElement() {
+        return valueElement;
     }
 }

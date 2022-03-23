@@ -1,5 +1,7 @@
 package services;
 
+import dataStorages.Buffer;
+import dataStorages.ConstantSizeBuffer;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.space.*;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -17,6 +19,7 @@ import messages.Message;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class OnlineMoonlightService implements Service<Tuple,
         SpaceTimeSignal<Double, Box<Boolean>>>{
@@ -31,6 +34,8 @@ public class OnlineMoonlightService implements Service<Tuple,
 
     private SpaceTimeSignal<Double, Box<Boolean>> results;
 
+    private Buffer<Tuple> buffer;
+
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
             Map<String, Function<Tuple, Box<Boolean>>> atoms,
             Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
@@ -39,6 +44,8 @@ public class OnlineMoonlightService implements Service<Tuple,
         this.atoms = atoms;
         locSvc = new StaticLocationService<>(this.spatialModel);
         this.distanceFunctions = distanceFunctions;
+        buffer = new ConstantSizeBuffer<>(model.size(), 6, service);
+        //buffer = new FixedTimeBuffer<>(this, model.size(),service, 10000);
     }
 
     @Override
@@ -77,6 +84,28 @@ public class OnlineMoonlightService implements Service<Tuple,
     @Override
     public SpaceTimeSignal<Double, Box<Boolean>> getResponseFromService() {
         return results;
+    }
+
+    //TODO: Receive the data from the bus
+    public void updateData(Message message) {
+        if(buffer.add(message)){
+            updateResponse();
+        }
+    }
+
+    //TODO: Send the data to the bus
+    public void updateResponse() {
+        result = service.getResponseFromService();
+        //TODO: Quit print line
+        // Send it to a client/dashboard
+        System.out.println(getResults());
+    }
+
+
+    public List<String> getResults() {
+        return result.getSegments().toList().stream() // converts signal to a list
+                .map(Object::toString) // convert signal segments to strings
+                .collect(Collectors.toList()); // recollect as list of strings
     }
 
 }

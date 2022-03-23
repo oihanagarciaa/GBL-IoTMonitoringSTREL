@@ -1,4 +1,4 @@
-package controller;
+package builders;
 
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Tuple;
@@ -6,6 +6,7 @@ import eu.quanticol.moonlight.core.formula.Formula;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 import services.MonitorType;
+import subscriber.ConnType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,11 +14,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
+ *
  *  The interface between the user/client and the middleware
  *
  *  It provides the setup methods for clarifying the data and services
  *  on which the Middleware should work
  */
+//TODO: Delete
 public interface Controller {
 
     /**

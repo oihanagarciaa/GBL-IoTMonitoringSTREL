@@ -1,3 +1,5 @@
+package main;
+
 import messages.Message;
 import services.Service;
 
@@ -10,7 +12,7 @@ import java.util.List;
 public class DataBus {
     private static DataBus instance;
 
-    private final List<Service<?, ?>> services;
+    private final List<Service> services;
 
     private DataBus() {
         services = new ArrayList<>();
@@ -24,11 +26,11 @@ public class DataBus {
         return instance;
     }
 
-    public void offer(Message<?> m) {
+    public void offer(Message m) {
         instance.services.forEach(s -> s.receive(m));
     }
 
-    public void notify(Service<?, ?> s) {
+    public void notify(Service s) {
         instance.services.add(s);
     }
 
