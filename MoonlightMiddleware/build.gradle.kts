@@ -34,6 +34,10 @@ dependencies {
     implementation("com.googlecode.json-simple:json-simple:1.1.1")
     implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
     implementation("org.apache.commons:commons-lang3:3.12.0")
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.8.5")
+
 }
 
 tasks.test {

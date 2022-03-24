@@ -35,11 +35,11 @@ class OnlineMoonlightServiceTest {
         assertTrue(onlineMoonlightService.isRunning());
     }
 
-    @Test
-    void monitorWithoutUpdate(){
-        startOnlineMoonlightService();
-        assertThrows(IllegalArgumentException.class, () -> {onlineMoonlightService.run(new Update<>(0.0, 0.0, null));});
-    }
+//    @Test
+//    void monitorWithoutUpdate(){
+//        startOnlineMoonlightService();
+//        assertThrows(IllegalArgumentException.class, () -> {onlineMoonlightService.run(new Update<>(0.0, 0.0, null));});
+//    }
 
     @Test
     void getResponseFromServiceTest(){
@@ -63,10 +63,10 @@ class OnlineMoonlightServiceTest {
             signalSP.add(Tuple.of(tupleType, 20));
         }
         Update<Double, List<Tuple>> update = new Update<>(0.0, 1.0, signalSP);
-        onlineMoonlightService.run(update);
-        SpaceTimeSignal<Double, Box<Boolean>> signal = onlineMoonlightService.getResponseFromService();
-        System.out.println(signal);
-        assertNotNull(signal);
+//        onlineMoonlightService.run(update);
+//        SpaceTimeSignal<Double, Box<Boolean>> signal = onlineMoonlightService.getResponseFromService();
+//        System.out.println(signal);
+//        assertNotNull(signal);
     }
     private static Box<Boolean> booleanInterval(boolean cond) {
         return cond ? new Box<>(true, true) :

@@ -36,7 +36,7 @@ public class DataStoringTimeChain<V>{
     private void initTimeChains(){
         timeChainList = new ArrayList<>();
         for(int i = 0; i < size; i++){
-            TimeChain<Double, V> timeChain = new TimeChain<Double, V>(Double.MAX_VALUE);
+            TimeChain<Double, V> timeChain = new TimeChain<>(Double.MAX_VALUE);
             timeChainList.add(timeChain);
         }
     }
@@ -66,16 +66,6 @@ public class DataStoringTimeChain<V>{
                 timeChainSplitter.splitTimeChain(timeChainList, time);
         timeChainList = timeChainArray[1];
         return timeChainArray[0];
-    }
-
-    public List<V> getAllValues(){
-        List<V> listRecords = new ArrayList<>();
-        for(int i = 0; i < size; i++){
-            for (int j = 0; j < timeChainList.get(i).size(); j++){
-                listRecords.add(timeChainList.get(i).get(j).getValue());
-            }
-        }
-        return listRecords;
     }
 
     public boolean allValuesPresent(){

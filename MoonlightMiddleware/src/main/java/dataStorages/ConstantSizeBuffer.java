@@ -1,23 +1,18 @@
 package dataStorages;
 
-import messages.Message;
-import services.Service;
+import eu.quanticol.moonlight.online.signal.TimeChain;
+import messages.CommonSensorsMessage;
 
-import java.util.Collection;
+import java.util.List;
 
 public class ConstantSizeBuffer<E> implements Buffer<E>{
     private final int maxCapacity;
     DataStoringTimeChain<E> storingTimeChain;
-    private final Service<E, ?> connectedService;
     int counter;
 
-    public ConstantSizeBuffer(int spatialModelSize, int bufferSize, Service<E, ?> serviceToConnect) {
+    public ConstantSizeBuffer(int spatialModelSize, int bufferSize) {
         counter = 0;
-
         maxCapacity = bufferSize;
-        connectedService = serviceToConnect;
-
-        //TODO: Change the null value
         storingTimeChain = new DataStoringTimeChain<>(spatialModelSize);
     }
 
@@ -25,27 +20,31 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
         return counter >= maxCapacity;
     }
 
+    //TODO: Think how to declare the messages better
     @Override
-    public boolean add(Message message) {
-        storingTimeChain.saveNewValue(message.getId(), message.getTime(), (E) message.getValueElement());
+    public boolean add(CommonSensorsMessage message) {
+        storingTimeChain.saveNewValue(message.getId(), message.getTime(), (E) message.getValue());
         counter ++;
         if(bufferIsFull() && storingTimeChain.allValuesPresent()) {
-            storingTimeChain.setDefaultValue((E) message.getDefaultValue());
-            connectedService.run(storingTimeChain.getDataToMonitor());
-            flush();
+//            storingTimeChain.setDefaultValue((E) message.getDefaultValue());
+//            connectedService.run(storingTimeChain.getDataToMonitor());
+//            flush();
             return true;
         }
         return false;
     }
 
     @Override
-    public Collection<E> get() {
-        return (Collection<E>)storingTimeChain.getAllValues();
+    public TimeChain<Double, List<E>> get() {
+        return storingTimeChain.getDataToMonitor();
+    }
+
+    public TimeChain<Double, List<E>> getDataToMonitor(){
+        return storingTimeChain.getDataToMonitor();
     }
 
     @Override
     public void flush() {
         counter = 0;
-        //storingTimeChain.deleteValues();
     }
 }

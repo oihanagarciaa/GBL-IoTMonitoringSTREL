@@ -1,9 +1,12 @@
 package dataStorages;
 
 
+import eu.quanticol.moonlight.online.signal.TimeChain;
+import messages.CommonSensorsMessage;
 import messages.Message;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This buffer abstracts the interaction with the data from the application.
@@ -15,13 +18,13 @@ public interface Buffer<E> {
      * @param message contains the element and information to be stored
      * @return <code>true</code> if the buffer gets full
      */
-    boolean add(Message message);
+    boolean add(CommonSensorsMessage message);
 
     /**
      * Primitive for retrieving the current data of the buffer
      * @return the collection of elements stored in the buffer
      */
-    Collection<E> get();
+    TimeChain<Double, List<E>> get();
 
     /**
      * Primitive for emptying the buffer

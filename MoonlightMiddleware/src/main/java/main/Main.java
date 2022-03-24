@@ -1,6 +1,5 @@
 package main;
 
-
 import builders.MoonlightServiceBuilder;
 import builders.SensorsServiceBuilder;
 import eu.quanticol.moonlight.core.base.Box;
@@ -13,6 +12,7 @@ import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.util.Utils;
+import messages.OfficeSensorMessage;
 import subscriber.ConnType;
 
 import java.util.HashMap;
@@ -27,6 +27,15 @@ public class Main {
         //TODO: the client must pass all the information
         setSensorsServiceBuilderServiceBuilders();
         setMoonlightServiceBuilder();
+        DataBus dataBus = DataBus.getInstance();
+        dataBus.notify(sensorsServiceBuilder.getService());
+        dataBus.notify(moonlightServiceBuilder.getService());
+        runServices();
+    }
+
+    private void runServices() {
+        sensorsServiceBuilder.run();
+        moonlightServiceBuilder.run();
     }
 
     public static void main(String[] args) {
@@ -36,7 +45,8 @@ public class Main {
     private void setSensorsServiceBuilderServiceBuilders(){
         String broker = "tcp://localhost:1883";
         String topic = "institute/thingy/#";
-        sensorsServiceBuilder = new SensorsServiceBuilder(ConnType.MQTT, broker, topic);
+        sensorsServiceBuilder = new SensorsServiceBuilder
+                (ConnType.MQTT, broker, topic, OfficeSensorMessage.class);
     }
 
     private void setMoonlightServiceBuilder(){
@@ -100,7 +110,7 @@ public class Main {
             (double distance, SpatialModel<Double> city) {
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
         distanceFunctions.put("distance",
-                m -> new DefaultDistanceStructure<Double, Double>(x -> x,
+                m -> new DefaultDistanceStructure<>(x -> x,
                         new DoubleDomain(), distance, Double.MAX_VALUE, city));
         return distanceFunctions;
     }

@@ -5,6 +5,7 @@ package dataConverters;
  * @param <U> Monitoring data, update
  * @param <M> The received message type
  */
+//TODO: I don't use it anymore
 public interface DataConverter<U, M> {
 
     /**

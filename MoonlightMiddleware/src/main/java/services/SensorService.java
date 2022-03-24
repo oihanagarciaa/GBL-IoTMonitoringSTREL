@@ -1,30 +1,35 @@
 package services;
 
+import com.google.gson.Gson;
+import main.DataBus;
 import messages.Message;
-import subscriber.ConnType;
-import subscriber.MQTTSubscriber;
+import subscriber.MessageListener;
 import subscriber.Subscriber;
 
-public class SensorService implements Service{
-    private Subscriber<String> subscriber;
+import java.lang.reflect.Type;
 
-    public SensorService(){
+public class SensorService implements Service, MessageListener {
+    private Subscriber subscriber;
+    Class messageClass;
 
+    public SensorService(Subscriber subscriber, Class messageClass){
+        this.subscriber = subscriber;
+        this.messageClass = messageClass;
     }
 
     @Override
     public boolean isRunning() {
-        return false;
+        return subscriber!=null;
     }
 
     @Override
     public void receive(Message message) {
-
+        //Do nothing
     }
 
     @Override
     public void init() {
-
+        this.subscriber.addListener(this);
     }
 
     @Override
@@ -32,14 +37,10 @@ public class SensorService implements Service{
 
     }
 
-    private void establishConnection() throws UnsupportedOperationException {
-        if (connectionType == ConnType.MQTT) {
-            //TODO: create service
-            subscriber = new MQTTSubscriber(broker, this);
-            subscriber.subscribe(topic);
-        } else if (connectionType == ConnType.REST) {
-            throw new UnsupportedOperationException("Rest not implemented");
-        } else
-            throw new UnsupportedOperationException("Unknown connection type");
+    @Override
+    public void messageArrived(String topic, String jsonMessage) {
+        Message message = new Gson().fromJson(jsonMessage, (Type) messageClass);
+        DataBus dataBus = DataBus.getInstance();
+        dataBus.offer(message);
     }
 }

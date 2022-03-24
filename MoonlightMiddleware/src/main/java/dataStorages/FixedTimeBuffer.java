@@ -1,22 +1,23 @@
 package dataStorages;
 
 import builders.MoonlightServiceBuilder;
-import messages.Message;
+import eu.quanticol.moonlight.online.signal.TimeChain;
+import messages.CommonSensorsMessage;
 import services.Service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class FixedTimeBuffer<E> implements Buffer<E>{
     private final Timer timer;
     private final int size;
-    private final Service<E, ?> service;
+    private final Service service;
     private final DataStoringTimeChain<E> storingTimeChain;
     private MoonlightServiceBuilder controller;
     private E defaultValue;
 
-    public FixedTimeBuffer(MoonlightServiceBuilder controller, int spatialModelSize, Service<E, ?> serviceToConnect, long timePeriod){
+    public FixedTimeBuffer(MoonlightServiceBuilder controller, int spatialModelSize, Service serviceToConnect, long timePeriod){
         this.controller = controller;
 
         size = spatialModelSize;
@@ -33,23 +34,23 @@ public class FixedTimeBuffer<E> implements Buffer<E>{
         public void run() {
             if(storingTimeChain.allValuesPresent()){
                 storingTimeChain.setDefaultValue(defaultValue);
-                service.run(storingTimeChain.getDataToMonitor());
+                //service.run(storingTimeChain.getDataToMonitor());
                 flush();
-                controller.updateResponse();
+                //controller.updateResponse();
             }
         }
     }
 
     @Override
-    public boolean add(Message message) {
-        if(defaultValue == null) defaultValue = (E) message.getDefaultValue();
-        storingTimeChain.saveNewValue(message.getId(), message.getTime(), (E) message.getValueElement());
+    public boolean add(CommonSensorsMessage message) {
+        //if(defaultValue == null) defaultValue = (E) message.getDefaultValue();
+        //storingTimeChain.saveNewValue(message.getId(), message.getTime(), (E) message.getValueElement());
         return false;
     }
 
     @Override
-    public Collection<E> get() {
-        return storingTimeChain.getAllValues();
+    public TimeChain<Double, List<E>> get() {
+        return storingTimeChain.getDataToMonitor();
     }
 
     @Override

@@ -1,36 +1,26 @@
 package builders;
 
-import dataStorages.Buffer;
-import dataStorages.ConstantSizeBuffer;
-
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 
-import messages.Message;
 import services.MonitorType;
 import services.OnlineMoonlightService;
 import services.Service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-/**
- * Main entry point of the middleware
- */
 public class MoonlightServiceBuilder {
     //If I want to access a variable from a test make it protected
     private Service service;
-    private MonitorType monitorType;
-    private SpatialModel<Double> spatialModel;
-    private Formula formula;
-    private Map<String, Function<Tuple, Box<Boolean>>> atoms;
-    private Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
+    private final MonitorType monitorType;
+    private final SpatialModel<Double> spatialModel;
+    private final Formula formula;
+    private final Map<String, Function<Tuple, Box<Boolean>>> atoms;
+    private final Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
 
     public MoonlightServiceBuilder(SpatialModel<Double> spatialModel,
                                    Formula formula,
@@ -44,7 +34,7 @@ public class MoonlightServiceBuilder {
         this.distanceFunctions = distFunctions;
     }
 
-    public void initializeService() {
+    private void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, spatialModel, atoms, distanceFunctions);
         } else {
@@ -60,5 +50,9 @@ public class MoonlightServiceBuilder {
         } catch (UnsupportedOperationException e) {
             return false;
         }
+    }
+
+    public Service getService() {
+        return service;
     }
 }

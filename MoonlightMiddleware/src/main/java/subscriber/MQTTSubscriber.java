@@ -1,34 +1,29 @@
 package subscriber;
 
-import builders.SensorsServiceBuilder;
-import messages.Message;
-import messages.OfficeMessage;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.util.UUID;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
-    //TODO: To change to a generic controller I have to add updateData(...) to the interface
-    final private SensorsServiceBuilder controller;
+    private MessageListener listener;
     private static final String clientId = UUID.randomUUID().toString();
     private static int qos = 0;
-    MqttClient sampleClient;
+    private static MqttClient sampleClient;
 
-    public MQTTSubscriber(String broker, SensorsServiceBuilder controller){
-        this.controller = controller;
+    public MQTTSubscriber(String broker, String topic) throws MqttException {
         try(MemoryPersistence persistence = new MemoryPersistence()) {
             sampleClient = new MqttClient(broker, clientId, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
 
             sampleClient.connect(connOpts);
-        } catch (MqttException ignored) {  }
+            subscribe(topic);
+        }
     }
 
     @Override
     public void connectionLost(Throwable cause) {
-
     }
 
     @Override
@@ -38,26 +33,21 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-
     }
 
     @Override
-    public void subscribe(String topic) {
-        try {
-            sampleClient.setCallback(this);
-            sampleClient.subscribe(topic);
-        } catch (MqttException ignored) {
-        }
+    public void subscribe(String topic) throws MqttException{
+        sampleClient.setCallback(this);
+        sampleClient.subscribe(topic);
     }
 
-    long t = 0;
-    //TODO: Think where to declare the specific message type (new OfficeMessage...)
+    @Override
+    public void addListener(MessageListener messageListener) {
+        this.listener = messageListener;
+    }
+
     @Override
     public void receive(String topic, String message) {
-        Message messageClass = new OfficeMessage();
-        messageClass.transformReceivedData(topic, message);
-        //TODO: Change the time set
-        //messageClass.setTime(t++);
-        controller.updateData(messageClass);
+        listener.messageArrived(topic, message);
     }
 }
