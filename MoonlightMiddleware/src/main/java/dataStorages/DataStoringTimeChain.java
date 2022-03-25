@@ -2,6 +2,7 @@ package dataStorages;
 
 import dataConverters.TimeChainConverter;
 import dataConverters.TimeChainSplitter;
+import eu.quanticol.moonlight.offline.signal.Segment;
 import eu.quanticol.moonlight.online.signal.TimeChain;
 import eu.quanticol.moonlight.online.signal.TimeSegment;
 
@@ -19,7 +20,6 @@ public class DataStoringTimeChain<V>{
     private boolean allElements;
     private final TimeChainConverter<V> timeChainConverter;
     private final TimeChainSplitter<V> timeChainSplitter;
-    private V defaultValue;
 
     public DataStoringTimeChain(int size){
         timeChainConverter = new TimeChainConverter<>(size);
@@ -45,20 +45,11 @@ public class DataStoringTimeChain<V>{
         timeChainList.get(id).add(new TimeSegment<>(time, value));
         if(!allElements) locations[id] = 1;
         allValuesPresent();
-        //TODO: change time
-        if(this.time < time) this.time = time;
     }
 
-    //TODO: Think how to specify the time
-    double time = 0;
-    public TimeChain<Double, List<V>> getDataToMonitor(){
-        double time = this.time-1;
+    public TimeChain<Double, List<V>> getDataToMonitor(double time){
         List<TimeChain<Double, V>> monitorTimeChain = getTimeChainToMonitor(time);
-        return timeChainConverter.fromListToTimeChain(monitorTimeChain, time, defaultValue);
-    }
-
-    public void setDefaultValue(V defaultValue){
-        this.defaultValue = defaultValue;
+        return timeChainConverter.fromListToTimeChain(monitorTimeChain, time);
     }
 
     private List<TimeChain<Double,V>> getTimeChainToMonitor(double time) {
@@ -77,5 +68,15 @@ public class DataStoringTimeChain<V>{
             allElements = true;
         }
         return true;
+    }
+
+    public void initStoringTimeChain() {
+        List<TimeChain<Double, V>> newTimeChainList = new ArrayList<>();
+        for(int i = 0; i < size; i++){
+            TimeChain<Double, V> newTimeChain = new TimeChain<>(new Segment<>(
+                    0.0, timeChainList.get(i).getLast().getValue()), Double.MAX_VALUE);
+            newTimeChainList.add(newTimeChain);
+        }
+        timeChainList = newTimeChainList;
     }
 }

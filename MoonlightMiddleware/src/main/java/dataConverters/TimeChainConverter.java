@@ -4,7 +4,6 @@ import eu.quanticol.moonlight.offline.signal.Segment;
 import eu.quanticol.moonlight.online.signal.TimeChain;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * There are n TimeChains, one for each sensor
@@ -19,9 +18,9 @@ public class TimeChainConverter<V> {
         this.previousTime = 0;
     }
 
-    public TimeChain<Double, List<V>> fromListToTimeChain(List<TimeChain<Double, V>> timeChainList, double finalTime, V defaultValue) {
+    public TimeChain<Double, List<V>> fromListToTimeChain(List<TimeChain<Double, V>> timeChainList, double finalTime) {
         Map<Double, Map<Integer, V>> valuesMap = createAValueMap(timeChainList);
-        return createOneTimeChain(valuesMap, finalTime, defaultValue);
+        return createOneTimeChain(valuesMap, finalTime);
     }
 
     private Map<Double, Map<Integer, V>> createAValueMap(List<TimeChain<Double, V>> timeChainList){
@@ -45,30 +44,19 @@ public class TimeChainConverter<V> {
     }
 
     //TODO: Think how to do this better
-    private TimeChain<Double, List<V>> createOneTimeChain(Map<Double, Map<Integer, V>> valuesMap, double finalTime, V defaultValue){
+    private TimeChain<Double, List<V>> createOneTimeChain(Map<Double, Map<Integer, V>> valuesMap, double finalTime){
         TimeChain<Double, List<V>> returnTimeChain = new TimeChain<>(finalTime);
-        //TODO: see if I can add values in order
-        // quit .set(index, ...) -> add .add(...)
-        List<V> listValues = initDefaultValues(defaultValue);
+        V listValues[] = (V[]) new Object[size];
 
         List<Double> sortedList = new ArrayList<>(valuesMap.keySet());
         Collections.sort(sortedList);
         sortedList.stream().forEach(time->{
             Map<Integer, V> posValueMap = valuesMap.get(time);
-            posValueMap.keySet().stream().forEach(index -> listValues.set(index, posValueMap.get(index)));
-            List<V> copy = listValues.stream().collect(Collectors.toList());
-            //TODO: Sometimes throws a exception
-            returnTimeChain.add(new Segment<>(time, copy));
+            posValueMap.keySet().stream().forEach(index -> listValues[index] = posValueMap.get(index));
+            List<V> copy = Arrays.asList(listValues);
+            returnTimeChain.add(new Segment<>(time, new ArrayList<V>(copy)));
         });
         previousTime = finalTime;
         return returnTimeChain;
-    }
-
-    private List<V> initDefaultValues(V defaultValue){
-        List<V> listValues = new ArrayList<>();
-        for(int i = 0; i < size; i++){
-            listValues.add(defaultValue);
-        }
-        return listValues;
     }
 }

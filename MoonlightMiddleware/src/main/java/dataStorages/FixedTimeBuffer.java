@@ -33,7 +33,6 @@ public class FixedTimeBuffer<E> implements Buffer<E>{
         @Override
         public void run() {
             if(storingTimeChain.allValuesPresent()){
-                storingTimeChain.setDefaultValue(defaultValue);
                 //service.run(storingTimeChain.getDataToMonitor());
                 flush();
                 //controller.updateResponse();
@@ -50,7 +49,7 @@ public class FixedTimeBuffer<E> implements Buffer<E>{
 
     @Override
     public TimeChain<Double, List<E>> get() {
-        return storingTimeChain.getDataToMonitor();
+        return storingTimeChain.getDataToMonitor(10.0);
     }
 
     @Override

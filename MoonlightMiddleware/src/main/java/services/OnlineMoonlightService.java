@@ -40,6 +40,7 @@ public class OnlineMoonlightService implements Service{
         this.atoms = atoms;
         locSvc = new StaticLocationService<>(this.spatialModel);
         this.distanceFunctions = distanceFunctions;
+        //TODO: Change the declaration of the buffer
         buffer = new ConstantSizeBuffer<>(model.size(), 6);
         //buffer = new FixedTimeBuffer<>(this, model.size(),service, 10000);
     }
@@ -49,7 +50,7 @@ public class OnlineMoonlightService implements Service{
         return onlineMonitor!=null;
     }
 
-    //TODO: Filter the messages in the DatBus in the future
+    //TODO: Maybe filter the messages in the DatBus in the future
     @Override
     public void receive(Message message) {
         if(message instanceof CommonSensorsMessage){
@@ -63,7 +64,10 @@ public class OnlineMoonlightService implements Service{
         SpaceTimeSignal<Double, Box<Boolean>> results;
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
-        dataBus.offer(new ResultsMessage<>(results));
+        //TODO: Quit println
+        ResultsMessage resultsMessage = new ResultsMessage(results);
+        System.out.println(resultsMessage.toString());
+        dataBus.offer(resultsMessage);
     }
 
     @Override
@@ -78,13 +82,4 @@ public class OnlineMoonlightService implements Service{
     public void stop() {
         onlineMonitor = null;
     }
-
-
-//    public List<String> getResults() {
-//        return result.getSegments().toList().stream() // converts signal to a list
-//                .map(Object::toString) // convert signal segments to strings
-//                .collect(Collectors.toList()); // recollect as list of strings
-//        return null;
-//    }
-
 }

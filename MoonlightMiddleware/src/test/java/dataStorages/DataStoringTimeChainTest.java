@@ -13,7 +13,7 @@ public class DataStoringTimeChainTest {
     @Test
     void getDataToMonitorTest(){
         DataStoringTimeChain<Integer> dataStoringTimeChain = initDataStoringTimeChain();
-        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor();
+        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor(5.0);
         assertEquals(5.0, timeChain.getEnd());
         assertEquals(ArrayList.class, timeChain.getFirst().getValue().getClass());
     }
@@ -21,10 +21,10 @@ public class DataStoringTimeChainTest {
     @Test
     void getDataTwice(){
         DataStoringTimeChain<Integer> dataStoringTimeChain = initDataStoringTimeChain();
-        dataStoringTimeChain.getDataToMonitor();
+        dataStoringTimeChain.getDataToMonitor(6.0);
         dataStoringTimeChain.saveNewValue(0, 7.0, 0);
         dataStoringTimeChain.saveNewValue(0, 9.0, 0);
-        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor();
+        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor(8.0);
         assertEquals(8.0, timeChain.getEnd());
         List<Integer> list = new ArrayList<>();
         list.add(0);
@@ -37,10 +37,10 @@ public class DataStoringTimeChainTest {
     void getDataWithNoValues(){
         int size = 3;
         DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size);
-        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor();
+        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor(0.0);
         dataStoringTimeChain.saveNewValue(1, 1.0, 6);
         dataStoringTimeChain.saveNewValue(1, 4.0, 8);
-        TimeChain<Double, List<Integer>> timeChain2 = dataStoringTimeChain.getDataToMonitor();
+        TimeChain<Double, List<Integer>> timeChain2 = dataStoringTimeChain.getDataToMonitor(5.0);
         assertEquals(timeChain2.get(0).getStart(), 1.0);
     }
 

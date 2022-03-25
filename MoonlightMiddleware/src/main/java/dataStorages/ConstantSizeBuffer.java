@@ -7,13 +7,19 @@ import java.util.List;
 
 public class ConstantSizeBuffer<E> implements Buffer<E>{
     private final int maxCapacity;
-    DataStoringTimeChain<E> storingTimeChain;
+    private final DataStoringTimeChain<E> storingTimeChain;
+    private final TimerSynchronization timerSynchronization;
+    private boolean canMonitor;
     int counter;
+    double time;
 
     public ConstantSizeBuffer(int spatialModelSize, int bufferSize) {
+        time = 0;
         counter = 0;
         maxCapacity = bufferSize;
         storingTimeChain = new DataStoringTimeChain<>(spatialModelSize);
+        timerSynchronization = new TimerSynchronization(spatialModelSize);
+        canMonitor = false;
     }
 
     private boolean bufferIsFull() {
@@ -23,24 +29,29 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
     //TODO: Think how to declare the messages better
     @Override
     public boolean add(CommonSensorsMessage message) {
-        storingTimeChain.saveNewValue(message.getId(), message.getTime(), (E) message.getValue());
-        counter ++;
-        if(bufferIsFull() && storingTimeChain.allValuesPresent()) {
-//            storingTimeChain.setDefaultValue((E) message.getDefaultValue());
-//            connectedService.run(storingTimeChain.getDataToMonitor());
-//            flush();
-            return true;
+        int id = message.getId();
+        double time = message.getTime();
+        if(canMonitor){
+            if(time > this.time) this.time = time;
+            storingTimeChain.saveNewValue(id,
+                    time-timerSynchronization.getIthTimeDifference(id), (E) message.getValue());
+            counter++;
+            if (bufferIsFull()) return true;
+        }else {
+            timerSynchronization.setNewTime(id, time);
+            storingTimeChain.saveNewValue(id,
+                    time, (E) message.getValue());
+            if(timerSynchronization.allValuesPresent()){
+                canMonitor = true;
+                storingTimeChain.initStoringTimeChain();
+            }
         }
         return false;
     }
 
     @Override
     public TimeChain<Double, List<E>> get() {
-        return storingTimeChain.getDataToMonitor();
-    }
-
-    public TimeChain<Double, List<E>> getDataToMonitor(){
-        return storingTimeChain.getDataToMonitor();
+        return storingTimeChain.getDataToMonitor(time);
     }
 
     @Override

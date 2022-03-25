@@ -27,15 +27,19 @@ public class Main {
         //TODO: the client must pass all the information
         setSensorsServiceBuilderServiceBuilders();
         setMoonlightServiceBuilder();
-        DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(sensorsServiceBuilder.getService());
-        dataBus.notify(moonlightServiceBuilder.getService());
         runServices();
+        notifyServices();
     }
 
     private void runServices() {
         sensorsServiceBuilder.run();
         moonlightServiceBuilder.run();
+    }
+
+    private void notifyServices(){
+        DataBus dataBus = DataBus.getInstance();
+        dataBus.notify(sensorsServiceBuilder.getService());
+        dataBus.notify(moonlightServiceBuilder.getService());
     }
 
     public static void main(String[] args) {
@@ -59,12 +63,6 @@ public class Main {
                 distFunctions = setDistanceFunctions(distance, spatialModel);
         moonlightServiceBuilder = new MoonlightServiceBuilder(spatialModel,
                 formula, atoms, distFunctions);
-    }
-
-    private void setupDataBus(){
-        DataBus instance = DataBus.getInstance();
-        instance.notify();
-        instance.notify();
     }
 
     private static SpatialModel<Double> buildSpatialModel(int size){
