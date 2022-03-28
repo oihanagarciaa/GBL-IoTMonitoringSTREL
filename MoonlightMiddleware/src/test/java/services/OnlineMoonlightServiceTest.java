@@ -18,10 +18,13 @@ import messages.ResultsMessage;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -49,6 +52,8 @@ public class OnlineMoonlightServiceTest {
             Message message = getMessage(i, i, 11);
             onlineMoonlightService.receive(message);
         }
+        Message message = serviceTest.getResultsMessage();
+        assertTrue(message instanceof ResultsMessage);
     }
 
     @Test
@@ -70,6 +75,56 @@ public class OnlineMoonlightServiceTest {
             Message message = getMessage(i, 6+i, 11);
             onlineMoonlightService.receive(message);
         }
+        Message message = serviceTest.getResultsMessage();
+        assertTrue(message instanceof ResultsMessage);
+    }
+
+    @Test
+    void sendingMessages2(){
+        ServiceTest serviceTest = new ServiceTest();
+        DataBus dataBus = DataBus.getInstance();
+        dataBus.notify(serviceTest);
+        OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
+        onlineMoonlightService.init();
+
+        List<Message> messages = new ArrayList<>();
+        messages.add(getMessage(1, 1, 11));
+        messages.add(getMessage(0, 1, 11));
+        messages.add(getMessage(1, 2, 11));
+        messages.add(getMessage(2, 1, 11));
+        messages.add(getMessage(3, 1, 11));
+        messages.add(getMessage(4, 1, 11));
+        messages.add(getMessage(3, 2, 11));
+        messages.add(getMessage(4, 3, 11));
+        for(int i = 0; i < messages.size(); i++){
+            onlineMoonlightService.receive(messages.get(i));
+        }
+        messages = new ArrayList<>();
+
+        messages.add(getMessage(5, 2, 11));
+
+        messages.add(getMessage(1, 2, 1));
+        messages.add(getMessage(1, 3, 11));
+        messages.add(getMessage(0, 1, 11));
+        messages.add(getMessage(2, 3, 11));
+        messages.add(getMessage(3, 3, 11));
+        messages.add(getMessage(4, 3, 11));
+        messages.add(getMessage(5, 3, 11));
+        messages.add(getMessage(0, 3, 11));
+        for(int i = 0; i < messages.size(); i++){
+            onlineMoonlightService.receive(messages.get(i));
+        }
+        messages = new ArrayList<>();
+        messages.add(getMessage(2, 4, 7));
+        messages.add(getMessage(4, 4, 11));
+        messages.add(getMessage(5, 4, 11));
+        messages.add(getMessage(0, 4, 11));
+        for(int i = 0; i < messages.size(); i++){
+            onlineMoonlightService.receive(messages.get(i));
+        }
+
+        Message message = serviceTest.getResultsMessage();
+        assertTrue(message instanceof ResultsMessage);
     }
 
     private OnlineMoonlightService getOnlineMoonlightService(){
@@ -141,6 +196,11 @@ public class OnlineMoonlightServiceTest {
     }
 
     public class ServiceTest implements Service{
+        ResultsMessage resultsMessage;
+
+        public ResultsMessage getResultsMessage() {
+            return resultsMessage;
+        }
 
         @Override
         public boolean isRunning() {
@@ -150,9 +210,7 @@ public class OnlineMoonlightServiceTest {
         @Override
         public void receive(Message message) {
             if (message instanceof ResultsMessage){
-                System.out.println("RESULTS:");
-                ResultsMessage message1 = (ResultsMessage) message;
-                System.out.println(message1.toString());
+                resultsMessage = (ResultsMessage) message;
             }
         }
 
