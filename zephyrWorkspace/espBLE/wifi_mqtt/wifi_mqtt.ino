@@ -1,9 +1,10 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include "esp_secrets.h"
 
 // WiFi
-const char *ssid = "Android.AP"; // Enter your WiFi name
-const char *password = "ylmn77832";  // Enter WiFi password
+const char *ssid = SECRET_SSID; // Enter your WiFi name
+const char *password = SECRET_PASS;  // Enter WiFi password
 
 // MQTT Broker
 const char *mqtt_broker = "broker.hivemq.com";
