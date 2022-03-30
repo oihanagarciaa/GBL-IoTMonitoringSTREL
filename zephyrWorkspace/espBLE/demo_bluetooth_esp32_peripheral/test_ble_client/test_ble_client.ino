@@ -63,9 +63,10 @@ bool connectToServer() {
 
     // Read the value of the characteristic.
     if(pRemoteCharacteristic->canRead()) {
-      int value = pRemoteCharacteristic->readUInt8();
+      //int value = pRemoteCharacteristic->readUInt8();
+      std::string value = pRemoteCharacteristic->readValue();
       Serial.print("The characteristic value was: ");
-      Serial.println(value);
+      Serial.println(value.c_str());
     }
 
     connected = true;
@@ -139,7 +140,7 @@ void loop() {
     
   }else if(doScan){
     // scan (blocking) for 2 seconds
-    BLEDevice::getScan()->start(2, false);  
+    BLEDevice::getScan()->start(10, false);  
   }
   
   delay(1000); // Delay a second between loops.
