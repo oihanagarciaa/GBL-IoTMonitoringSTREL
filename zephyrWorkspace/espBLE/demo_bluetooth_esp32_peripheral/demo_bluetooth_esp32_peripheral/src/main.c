@@ -79,6 +79,7 @@ static void connection_established(struct bt_conn *conn, uint8_t err) {
     return;
   }
   setLeds(0, 1, 0);
+  bt_set_name("see prj.conf");
   bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 
   printk("Connected: %s\n", addr);
@@ -126,6 +127,7 @@ int main() {
     printk("Bluetooth init failed (err %d)\n", err);
     return err;
   }
+
 
   /* Register callbacks for connection establishment */
   bt_conn_cb_register(&beacon_connection_callbacks);
