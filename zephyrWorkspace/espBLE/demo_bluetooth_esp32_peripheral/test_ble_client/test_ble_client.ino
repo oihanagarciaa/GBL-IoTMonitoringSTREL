@@ -29,8 +29,12 @@ class MyClientCallback : public BLEClientCallbacks {
 // Function which is used to initiate a connection
 bool connectToServer() {
     Serial.print("Forming a connection to ");
-    Serial.println(myDevice->getAddress().toString().c_str());
-    
+    if (myDevice->haveName())
+      {
+        Serial.print("Device name: ");
+        Serial.println(myDevice->getName().c_str());
+        Serial.println("");
+      }
     client  = BLEDevice::createClient();
     Serial.println(" - Created client");
 
