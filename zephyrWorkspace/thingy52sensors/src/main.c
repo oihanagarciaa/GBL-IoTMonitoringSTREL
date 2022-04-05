@@ -1,5 +1,4 @@
 #include <zephyr.h>
-#include <device.h>
 #include <drivers/sensor.h>
 #include <stdio.h>
 #include <sys/util.h>

@@ -1,3 +1,5 @@
+#include "sensors.h"
+
 #include <bluetooth/bluetooth.h>
 #include <bluetooth/conn.h>
 #include <bluetooth/gap.h>

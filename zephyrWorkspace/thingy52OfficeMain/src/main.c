@@ -2,15 +2,16 @@
  */
 #include "bluetooth.h"
 #include "sensors.h"
+#include "realTimeClock.h"
 
-#include <device.h>
-#include <devicetree.h>
-#include <zephyr.h>
 #define DEVICE_NAME CONFIG_BT_DEVICE_NAME
 #define DEVICE_NAME_LEN (sizeof(DEVICE_NAME) - 1)
 
 /* The main function */
 int main() {
+  init_sensors();
+  initialize_realTimeClock();
+
   int err;
   
   err = initialize_bluetooth();
@@ -28,6 +29,11 @@ int main() {
   } else {
     printk("Started advertising.\n");
   }
+
+  /*while(true){
+      getCurrentValues();
+      k_sleep(K_MSEC(5000));
+  }*/
 
   return 0;
 }

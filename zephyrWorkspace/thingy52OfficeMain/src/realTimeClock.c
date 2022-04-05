@@ -1,8 +1,4 @@
-#include <device.h>
-#include <devicetree.h>
-#include <zephyr.h>
-#include <drivers/counter.h>
-#include <drivers/timer/nrf_rtc_timer.h>
+#include "realTimeClock.h"
 
 /* RTC device */
 #define MY_RTC DT_PATH(soc, rtc_4000b000)
@@ -17,7 +13,7 @@ void timer_handler(int32_t id, uint64_t expire_time, void *user_data) {
 }
 
 
-int main() {
+void initialize_realTimeClock() {
   printk("Starting main.\n");
   int err;
 
@@ -40,14 +36,10 @@ int main() {
   /* enable interrupt after setting the timer */
   z_nrf_rtc_timer_compare_int_unlock(channel, locked);
   printk("Lock state: %i\n", locked);
+}
 
+unsigned long long getRealTimeValue(){
   uint64_t time;
-  while(true) {
-    time = z_nrf_rtc_timer_read();
-    printk("In loop, current tick-delay %llu\n", time / (increment / 100));
-
-    k_msleep(1000);
-  }
-
-  return 0;
+  time = z_nrf_rtc_timer_read();
+  return time / (increment / 100);
 }
