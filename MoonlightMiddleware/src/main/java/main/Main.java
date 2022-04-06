@@ -12,7 +12,7 @@ import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.util.Utils;
-import messages.OfficeSensorMessage;
+import messages.JsonOfficeSensorMessage;
 import subscriber.ConnType;
 
 import java.util.HashMap;
@@ -45,8 +45,10 @@ public class Main {
     private void setSensorsServiceBuilderServiceBuilders(){
         String broker = "tcp://localhost:1883";
         String topic = "institute/thingy/#";
+        String username = "oihana";
+        String password = "22oihana22";
         sensorsServiceBuilder = new SensorsServiceBuilder
-                (ConnType.MQTT, broker, topic, OfficeSensorMessage.class);
+                (ConnType.MQTT, broker, topic, username, password, JsonOfficeSensorMessage.class);
     }
 
     private void setMoonlightServiceBuilder(){

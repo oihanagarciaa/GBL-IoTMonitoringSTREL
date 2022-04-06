@@ -11,16 +11,6 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     private static int qos = 0;
     private static MqttClient sampleClient;
 
-    public MQTTSubscriber(String broker, String topic) throws MqttException {
-        try(MemoryPersistence persistence = new MemoryPersistence()) {
-            sampleClient = new MqttClient(broker, MqttClient.generateClientId(), persistence);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-            sampleClient.connect(connOpts);
-            subscribe(topic);
-        }
-    }
-
     public MQTTSubscriber(String broker, String topic, String username, String password) throws MqttException {
         try(MemoryPersistence persistence = new MemoryPersistence()) {
             sampleClient = new MqttClient(broker, MqttClient.generateClientId(), persistence);
@@ -64,6 +54,6 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void receive(String topic, String message) {
-        listener.messageArrived(topic, message);
+        listener.messageArrived(topic, topic + ";" +message);
     }
 }

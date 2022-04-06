@@ -3,7 +3,7 @@ package messages;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.base.TupleType;
 
-public class OfficeSensorMessage implements Message, CommonSensorsMessage<Tuple>{
+public class JsonOfficeSensorMessage implements Message, CommonSensorsMessage<Tuple>{
     private int id;
     private String place;
     private int noise;
