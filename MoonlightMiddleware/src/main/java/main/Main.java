@@ -42,10 +42,6 @@ public class Main {
         dataBus.notify(moonlightServiceBuilder.getService());
     }
 
-    public static void main(String[] args) {
-        Main main = new Main();
-    }
-
     private void setSensorsServiceBuilderServiceBuilders(){
         String broker = "tcp://localhost:1883";
         String topic = "institute/thingy/#";
@@ -111,5 +107,9 @@ public class Main {
                 m -> new DefaultDistanceStructure<>(x -> x,
                         new DoubleDomain(), distance, Double.MAX_VALUE, city));
         return distanceFunctions;
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
     }
 }
