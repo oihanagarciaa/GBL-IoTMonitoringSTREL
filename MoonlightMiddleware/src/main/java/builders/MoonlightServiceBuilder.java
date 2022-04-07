@@ -34,6 +34,9 @@ public class MoonlightServiceBuilder {
         this.distanceFunctions = distFunctions;
     }
 
+    /* it takes the if else as a duplication:
+     * see polymorphism [Clean code]
+     */
     private void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, spatialModel, atoms, distanceFunctions);
@@ -43,6 +46,10 @@ public class MoonlightServiceBuilder {
         service.init();
     }
 
+    /* TODO:
+        it takes the catch as a duplication:
+        see Template method or strategy
+     */
     public boolean run() {
         try {
             initializeService();

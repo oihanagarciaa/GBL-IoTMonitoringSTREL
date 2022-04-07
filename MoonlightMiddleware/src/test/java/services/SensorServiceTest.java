@@ -1,6 +1,6 @@
 package services;
 
-import messages.OfficeSensorMessage;
+import messages.JsonOfficeSensorMessage;
 import org.junit.jupiter.api.Test;
 import subscriber.MQTTSubscriber;
 import subscriber.Subscriber;
@@ -13,7 +13,7 @@ public class SensorServiceTest {
     @Test
     void simpleSensorServiceTest(){
         Subscriber<String> subscriber = mock(MQTTSubscriber.class);
-        SensorService sensorService = new SensorService(subscriber, OfficeSensorMessage.class);
+        SensorService sensorService = new SensorService(subscriber, JsonOfficeSensorMessage.class);
         sensorService.init();
         assertTrue(sensorService.isRunning());
     }
@@ -21,7 +21,7 @@ public class SensorServiceTest {
     @Test
     void sensorMessageTest(){
         Subscriber<String> subscriber = mock(MQTTSubscriber.class);
-        SensorService sensorService = new SensorService(subscriber, OfficeSensorMessage.class);
+        SensorService sensorService = new SensorService(subscriber, JsonOfficeSensorMessage.class);
         assertAll(() -> sensorService.messageArrived("topic", getBasicJSON()));
     }
 

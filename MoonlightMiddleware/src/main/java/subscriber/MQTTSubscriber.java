@@ -11,15 +11,21 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     private static int qos = 0;
     private static MqttClient sampleClient;
 
-    public MQTTSubscriber(String broker, String topic) throws MqttException {
+    public MQTTSubscriber(String broker, String topic, String username, String password) throws MqttException {
         try(MemoryPersistence persistence = new MemoryPersistence()) {
-            sampleClient = new MqttClient(broker, clientId, persistence);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-
+            sampleClient = new MqttClient(broker, MqttClient.generateClientId(), persistence);
+            MqttConnectOptions connOpts = setUpConnectionOptions(username, password);
             sampleClient.connect(connOpts);
             subscribe(topic);
         }
+    }
+
+    private static MqttConnectOptions setUpConnectionOptions(String username, String password) {
+        MqttConnectOptions connOpts = new MqttConnectOptions();
+        connOpts.setCleanSession(true);
+        connOpts.setUserName(username);
+        connOpts.setPassword(password.toCharArray());
+        return connOpts;
     }
 
     @Override
