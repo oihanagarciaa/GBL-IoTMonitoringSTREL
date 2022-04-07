@@ -5,9 +5,9 @@ static ssize_t read_callback(struct bt_conn *conn,
                              const struct bt_gatt_attr *attr, void *buf,
                              uint16_t len, uint16_t offset) {
   // increase our meaningful data, use helper method to write it
-  const char *name = getCurrentValues();
+  const char *message = getCurrentValues();
 
-  return bt_gatt_attr_read(conn, attr, buf, len, offset, name, strlen(name));
+  return bt_gatt_attr_read(conn, attr, buf, len, offset, message, strlen(message));
 }
 /* Write callback, currently, do nothing, also not used */
 ssize_t write_callback(struct bt_conn *conn, const struct bt_gatt_attr *attr,

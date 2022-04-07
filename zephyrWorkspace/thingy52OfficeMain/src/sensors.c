@@ -1,6 +1,5 @@
 #include "sensors.h"
 
-
 const struct device *tempHumdev;
 const struct device *airDev;
 
