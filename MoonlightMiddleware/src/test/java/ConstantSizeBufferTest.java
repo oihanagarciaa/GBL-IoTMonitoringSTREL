@@ -3,7 +3,7 @@ import dataStorages.Buffer;
 import dataStorages.ConstantSizeBuffer;
 import messages.CommonSensorsMessage;
 import messages.Message;
-import messages.JsonOfficeSensorMessage;
+import messages.OfficeSensorMessage;
 import org.junit.jupiter.api.Test;
 import services.Service;
 
@@ -52,7 +52,7 @@ public class ConstantSizeBufferTest {
                 "'people': "+people+","+
                 "'time': "+time+
                 "}";
-        Message message = new Gson().fromJson(jsonMessage, (Type) JsonOfficeSensorMessage.class);
+        Message message = new Gson().fromJson(jsonMessage, (Type) OfficeSensorMessage.class);
         return message;
     }
 }

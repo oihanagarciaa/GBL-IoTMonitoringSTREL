@@ -54,6 +54,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void receive(String topic, String message) {
+        System.out.println("MESSAGE " + message);
         listener.messageArrived(topic, message);
     }
 }

@@ -1,6 +1,5 @@
 #include "wifi_setup.h"
 
-#include "json11/json11.hpp"
 #include "BLEDevice.h"
 
 // The remote service we wish to connect to, set also in the peripheral
@@ -118,14 +117,14 @@ char * convertToJson(String espID, String value){
   String g = "{ 'id': " + espID + "," +
     "'time': " + getValue(value,';',0) + "," +
     "'temp': " + getValue(value,';',1) + "," +
-    "'hum': " + getValue(value,';',2) + "," +
-    "'co2': " + getValue(value,';',3) + "," +
+    "'hum': "  + getValue(value,';',2) + "," +
+    "'co2': "  + getValue(value,';',3) + "," +
     "'tvoc': " + getValue(value,';',4) + "}";
 
   Serial.print("JSON -> ");
   Serial.println(g);
-  char c[g.length()]; 
-  g.toCharArray(c, g.length());
+  char *c = new char[g.length() + 1];
+  strcpy(c, g.c_str());
 
   return c;
 }

@@ -10,7 +10,7 @@ import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.util.Utils;
-import messages.JsonOfficeSensorMessage;
+import messages.OfficeSensorMessage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import subscriber.ConnType;
@@ -49,14 +49,14 @@ class ServiceBuildersTest {
     @Disabled("In my computer works but not in github actions")
     void basicSensorBuilderInit() {
         SensorsServiceBuilder serviceBuilder = new SensorsServiceBuilder
-                (ConnType.MQTT, "tcp://localhost:1883", "topic", "", "", JsonOfficeSensorMessage.class);
+                (ConnType.MQTT, "tcp://localhost:1883", "topic", "", "", OfficeSensorMessage.class);
         assertTrue(serviceBuilder.run());
     }
 
     @Test
     void sensorsBuilderInitNull1() {
         SensorsServiceBuilder serviceBuilder = new SensorsServiceBuilder
-                (ConnType.MQTT, "", "", "", "", JsonOfficeSensorMessage.class);
+                (ConnType.MQTT, "", "", "", "", OfficeSensorMessage.class);
         assertThrows(IllegalArgumentException.class,
                 () -> serviceBuilder.run());
     }
@@ -64,7 +64,7 @@ class ServiceBuildersTest {
     @Test
     void sensorsBuilderInitNull2() {
         SensorsServiceBuilder serviceBuilder = new SensorsServiceBuilder
-                (null, "tcp://localhost:1883", "topic", "", "", JsonOfficeSensorMessage.class);
+                (null, "tcp://localhost:1883", "topic", "", "", OfficeSensorMessage.class);
         assertFalse(serviceBuilder.run());
     }
 

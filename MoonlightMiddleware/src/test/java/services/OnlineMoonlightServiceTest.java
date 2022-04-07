@@ -13,7 +13,7 @@ import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.util.Utils;
 import main.DataBus;
 import messages.Message;
-import messages.JsonOfficeSensorMessage;
+import messages.OfficeSensorMessage;
 import messages.ResultsMessage;
 import org.junit.jupiter.api.Test;
 
@@ -151,7 +151,7 @@ public class OnlineMoonlightServiceTest {
                 "'people': "+people+","+
                 "'time': "+time+
                 "}";
-        Message message = new Gson().fromJson(jsonMessage, (Type) JsonOfficeSensorMessage.class);
+        Message message = new Gson().fromJson(jsonMessage, (Type) OfficeSensorMessage.class);
         return message;
     }
 

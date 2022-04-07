@@ -12,7 +12,7 @@ import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.util.Utils;
-import messages.JsonOfficeSensorMessage;
+import messages.OfficeSensorMessage;
 import subscriber.ConnType;
 
 import java.util.HashMap;
@@ -48,11 +48,11 @@ public class Main {
         String username = "oihana";
         String password = "22oihana22";
         sensorsServiceBuilder = new SensorsServiceBuilder
-                (ConnType.MQTT, broker, topic, username, password, JsonOfficeSensorMessage.class);
+                (ConnType.MQTT, broker, topic, username, password, OfficeSensorMessage.class);
     }
 
     private void setMoonlightServiceBuilder(){
-        int size = 6;
+        int size = 3;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
         Formula formula = formula();
@@ -67,33 +67,19 @@ public class Main {
         HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         cityMap.put(new Pair<>(0, 2), 4.0);
         cityMap.put(new Pair<>(2, 0), 4.0);
-        cityMap.put(new Pair<>(2, 3), 8.0);
-        cityMap.put(new Pair<>(0, 4), 7.0);
-        cityMap.put(new Pair<>(0, 5), 25.0);
-        cityMap.put(new Pair<>(2, 4), 5.0);
-        cityMap.put(new Pair<>(4, 2), 5.0);
-        cityMap.put(new Pair<>(4, 5), 9.0);
-        cityMap.put(new Pair<>(1, 4), 14.0);
-        cityMap.put(new Pair<>(1, 5), 19.0);
+        cityMap.put(new Pair<>(2, 1), 8.0);
         return Utils.createSpatialModel(size, cityMap);
     }
 
     private static Formula formula() {
-        Formula controlPeople = new AtomicFormula("manyPeople");
-        /*Formula isSchool = new AtomicFormula("isSchool");
-        Formula noiseLevel = new AtomicFormula("noiseLevel");
-        Formula noiseNearby = new EscapeFormula("distance", noiseLevel);*/
-
-        //return new OrFormula(new NegationFormula(isSchool), noiseNearby);
+        Formula controlPeople = new AtomicFormula("highTemperature");
         return controlPeople;
     }
 
     private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
-        int maxDecibels = 70;
+        double maxTemperature = 30;
         Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();
-        atoms.put("noiseLevel", a -> booleanInterval((Integer) a.getIthValue(1)< maxDecibels));
-        atoms.put("isSchool", a -> booleanInterval("School".equals(a.getIthValue(0))));
-        atoms.put("manyPeople", a -> booleanInterval((Integer) a.getIthValue(2) < maxDecibels));
+        atoms.put("highTemperature", a -> booleanInterval((Double) a.getIthValue(0)< maxTemperature));
         return atoms;
     }
 

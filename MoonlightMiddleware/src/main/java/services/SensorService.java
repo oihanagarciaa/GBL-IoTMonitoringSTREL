@@ -3,7 +3,6 @@ package services;
 import com.google.gson.Gson;
 import main.DataBus;
 import messages.Message;
-import messages.SensorsMessage;
 import subscriber.MessageListener;
 import subscriber.Subscriber;
 
@@ -40,12 +39,7 @@ public class SensorService implements Service, MessageListener {
 
     @Override
     public void messageArrived(String topic, String jsonMessage) {
-        //Message message = new Gson().fromJson(jsonMessage, (Type) messageClass);
-
-        Message message = null;
-        if(messageClass == SensorsMessage.class){
-            message = new SensorsMessage(jsonMessage);
-        }
+        Message message = new Gson().fromJson(jsonMessage, (Type) messageClass);
 
         DataBus dataBus = DataBus.getInstance();
         dataBus.offer(message);
