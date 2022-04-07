@@ -43,7 +43,7 @@ public class Main {
     }
 
     private void setSensorsServiceBuilderServiceBuilders(){
-        String broker = "tcp://localhost:1883";
+        String broker = "tcp://stefanschupp.de:1883";
         String topic = "institute/thingy/#";
         String username = "oihana";
         String password = "22oihana22";

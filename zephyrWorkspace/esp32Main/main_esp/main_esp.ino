@@ -1,4 +1,6 @@
 #include "wifi_setup.h"
+
+#include "json11/json11.hpp"
 #include "BLEDevice.h"
 
 // The remote service we wish to connect to, set also in the peripheral
@@ -77,9 +79,11 @@ bool connectToServer() {
       
       char *cespID = new char[espID.length() + 1];
       strcpy(cespID, espID.c_str());
-      char *cvalue = new char[value.length() + 1];
-      strcpy(cvalue, value.c_str());
-      publishESPMessage(cespID, cvalue);
+      /*char *cvalue = new char[value.length() + 1];
+      strcpy(cvalue, value.c_str());*/
+      
+      char* jsonMessage = convertToJson(espID, value);
+      publishESPMessage(cespID, jsonMessage);
     }
 
     connected = true;
@@ -106,6 +110,48 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     } // Found our server
   } // onResult
 }; // MyAdvertisedDeviceCallbacks
+
+
+
+char * convertToJson(String espID, String value){
+    
+  String g = "{ 'id': " + espID + "," +
+    "'time': " + getValue(value,';',0) + "," +
+    "'temp': " + getValue(value,';',1) + "," +
+    "'hum': " + getValue(value,';',2) + "," +
+    "'co2': " + getValue(value,';',3) + "," +
+    "'tvoc': " + getValue(value,';',4) + "}";
+
+  Serial.print("JSON -> ");
+  Serial.println(g);
+  char c[g.length()]; 
+  g.toCharArray(c, g.length());
+
+  return c;
+}
+String getValue(String data, char separator, int index)
+{
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length()-1;
+
+  for(int i=0; i<=maxIndex && found<=index; i++){
+    if(data.charAt(i)==separator || i==maxIndex){
+        found++;
+        strIndex[0] = strIndex[1]+1;
+        strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  }
+
+  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
+
+
+
+
+
+
 
 
 void setup() {

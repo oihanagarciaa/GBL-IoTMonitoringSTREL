@@ -46,6 +46,10 @@ public class SensorsServiceBuilder {
         service.init();
     }
 
+    /* TODO:
+        it takes the catch as a duplication:
+        see Template method or strategy
+     */
     public boolean run() {
         try {
             initializeService();
