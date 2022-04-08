@@ -11,7 +11,8 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     private static int qos = 0;
     private static MqttClient sampleClient;
 
-    public MQTTSubscriber(String broker, String topic, String username, String password) throws MqttException {
+    public MQTTSubscriber(String broker, String topic,
+                          String username, String password) throws MqttException {
         try(MemoryPersistence persistence = new MemoryPersistence()) {
             sampleClient = new MqttClient(broker, MqttClient.generateClientId(), persistence);
             MqttConnectOptions connOpts = setUpConnectionOptions(username, password);
@@ -20,7 +21,8 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
         }
     }
 
-    private static MqttConnectOptions setUpConnectionOptions(String username, String password) {
+    private static MqttConnectOptions setUpConnectionOptions(
+            String username, String password) {
         MqttConnectOptions connOpts = new MqttConnectOptions();
         connOpts.setCleanSession(true);
         connOpts.setUserName(username);

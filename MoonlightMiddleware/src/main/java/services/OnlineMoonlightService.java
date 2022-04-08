@@ -50,7 +50,7 @@ public class OnlineMoonlightService implements Service{
         return onlineMonitor!=null;
     }
 
-    //TODO: Maybe filter the messages in the DatBus in the future
+    //TODO: Use pattern matching
     @Override
     public void receive(Message message) {
         if(message instanceof CommonSensorsMessage){
