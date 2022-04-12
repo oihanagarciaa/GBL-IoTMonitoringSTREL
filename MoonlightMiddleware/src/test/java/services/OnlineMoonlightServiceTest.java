@@ -115,7 +115,7 @@ public class OnlineMoonlightServiceTest {
             onlineMoonlightService.receive(messages.get(i));
         }
         messages = new ArrayList<>();
-        messages.add(getMessage(2, 4, 7));
+        messages.add(getMessage(2, 3, 7));
         messages.add(getMessage(4, 4, 11));
         messages.add(getMessage(5, 4, 11));
         messages.add(getMessage(0, 4, 11));

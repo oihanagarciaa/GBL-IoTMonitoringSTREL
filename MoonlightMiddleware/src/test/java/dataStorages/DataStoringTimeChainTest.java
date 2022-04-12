@@ -24,8 +24,8 @@ public class DataStoringTimeChainTest {
         dataStoringTimeChain.getDataToMonitor(6.0);
         dataStoringTimeChain.saveNewValue(0, 7.0, 0);
         dataStoringTimeChain.saveNewValue(0, 9.0, 0);
-        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor(8.0);
-        assertEquals(8.0, timeChain.getEnd());
+        TimeChain<Double, List<Integer>> timeChain = dataStoringTimeChain.getDataToMonitor(9.0);
+        assertEquals(9.0, timeChain.getEnd());
         List<Integer> list = new ArrayList<>();
         list.add(0);
         list.add(9);
