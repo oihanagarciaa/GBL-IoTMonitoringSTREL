@@ -66,7 +66,8 @@ public class OnlineMoonlightService implements Service{
         buffer.flush();
         //TODO: Quit println
         ResultsMessage resultsMessage = new ResultsMessage(results);
-        System.out.println(resultsMessage.toString());
+        //System.out.println("RESULTS:");
+        //System.out.println(resultsMessage.toString());
         dataBus.offer(resultsMessage);
     }
 
