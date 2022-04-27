@@ -36,7 +36,10 @@ public class OnlineMoonlightMessagesTest {
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
         long startingMilis = System.currentTimeMillis();
-        for(int i = 0; i < 100000000; i++){
+        /**
+         * change the i
+         */
+        for(int i = 0; i < 100; i++){
             Message message = getMessage(i%6, i, 11);
             onlineMoonlightService.receive(message);
         }

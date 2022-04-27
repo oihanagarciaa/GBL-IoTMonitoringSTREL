@@ -7,11 +7,13 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
+import java.security.SecureRandom;
+import java.util.concurrent.TimeUnit;
+
 public class ConnectionToMQTT {
 
     public static void main(String[] args){
         String topic        = "v1/devices/me/telemetry";
-        String content      = "{'temperature': 23}";
         int qos             = 0;
         String broker       = "tcp://thingsboard.cloud:1883";
         String clientId     = "JavaSample1234";
@@ -28,16 +30,26 @@ public class ConnectionToMQTT {
             System.out.println("Connecting to broker: "+broker);
             sampleClient.connect(connOpts);
             System.out.println("Connected");
-            System.out.println("Publishing message: "+content);
-            MqttMessage message = new MqttMessage(content.getBytes());
-            message.setQos(qos);
-            sampleClient.publish(topic, message);
+            //System.out.println("Publishing message: "+content);
+            int i = 1;
+            final SecureRandom rand = new SecureRandom();
+            double temp = 0;
+            int co2 = 0;
+            while(i == 1) {
+                temp = 20+ rand.nextDouble(15);
+                co2 = 300 + rand.nextInt(300);
+                String content = "{'temperature': "+temp+", 'co2':"+co2+"}";
+                MqttMessage message = new MqttMessage(content.getBytes());
+                message.setQos(qos);
+                sampleClient.publish(topic, message);
+                TimeUnit.SECONDS.sleep(3);
+            }
             System.out.println("Message published");
             sampleClient.disconnect();
             System.out.println("Disconnected");
             System.exit(0);
-        } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
+        } catch(MqttException | InterruptedException me) {
+            //System.out.println("reason "+me.getReasonCode());
             System.out.println("msg "+me.getMessage());
             System.out.println("loc "+me.getLocalizedMessage());
             System.out.println("cause "+me.getCause());
