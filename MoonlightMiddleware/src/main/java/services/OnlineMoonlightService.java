@@ -74,7 +74,7 @@ public class OnlineMoonlightService implements Service{
     @Override
     public void init() {
         onlineMonitor = new OnlineSpatialTemporalMonitor<>(
-                formula, spatialModel.size(), new BooleanDomain(),
+                formula, spatialModel.size(), new BooleanDomain(), //TODO: change Domain type
                 locSvc, atoms, distanceFunctions);
         dataBus = DataBus.getInstance();
     }
