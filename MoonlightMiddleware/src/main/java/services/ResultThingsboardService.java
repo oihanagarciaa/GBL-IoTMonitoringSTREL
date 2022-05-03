@@ -30,6 +30,8 @@ public class ResultThingsboardService implements Service{
     //TODO: to do
     @Override
     public void receive(Message message) {
+        //TODO: Make thingsboard Json creator abstract and add the send message
+        // to thingsboard inside this class as an abstract function
         ThingsboardJsonCreator thingsboardCommunication = null;
         if(message instanceof CommonSensorsMessage){
             thingsboardCommunication =

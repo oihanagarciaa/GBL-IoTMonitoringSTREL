@@ -23,4 +23,8 @@ public class ResultsMessage<V extends Comparable<V>> implements Message{
         }
         return r;
     }
+
+    public SpaceTimeSignal<Double, Box<V>> getSpaceTimeSignal(){
+        return results;
+    }
 }

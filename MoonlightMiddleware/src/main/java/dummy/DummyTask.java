@@ -8,6 +8,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.security.SecureRandom;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class DummyTask implements Runnable{
     private int id;
@@ -51,7 +52,12 @@ public class DummyTask implements Runnable{
 
                     sampleClient.publish(topic+id,new MqttMessage(s.getBytes()));
                     cont = dummyCommonValues.addAndGetCont();
-                }while (cont <= 10000);
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }while (cont <= 50);
 
                 sampleClient.disconnect();
                 System.out.println("Disconnected");
