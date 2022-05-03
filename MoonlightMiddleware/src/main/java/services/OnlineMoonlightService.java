@@ -64,10 +64,7 @@ public class OnlineMoonlightService implements Service{
         SpaceTimeSignal<Double, Box<Boolean>> results;
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
-        //TODO: Quit println
         ResultsMessage resultsMessage = new ResultsMessage(results);
-        //System.out.println("RESULTS:");
-        //System.out.println(resultsMessage.toString());
         dataBus.offer(resultsMessage);
     }
 

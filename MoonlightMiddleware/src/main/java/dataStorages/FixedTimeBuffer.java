@@ -1,6 +1,6 @@
 package dataStorages;
 
-import builders.MoonlightServiceBuilder;
+import serviceBuilders.MoonlightServiceBuilder;
 import eu.quanticol.moonlight.online.signal.TimeChain;
 import messages.CommonSensorsMessage;
 import services.Service;

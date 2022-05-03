@@ -1,33 +1,15 @@
 package subscriber;
 
 import org.eclipse.paho.client.mqttv3.*;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
-import java.util.UUID;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     private MessageListener listener;
-    private static final String clientId = UUID.randomUUID().toString();
-    private static int qos = 0;
-    private static MqttClient sampleClient;
+    private final MQTTConnection mqttConnection;
 
     public MQTTSubscriber(String broker, String topic,
-                          String username, String password) throws MqttException {
-        try(MemoryPersistence persistence = new MemoryPersistence()) {
-            sampleClient = new MqttClient(broker, MqttClient.generateClientId(), persistence);
-            MqttConnectOptions connOpts = setUpConnectionOptions(username, password);
-            sampleClient.connect(connOpts);
-            subscribe(topic);
-        }
-    }
-
-    private static MqttConnectOptions setUpConnectionOptions(
-            String username, String password) {
-        MqttConnectOptions connOpts = new MqttConnectOptions();
-        connOpts.setCleanSession(true);
-        connOpts.setUserName(username);
-        connOpts.setPassword(password.toCharArray());
-        return connOpts;
+                          String username, String password){
+        mqttConnection = new MQTTConnection(broker, username, password);
+        subscribe(topic);
     }
 
     @Override
@@ -44,9 +26,14 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     }
 
     @Override
-    public void subscribe(String topic) throws MqttException{
-        sampleClient.setCallback(this);
-        sampleClient.subscribe(topic);
+    public void subscribe(String topic){
+        try {
+            MqttClient sampleClient = mqttConnection.getSampleClient();
+            sampleClient.setCallback(this);
+            sampleClient.subscribe(topic);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -56,7 +43,6 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void receive(String topic, String message) {
-        //System.out.println("MESSAGE " + message);
         listener.messageArrived(topic, message);
     }
 }

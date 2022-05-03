@@ -1,7 +1,8 @@
 package main;
 
-import builders.MoonlightServiceBuilder;
-import builders.SensorsServiceBuilder;
+import serviceBuilders.MoonlightServiceBuilder;
+import serviceBuilders.ResultsThingsboardServiceBuilder;
+import serviceBuilders.SensorsServiceBuilder;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.base.Tuple;
@@ -22,11 +23,13 @@ import java.util.function.Function;
 public class Main {
     private SensorsServiceBuilder sensorsServiceBuilder;
     private MoonlightServiceBuilder moonlightServiceBuilder;
+    private ResultsThingsboardServiceBuilder thingsboardServiceBuilder;
 
     public Main(){
         //TODO: the client must pass all the information
         setSensorsServiceBuilderServiceBuilders();
         setMoonlightServiceBuilder();
+        setThingsboardServiceBuilder();
         runServices();
         notifyServices();
     }
@@ -34,12 +37,14 @@ public class Main {
     private void runServices() {
         sensorsServiceBuilder.run();
         moonlightServiceBuilder.run();
+        thingsboardServiceBuilder.run();
     }
 
     private void notifyServices(){
         DataBus dataBus = DataBus.getInstance();
         dataBus.notify(sensorsServiceBuilder.getService());
         dataBus.notify(moonlightServiceBuilder.getService());
+        dataBus.notify(thingsboardServiceBuilder.getService());
     }
 
     private void setSensorsServiceBuilderServiceBuilders(){
@@ -49,6 +54,16 @@ public class Main {
         String password = "22oihana22";
         sensorsServiceBuilder = new SensorsServiceBuilder
                 (ConnType.MQTT, broker, topic, username, password, OfficeSensorMessage.class);
+    }
+
+    private void setThingsboardServiceBuilder() {
+        Map<String, String> deviceAccessTokens = new HashMap<>();
+        deviceAccessTokens.put("Thingy1", "T6Tn0xfSJKolnUfxmZFr");
+        deviceAccessTokens.put("Thingy2", "U7THZHwXrc0cqCT3S0Yz");
+        deviceAccessTokens.put("Thingy3", "LRXoHowQzSHI4MIzlr5s");
+        deviceAccessTokens.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
+        thingsboardServiceBuilder =
+                new ResultsThingsboardServiceBuilder(deviceAccessTokens);
     }
 
     private void setMoonlightServiceBuilder(){

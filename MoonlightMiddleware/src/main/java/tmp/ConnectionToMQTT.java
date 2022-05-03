@@ -38,7 +38,7 @@ public class ConnectionToMQTT {
             while(i == 1) {
                 temp = 20+ rand.nextDouble(15);
                 co2 = 300 + rand.nextInt(300);
-                String content = "{'temperature': "+temp+", 'co2':"+co2+"}";
+                String content = "{'id':1,'time':123456.0,'temp': "+temp+",'hum':15.3, 'co2':"+co2+", 'tvoc': 45}";
                 MqttMessage message = new MqttMessage(content.getBytes());
                 message.setQos(qos);
                 sampleClient.publish(topic, message);
