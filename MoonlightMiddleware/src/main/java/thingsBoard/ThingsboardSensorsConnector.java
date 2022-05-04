@@ -6,17 +6,25 @@ import messages.Message;
 
 import java.util.Map;
 
-public class ThingsboardSensorsJsonCreator implements ThingsboardJsonCreator {
+public class ThingsboardSensorsConnector extends ThingsboardConnector {
     private final Map<String, String> deviceAccessToken;
-    private final Message message;
-    public ThingsboardSensorsJsonCreator(Map<String, String> deviceAccessToken, Message message){
+    protected CommonSensorsMessage commonSensorsMessage;
+
+    public ThingsboardSensorsConnector(Map<String, String> deviceAccessToken){
         this.deviceAccessToken = deviceAccessToken;
-        this.message = message;
+    }
+
+    @Override
+    public void sendMessage(Message message) {
+        commonSensorsMessage = (CommonSensorsMessage) message;
+        String username = getUsername();
+        String password = "";
+        String json = getJson();
+        publishToThingsboard(username, password, json);
     }
 
     @Override
     public String getJson() {
-        CommonSensorsMessage commonSensorsMessage = (CommonSensorsMessage) message;
         Gson gson = new Gson();
         String jsonInString = gson.toJson(commonSensorsMessage);
         System.out.println("JSON: "+jsonInString);
@@ -25,7 +33,6 @@ public class ThingsboardSensorsJsonCreator implements ThingsboardJsonCreator {
 
     @Override
     public String getUsername() {
-        CommonSensorsMessage commonSensorsMessage = (CommonSensorsMessage) message;
         int num = commonSensorsMessage.getId()+1;
         String username = deviceAccessToken.get("Thingy"+num);
         return username;

@@ -1,20 +1,22 @@
 package thingsBoard;
 
-import eu.quanticol.moonlight.core.base.Box;
-import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 import messages.Message;
-import messages.ResultsMessage;
 
 import java.util.Map;
 
-public class ThingsboardMoonlightJsonCreator implements ThingsboardJsonCreator {
+public class ThingsboardMoonlightConnector extends ThingsboardConnector {
     private final Map<String, String> deviceAccessToken;
-    private final Message message;
 
-    public ThingsboardMoonlightJsonCreator(Map<String, String> deviceAccessToken, Message message){
+    public ThingsboardMoonlightConnector(Map<String, String> deviceAccessToken){
         this.deviceAccessToken = deviceAccessToken;
-        this.message = message;
     }
+
+    @Override
+    public void sendMessage( Message message) {
+
+    }
+
+
 
     //TODO: Thingsboard and Json
     // thingsboard just do NOT support objects and arrays
@@ -23,11 +25,11 @@ public class ThingsboardMoonlightJsonCreator implements ThingsboardJsonCreator {
     // create multiple jsons and send them to different devices
     @Override
     public String getJson() {
-        ResultsMessage<Boolean> resultsMessage = (ResultsMessage<Boolean>) message;
+        /*ResultsMessage<Boolean> resultsMessage = (ResultsMessage<Boolean>) message;
         SpaceTimeSignal<Double, Box<Boolean>> results = resultsMessage.getSpaceTimeSignal();
         System.out.println("- - - - -  - THINGSBOARD MOONLIGHT RESULTS - - - - - -");
         System.out.println(results.getSegments().toList());
-        System.out.println("_");
+        System.out.println("_");*/
 
         String jsonMessage = "{ 'monitorstate' = true}";
         return jsonMessage;
