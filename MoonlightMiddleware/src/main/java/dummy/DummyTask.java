@@ -37,19 +37,23 @@ public class DummyTask implements Runnable{
                 sampleClient.connect(connOpts);
                 System.out.println("Connected");
                 double temp;
+                double hum;
+                int co2;
+                int tvoc;
                 int cont;
                 final SecureRandom rand = new SecureRandom();
                 do {
                     temp = 20+ rand.nextDouble(15);
-
+                    hum = 10+ rand.nextDouble(40);
+                    co2 = 100+ rand.nextInt(300);
+                    tvoc = 100+ rand.nextInt(400);
                     String s = "{ 'id':"+id+",\n" +
                             "   'time':"+dummyCommonValues.addAndGetTime()+",\n" +
                             "   'temp':"+temp+",\n" +
-                            "   'hum': "+temp+",\n" +
-                            "   'co2': "+3+",\n" +
-                            "   'tvoc':"+3+"\n" +
+                            "   'hum': "+hum+",\n" +
+                            "   'co2': "+co2+",\n" +
+                            "   'tvoc':"+tvoc+"\n" +
                             "   }";
-
                     sampleClient.publish(topic+id,new MqttMessage(s.getBytes()));
                     cont = dummyCommonValues.addAndGetCont();
                     try {
@@ -57,7 +61,7 @@ public class DummyTask implements Runnable{
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }while (cont <= 50);
+                }while (cont <= 1000);
 
                 sampleClient.disconnect();
                 System.out.println("Disconnected");

@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import messages.OfficeSensorMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import thingsBoard.ThingsboardSensorsConnector;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +23,10 @@ public class ThingsboardSensorTest {
 
     OfficeSensorMessage getMessage(){
         String json = "{'id': 1, 'time':123456," +
-                "   'temp':20.2," +
-                "   'hum': 15.3," +
-                "   'co2': 123," +
-                "   'tvoc':45}";
+                     "   'temp':20.2," +
+                     "   'hum': 15.3," +
+                     "   'co2': 123," +
+                     "   'tvoc':45}";
         OfficeSensorMessage officeSensorMessage =
                 new Gson().fromJson(json, OfficeSensorMessage.class);
         return officeSensorMessage;
