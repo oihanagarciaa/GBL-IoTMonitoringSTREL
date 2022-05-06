@@ -19,6 +19,7 @@ public class Dummy {
             t3.join(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         long endingTime = System.currentTimeMillis();
         float duration = (float) ((endingTime - startingTime) / 1000.0);

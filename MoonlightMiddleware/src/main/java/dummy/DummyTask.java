@@ -60,6 +60,7 @@ public class DummyTask implements Runnable{
                         TimeUnit.SECONDS.sleep(5);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Thread.currentThread().interrupt();
                     }
                 }while (cont <= 1000);
 
