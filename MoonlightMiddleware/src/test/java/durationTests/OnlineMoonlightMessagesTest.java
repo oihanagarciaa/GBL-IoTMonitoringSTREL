@@ -1,0 +1,150 @@
+package durationTests;
+
+import com.google.gson.Gson;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.base.Tuple;
+import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import eu.quanticol.moonlight.domain.DoubleDomain;
+import eu.quanticol.moonlight.formula.AtomicFormula;
+import eu.quanticol.moonlight.util.Utils;
+import main.DataBus;
+import messages.Message;
+import messages.OfficeSensorMessage;
+import messages.ResultsMessage;
+import org.junit.jupiter.api.Test;
+import services.OnlineMoonlightService;
+import services.Service;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import static org.mockito.Mockito.mock;
+
+public class OnlineMoonlightMessagesTest {
+
+    @Test
+    void basicSendMessages(){
+        ServiceTest serviceTest = new ServiceTest();
+        DataBus dataBus = DataBus.getInstance();
+        dataBus.notify(serviceTest);
+        OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
+        onlineMoonlightService.init();
+        long startingMilis = System.currentTimeMillis();
+        /**
+         * change the i
+         */
+        for(int i = 0; i < 100; i++){
+            Message message = getMessage(i%6, i, 11);
+            onlineMoonlightService.receive(message);
+        }
+        long finishingMilis = System.currentTimeMillis();
+        double duration = ((finishingMilis-startingMilis)/1000.0);
+        System.out.println("Duration: "+duration);
+    }
+
+    private OnlineMoonlightService getOnlineMoonlightService(){
+        Formula formula = mock(Formula.class);
+        SpatialModel spatialModel = mock(SpatialModel.class);
+        Map atoms = mock(Map.class);
+        Map distances = mock(Map.class);
+        return new OnlineMoonlightService(formula, spatialModel, atoms, distances);
+    }
+
+    private OnlineMoonlightService getOnlineMoonlightServiceWithRealValues(){
+        Formula formula = formula();
+        SpatialModel spatialModel = buildSpatialModel(6);
+        Map atoms = getOnlineAtoms();
+        Map distances = setDistanceFunctions(spatialModel);
+        return new OnlineMoonlightService(formula, spatialModel, atoms, distances);
+    }
+
+    private Message getMessage(int id, double time, int temp){
+        String jsonMessage = "{ 'id':"+id+",\n" +
+                "   'time':"+time+",\n" +
+                "   'temp':"+temp+",\n" +
+                "   'hum': "+temp+",\n" +
+                "   'co2': "+3+",\n" +
+                "   'tvoc':"+3+"\n" +
+                "    }";
+        Message message = new Gson().fromJson(jsonMessage, (Type) OfficeSensorMessage.class);
+        return message;
+    }
+
+    private static SpatialModel<Double> buildSpatialModel(int size){
+        Map<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
+        cityMap.put(new Pair<>(0, 2), 4.0);
+        cityMap.put(new Pair<>(2, 0), 4.0);
+        cityMap.put(new Pair<>(2, 3), 8.0);
+        cityMap.put(new Pair<>(0, 4), 7.0);
+        cityMap.put(new Pair<>(0, 5), 25.0);
+        cityMap.put(new Pair<>(2, 4), 5.0);
+        cityMap.put(new Pair<>(4, 2), 5.0);
+        cityMap.put(new Pair<>(4, 5), 9.0);
+        cityMap.put(new Pair<>(1, 4), 14.0);
+        cityMap.put(new Pair<>(1, 5), 19.0);
+        return Utils.createSpatialModel(size, cityMap);
+    }
+
+    private static Formula formula() {
+        Formula controlPeople = new AtomicFormula("highTemperature");
+        return controlPeople;
+    }
+
+    private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
+        double maxTemperature = 30;
+        Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();
+        atoms.put("highTemperature", a -> booleanInterval((Double) a.getIthValue(0)< maxTemperature));
+        return atoms;
+    }
+
+    private static Box<Boolean> booleanInterval(boolean cond) {
+        return cond ? new Box<>(true, true) :
+                new Box<>(false, false);
+    }
+
+    private static HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
+    setDistanceFunctions(SpatialModel<Double> city) {
+        HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
+        distanceFunctions.put("distance",
+                m -> new DefaultDistanceStructure<Double, Double>(x -> x,
+                        new DoubleDomain(), 60.0, Double.MAX_VALUE, city));
+        return distanceFunctions;
+    }
+
+
+    public class ServiceTest implements Service {
+        ResultsMessage resultsMessage;
+
+        public ResultsMessage getResultsMessage() {
+            return resultsMessage;
+        }
+
+        @Override
+        public boolean isRunning() {
+            return false;
+        }
+
+        @Override
+        public void receive(Message message) {
+            if (message instanceof ResultsMessage){
+                resultsMessage = (ResultsMessage) message;
+            }
+        }
+
+        @Override
+        public void init() {
+
+        }
+
+        @Override
+        public void stop() {
+
+        }
+    }
+}

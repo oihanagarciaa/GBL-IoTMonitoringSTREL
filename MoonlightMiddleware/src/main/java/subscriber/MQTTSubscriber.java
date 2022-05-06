@@ -1,25 +1,15 @@
 package subscriber;
 
 import org.eclipse.paho.client.mqttv3.*;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
-import java.util.UUID;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     private MessageListener listener;
-    private static final String clientId = UUID.randomUUID().toString();
-    private static int qos = 0;
-    private static MqttClient sampleClient;
+    private final MQTTConnection mqttConnection;
 
-    public MQTTSubscriber(String broker, String topic) throws MqttException {
-        try(MemoryPersistence persistence = new MemoryPersistence()) {
-            sampleClient = new MqttClient(broker, clientId, persistence);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
-
-            sampleClient.connect(connOpts);
-            subscribe(topic);
-        }
+    public MQTTSubscriber(String broker, String topic,
+                          String username, String password){
+        mqttConnection = new MQTTConnection(broker, username, password);
+        subscribe(topic);
     }
 
     @Override
@@ -36,9 +26,14 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     }
 
     @Override
-    public void subscribe(String topic) throws MqttException{
-        sampleClient.setCallback(this);
-        sampleClient.subscribe(topic);
+    public void subscribe(String topic){
+        try {
+            MqttClient sampleClient = mqttConnection.getSampleClient();
+            sampleClient.setCallback(this);
+            sampleClient.subscribe(topic);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

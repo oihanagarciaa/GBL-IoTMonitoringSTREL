@@ -1,6 +1,6 @@
 package dataStorages;
 
-import builders.MoonlightServiceBuilder;
+import serviceBuilders.MoonlightServiceBuilder;
 import eu.quanticol.moonlight.online.signal.TimeChain;
 import messages.CommonSensorsMessage;
 import services.Service;
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+//TODO: Deprecated
 public class FixedTimeBuffer<E> implements Buffer<E>{
     private final Timer timer;
     private final int size;

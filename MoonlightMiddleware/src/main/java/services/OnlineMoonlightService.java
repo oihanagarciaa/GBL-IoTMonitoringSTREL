@@ -50,7 +50,7 @@ public class OnlineMoonlightService implements Service{
         return onlineMonitor!=null;
     }
 
-    //TODO: Maybe filter the messages in the DatBus in the future
+    //TODO: Use pattern matching
     @Override
     public void receive(Message message) {
         if(message instanceof CommonSensorsMessage){
@@ -64,16 +64,14 @@ public class OnlineMoonlightService implements Service{
         SpaceTimeSignal<Double, Box<Boolean>> results;
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
-        //TODO: Quit println
         ResultsMessage resultsMessage = new ResultsMessage(results);
-        System.out.println(resultsMessage.toString());
         dataBus.offer(resultsMessage);
     }
 
     @Override
     public void init() {
         onlineMonitor = new OnlineSpatialTemporalMonitor<>(
-                formula, spatialModel.size(), new BooleanDomain(),
+                formula, spatialModel.size(), new BooleanDomain(), //TODO: change Domain type
                 locSvc, atoms, distanceFunctions);
         dataBus = DataBus.getInstance();
     }

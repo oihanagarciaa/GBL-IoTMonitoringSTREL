@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "random": "c",
+        "bluetooth.h": "c",
+        "devicetree.h": "c"
+    }
+}

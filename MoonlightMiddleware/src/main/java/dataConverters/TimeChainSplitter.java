@@ -11,8 +11,9 @@ public class TimeChainSplitter<V>{
     public TimeChainSplitter(){
     }
 
+    //TODO: Think how much time quit to the time end
     public List<TimeChain<Double, V>>[] splitTimeChain(List<TimeChain<Double, V>> timeChainList, double time){
-        timeEnd = time;
+        timeEnd = time - 1;
         List<TimeChain<Double, V>> [] timeChains = new List[2];
         timeChains[0] = split1stToMonitor(timeChainList);
         timeChains[1] = split2ndNewStorage(timeChainList);
