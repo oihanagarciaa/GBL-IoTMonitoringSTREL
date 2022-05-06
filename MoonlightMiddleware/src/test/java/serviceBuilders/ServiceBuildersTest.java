@@ -68,6 +68,14 @@ class ServiceBuildersTest {
         assertFalse(serviceBuilder.run());
     }
 
+    @Test
+    void thingsboardBuilderInit(){
+        Map<String, String> tokens = new HashMap<>();
+        ResultsThingsboardServiceBuilder resultsThingsboardServiceBuilder =
+                new ResultsThingsboardServiceBuilder(tokens);
+        assertTrue(resultsThingsboardServiceBuilder.run());
+    }
+
     private static SpatialModel<Double> buildSpatialModel(int size){
         Map<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         cityMap.put(new Pair<>(0, 2), 4.0);

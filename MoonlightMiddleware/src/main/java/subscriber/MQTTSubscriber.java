@@ -32,7 +32,6 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
             sampleClient.setCallback(this);
             sampleClient.subscribe(topic);
         } catch (MqttException e) {
-            e.printStackTrace();
         }
     }
 

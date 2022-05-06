@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 public class OnlineMoonlightMessagesTest {
@@ -35,7 +36,7 @@ public class OnlineMoonlightMessagesTest {
         dataBus.notify(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
-        long startingMilis = System.currentTimeMillis();
+        long startingMillis = System.currentTimeMillis();
         /**
          * change the i
          */
@@ -44,16 +45,9 @@ public class OnlineMoonlightMessagesTest {
             onlineMoonlightService.receive(message);
         }
         long finishingMilis = System.currentTimeMillis();
-        double duration = ((finishingMilis-startingMilis)/1000.0);
+        double duration = ((finishingMilis-startingMillis)/1000.0);
         System.out.println("Duration: "+duration);
-    }
-
-    private OnlineMoonlightService getOnlineMoonlightService(){
-        Formula formula = mock(Formula.class);
-        SpatialModel spatialModel = mock(SpatialModel.class);
-        Map atoms = mock(Map.class);
-        Map distances = mock(Map.class);
-        return new OnlineMoonlightService(formula, spatialModel, atoms, distances);
+        assertNotNull(serviceTest.getResultsMessage());
     }
 
     private OnlineMoonlightService getOnlineMoonlightServiceWithRealValues(){

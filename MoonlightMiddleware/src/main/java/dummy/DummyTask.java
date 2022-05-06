@@ -13,7 +13,6 @@ import java.util.concurrent.TimeUnit;
 public class DummyTask implements Runnable{
     private int id;
     private String clientId = UUID.randomUUID().toString();
-    private int qos         = 0;
     private String username = "oihana";
     private String password = "22oihana22";
     private String broker   = "tcp://stefanschupp.de:1883";
@@ -59,7 +58,6 @@ public class DummyTask implements Runnable{
                     try {
                         TimeUnit.SECONDS.sleep(5);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
                         Thread.currentThread().interrupt();
                     }
                 }while (cont <= 1000);

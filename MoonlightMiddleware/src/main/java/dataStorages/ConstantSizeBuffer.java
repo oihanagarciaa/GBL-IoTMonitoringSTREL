@@ -30,17 +30,17 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
     @Override
     public boolean add(CommonSensorsMessage message) {
         int id = message.getId();
-        double time = message.getTime();
+        double messageTime = message.getTime();
         if(canMonitor){
-            if(time > this.time) this.time = time;
+            if(messageTime > this.time) this.time = messageTime;
             storingTimeChain.saveNewValue(id,
-                    time-timerSynchronization.getIthTimeDifference(id), (E) message.getValue());
+                    messageTime-timerSynchronization.getIthTimeDifference(id), (E) message.getValue());
             counter++;
             if (bufferIsFull()) return true;
         }else {
-            timerSynchronization.setNewTime(id, time);
+            timerSynchronization.setNewTime(id, messageTime);
             storingTimeChain.saveNewValue(id,
-                    time, (E) message.getValue());
+                    messageTime, (E) message.getValue());
             if(timerSynchronization.allValuesPresent()){
                 canMonitor = true;
                 storingTimeChain.initStoringTimeChain();

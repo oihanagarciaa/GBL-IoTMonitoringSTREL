@@ -15,7 +15,7 @@ public class ResultThingsboardService implements Service{
     private final Map<String, String> deviceAccessTokens;
     private double lastTime;
 
-    public ResultThingsboardService(Map<String, String> deviceAccessToken, int qos){
+    public ResultThingsboardService(Map<String, String> deviceAccessToken){
         this.deviceAccessTokens = deviceAccessToken;
         lastTime = 0;
     }
@@ -28,18 +28,16 @@ public class ResultThingsboardService implements Service{
 
     @Override
     public void receive(Message message) {
-        //TODO: Make thingsboard Json creator abstract and add the send message
-        // to thingsboard inside this class as an abstract function
         ThingsboardConnector thingsboardCommunication = null;
-        if(message instanceof CommonSensorsMessage){
+        if(message instanceof CommonSensorsMessage commonSensorsMessage){
             thingsboardCommunication =
                     new ThingsboardSensorsConnector(deviceAccessTokens);
-            thingsboardCommunication.sendMessage(message);
-        }else if(message instanceof ResultsMessage){
+            thingsboardCommunication.sendMessage(commonSensorsMessage);
+        }else if(message instanceof ResultsMessage resultsMessage){
             thingsboardCommunication =
                     new ThingsboardMoonlightConnector(deviceAccessTokens, lastTime);
-            lastTime = getLastResultsMessageTimeValue((ResultsMessage) message);
-            thingsboardCommunication.sendMessage(message);/**/
+            lastTime = getLastResultsMessageTimeValue(resultsMessage);
+            thingsboardCommunication.sendMessage(resultsMessage);
         }
     }
 

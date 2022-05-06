@@ -24,7 +24,6 @@ public class MQTTPublisher {
             mqttConnection.getSampleClient().publish(topic, mqttMessage);
             mqttConnection.disconnect();
         } catch (MqttException e) {
-            e.printStackTrace();
         }
     }
 }

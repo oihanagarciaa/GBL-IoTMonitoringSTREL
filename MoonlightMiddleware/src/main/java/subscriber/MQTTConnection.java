@@ -4,7 +4,7 @@ import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class MQTTConnection {
-    private static MqttClient sampleClient;
+    private MqttClient sampleClient;
 
     public MQTTConnection(String broker,
                           String username, String password) {
@@ -13,11 +13,8 @@ public class MQTTConnection {
             MqttConnectOptions connOpts = setUpConnectionOptions(username, password);
             sampleClient.connect(connOpts);
         } catch (MqttPersistenceException e) {
-            e.printStackTrace();
         } catch (MqttSecurityException e) {
-            e.printStackTrace();
-        } catch (MqttException exception) {
-            exception.printStackTrace();
+        } catch (MqttException e) {
         }
     }
 
@@ -38,7 +35,6 @@ public class MQTTConnection {
         try {
             sampleClient.disconnect();
         } catch (MqttException e) {
-            e.printStackTrace();
         }
     }
 }

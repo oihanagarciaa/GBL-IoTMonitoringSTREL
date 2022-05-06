@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class OnlineMoonlightMultipleMessagesTest {
 
     @Test
@@ -43,7 +46,7 @@ public class OnlineMoonlightMultipleMessagesTest {
                 }
             }
         }
-
+        assertEquals(true, onlineMoonlightService.isRunning());
     }
 
     private OnlineMoonlightService getOnlineMoonlightServiceWithRealValues(){

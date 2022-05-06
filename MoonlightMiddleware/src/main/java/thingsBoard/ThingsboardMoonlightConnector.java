@@ -41,9 +41,10 @@ public class ThingsboardMoonlightConnector extends ThingsboardConnector {
                 publishToThingsboard(username, password, json);
             }
         }
+        lastTime = (double) resultsList.get(resultsList.size()-1).getStart();
     }
 
-    //Thingsboard takes true / false as String
+    //If I create the json file like bellow, thingsboard takes true/false as a string
     @Override
     public String getJson() {
         String jsonMessage = "{ 'result' = "+(resultBoolean? 1:0 )+"}";

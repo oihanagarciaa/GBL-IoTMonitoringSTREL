@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
 
 public class ThingsboardMiddlewareTest {
@@ -46,12 +47,13 @@ public class ThingsboardMiddlewareTest {
     void thingsboardConvertion(){
         ThingsboardMoonlightConnector thingsboardMiddleware = Mockito.spy(
                 new ThingsboardMoonlightConnector(sensorAccessToken, 0));
-        doNothing().when(thingsboardMiddleware).
-                publishToThingsboard(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+        //doNothing().when(thingsboardMiddleware).
+        //        publishToThingsboard(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
         SpaceTimeSignal spaceTimeSignal = setOnlineMoonlight();
         ResultsMessage<Boolean> resultsMessage = new ResultsMessage<>(spaceTimeSignal);
         thingsboardMiddleware.sendMessage(resultsMessage);
+        assertEquals(9, thingsboardMiddleware.lastTime);
     }
 
     //functions to get the SpaceTimeSignal

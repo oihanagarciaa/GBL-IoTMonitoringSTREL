@@ -16,7 +16,7 @@ public interface Buffer<E> {
      * @param message contains the element and information to be stored
      * @return <code>true</code> if the buffer gets full
      */
-    boolean add(CommonSensorsMessage message);
+    boolean add(CommonSensorsMessage<?> message);
 
     /**
      * Primitive for retrieving the current data of the buffer

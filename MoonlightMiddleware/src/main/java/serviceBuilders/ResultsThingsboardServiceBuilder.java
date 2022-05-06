@@ -14,7 +14,7 @@ public class ResultsThingsboardServiceBuilder {
     }
 
     private void initializeService() {
-        service = new ResultThingsboardService(deviceAccessToken, 0);
+        service = new ResultThingsboardService(deviceAccessToken);
         service.init();
     }
 

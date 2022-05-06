@@ -42,7 +42,6 @@ public class OnlineMoonlightService implements Service{
         this.distanceFunctions = distanceFunctions;
         //TODO: Change the declaration of the buffer
         buffer = new ConstantSizeBuffer<>(model.size(), 6);
-        //buffer = new FixedTimeBuffer<>(this, model.size(),service, 10000);
     }
 
     @Override
@@ -53,10 +52,9 @@ public class OnlineMoonlightService implements Service{
     //TODO: Use pattern matching
     @Override
     public void receive(Message message) {
-        if(message instanceof CommonSensorsMessage){
-            if(buffer.add((CommonSensorsMessage) message)){
+        if(message instanceof CommonSensorsMessage commonSensorsMessage
+                && buffer.add(commonSensorsMessage)){
                 sendResults();
-            }
         }
     }
 

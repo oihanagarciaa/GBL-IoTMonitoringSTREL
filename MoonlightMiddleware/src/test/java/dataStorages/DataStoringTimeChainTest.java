@@ -41,7 +41,7 @@ public class DataStoringTimeChainTest {
         dataStoringTimeChain.saveNewValue(1, 1.0, 6);
         dataStoringTimeChain.saveNewValue(1, 4.0, 8);
         TimeChain<Double, List<Integer>> timeChain2 = dataStoringTimeChain.getDataToMonitor(5.0);
-        assertEquals(timeChain2.get(0).getStart(), 1.0);
+        assertEquals(1.0, timeChain2.get(0).getStart());
     }
 
     private DataStoringTimeChain<Integer> initDataStoringTimeChain(){

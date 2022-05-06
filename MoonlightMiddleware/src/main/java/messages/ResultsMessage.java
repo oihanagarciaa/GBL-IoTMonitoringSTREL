@@ -16,7 +16,7 @@ public class ResultsMessage<V extends Comparable<V>> implements Message{
     @Override
     public String toString() {
         List<String> listResults = results.getSegments().toList().stream()
-                .map(Object::toString).collect(Collectors.toList());
+                .map(Object::toString).toList();
         String r = "";
         for (int i = 0; i < listResults.size(); i++){
             r += "\t"+listResults.get(i)+"\n";
