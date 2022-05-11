@@ -27,6 +27,7 @@ class MyClientCallback : public BLEClientCallbacks {
     Serial.println("onDisconnect");
   }
 };
+static MyClientCallback* myClientCallback = new MyClientCallback();
 
 // Function which is used to initiate a connection
 bool connectToServer() {
@@ -39,17 +40,22 @@ bool connectToServer() {
         Serial.println(espID);
         Serial.println("");
       }
+    delete client;
     client  = BLEDevice::createClient();
     Serial.println(" - Created client");
 
-    client->setClientCallbacks(new MyClientCallback());
-
+    
+    //!!!
+    client->setClientCallbacks(myClientCallback);
+Serial.println(" - 1");
     // Connect to the remote BLE Server.
+    delay(2000);
     client->connect(myDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
-    Serial.println(" - Connected to server");
-
+    //Serial.println(" - Connected to server");
+Serial.println(" - 2");
     // Obtain a reference to the service we are after in the remote BLE server.
     BLERemoteService* pRemoteService = client->getService(serviceUUID);
+    Serial.println(" - 3");
     if (pRemoteService == nullptr) {
       Serial.print("Failed to find our service UUID: ");
       Serial.println(serviceUUID.toString().c_str());
@@ -57,7 +63,6 @@ bool connectToServer() {
       return false;
     }
     Serial.println(" - Found our service");
-
 
     // Obtain a reference to the characteristic in the service of the remote BLE server.
     pRemoteCharacteristic = pRemoteService->getCharacteristic(charUUID);
@@ -84,7 +89,7 @@ bool connectToServer() {
       char* jsonMessage = convertToJson(espID, value);
       publishESPMessage(cespID, jsonMessage);
     }
-
+    //delete client;
     connected = true;
 }
 /**
@@ -102,6 +107,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
     if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID)) {
 
       BLEDevice::getScan()->stop();
+      delete myDevice;
       myDevice = new BLEAdvertisedDevice(advertisedDevice);
       doConnect = true;
       doScan = true;
@@ -146,13 +152,6 @@ String getValue(String data, char separator, int index)
 }
 
 
-
-
-
-
-
-
-
 void setup() {
   Serial.begin(115200);
   init_wifi();
@@ -164,11 +163,14 @@ void setup() {
   // have detected a new device.  Specify that we want active scanning and start the
   // scan to run for 5 seconds.
   BLEScan* pBLEScan = BLEDevice::getScan();
-  pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+  MyAdvertisedDeviceCallbacks* myCallbacks = new MyAdvertisedDeviceCallbacks();
+  pBLEScan->setAdvertisedDeviceCallbacks(myCallbacks);
+  // a new call consumes a lot of memory
+  //pBLEScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
   pBLEScan->setInterval(1349);
   pBLEScan->setWindow(449);
   pBLEScan->setActiveScan(true);
-  pBLEScan->start(5, false);
+  pBLEScan->start(5000, false);
 } // End of setup.
 
 
@@ -190,8 +192,7 @@ void loop() {
   // If we are connected to a peer BLE Server, update the characteristic each time we are reached
   // with the current time since boot.
   if (connected) {
-    // if everything went right, wait a bit and then disconnect
-    delay(1000);
+    // if everything went right, wait a bit and then disconnect 
     doConnect = false;
     connected = false;
     doScan = true;
@@ -202,5 +203,5 @@ void loop() {
     BLEDevice::getScan()->start(10, false);  
   }
   
-  delay(500);
+  delay(1000);
 } // End of loop
