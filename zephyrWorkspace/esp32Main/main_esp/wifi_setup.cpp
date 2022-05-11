@@ -19,19 +19,19 @@ WiFiClient espClient;
 PubSubClient client(espClient);
 
 void callback(char *topic, byte *payload, unsigned int length) {
- /*Serial.print("Message arrived in topic: ");
+ Serial.print("Message arrived in topic: ");
  Serial.println(topic);
  Serial.print("Message:");
  for (int i = 0; i < length; i++) {
      Serial.print((char) payload[i]);
  }
  Serial.println();
- Serial.println("-----------------------");*/
+ Serial.println("-----------------------");
 }
 
 void init_wifi(){
  // connecting to a WiFi network
- /*WiFi.begin(ssid, password);
+ WiFi.begin(ssid, password);
  while (WiFi.status() != WL_CONNECTED) {
      delay(500);
      Serial.println("Connecting to WiFi..");
@@ -52,16 +52,16 @@ void init_wifi(){
          delay(2000);
      }
  }
- client.loop();*/
+ client.loop();
 }
 
 void publishESPMessage(char* id, char* message){
-  /*String newTopic = stopic + id;
+  String newTopic = stopic + id;
   // Length (with one extra character for the null terminator)
   int str_len = newTopic.length() + 1; 
   
   char char_array[str_len];
   
   newTopic.toCharArray(char_array, str_len);
-  client.publish(char_array, message);*/
+  client.publish(char_array, message);
 }

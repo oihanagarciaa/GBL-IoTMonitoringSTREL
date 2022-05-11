@@ -40,22 +40,17 @@ bool connectToServer() {
         Serial.println(espID);
         Serial.println("");
       }
-    delete client;
     client  = BLEDevice::createClient();
     Serial.println(" - Created client");
 
-    
-    //!!!
-    client->setClientCallbacks(myClientCallback);
-Serial.println(" - 1");
-    // Connect to the remote BLE Server.
     delay(2000);
+    client->setClientCallbacks(myClientCallback);
+    // Connect to the remote BLE Server.
+    delay(5000);
     client->connect(myDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
-    //Serial.println(" - Connected to server");
-Serial.println(" - 2");
+    Serial.println(" - Connected to server");
     // Obtain a reference to the service we are after in the remote BLE server.
     BLERemoteService* pRemoteService = client->getService(serviceUUID);
-    Serial.println(" - 3");
     if (pRemoteService == nullptr) {
       Serial.print("Failed to find our service UUID: ");
       Serial.println(serviceUUID.toString().c_str());
@@ -83,13 +78,10 @@ Serial.println(" - 2");
       
       char *cespID = new char[espID.length() + 1];
       strcpy(cespID, espID.c_str());
-      /*char *cvalue = new char[value.length() + 1];
-      strcpy(cvalue, value.c_str());*/
       
       char* jsonMessage = convertToJson(espID, value);
       publishESPMessage(cespID, jsonMessage);
     }
-    //delete client;
     connected = true;
 }
 /**
@@ -105,9 +97,8 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
 
     // We have found a device, let us now see if it contains the service we are looking for.
     if (advertisedDevice.haveServiceUUID() && advertisedDevice.isAdvertisingService(serviceUUID)) {
-
-      BLEDevice::getScan()->stop();
       delete myDevice;
+      BLEDevice::getScan()->stop();
       myDevice = new BLEAdvertisedDevice(advertisedDevice);
       doConnect = true;
       doScan = true;
