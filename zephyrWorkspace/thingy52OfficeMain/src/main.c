@@ -30,10 +30,5 @@ int main() {
     printk("Started advertising.\n");
   }
 
-  /*while(true){
-      getCurrentValues();
-      k_sleep(K_MSEC(5000));
-  }*/
-
   return 0;
 }

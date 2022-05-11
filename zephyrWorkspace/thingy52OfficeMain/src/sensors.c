@@ -127,7 +127,7 @@ void init_sensors(){
 char* getCurrentValues(){
   readTempHumValues(tempHumdev);
   readAirValues(airDev);
-  static char values[300];
+  static char values[125];
 
   unsigned long long time = 
     getRealTimeValue();
