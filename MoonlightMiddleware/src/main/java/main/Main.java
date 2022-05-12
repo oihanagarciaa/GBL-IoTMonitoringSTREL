@@ -67,7 +67,7 @@ public class Main {
     }
 
     private void setMoonlightServiceBuilder(){
-        int size = 3;
+        int size = 10;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
         Formula formula = formula();

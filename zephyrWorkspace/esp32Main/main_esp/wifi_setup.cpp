@@ -1,4 +1,4 @@
-#include "wifi_setup.h"
+#include "main_setup.h"
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "esp_secrets.h"
@@ -55,10 +55,12 @@ void init_wifi(){
  client.loop();
 }
 
+static String newTopic;
+static int str_len;
 void publishESPMessage(char* id, char* message){
-  String newTopic = stopic + id;
+  newTopic = stopic + id;
   // Length (with one extra character for the null terminator)
-  int str_len = newTopic.length() + 1; 
+  str_len = newTopic.length() + 1; 
   
   char char_array[str_len];
   
