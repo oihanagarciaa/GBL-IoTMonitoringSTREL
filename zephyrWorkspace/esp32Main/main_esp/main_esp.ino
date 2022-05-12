@@ -14,9 +14,7 @@ static boolean doScan = false;
 // Variables to keep track of characteristics, devices and connections
 static BLERemoteCharacteristic* pRemoteCharacteristic;
 static BLEAdvertisedDevice* myDevice;
-BLEClient* client;
-BLEClient* client1;
-BLEClient* client2;
+static BLEClient* client;
 
 // Callback struct which holds callbacks for connection and connection termination
 class MyClientCallback : public BLEClientCallbacks {
