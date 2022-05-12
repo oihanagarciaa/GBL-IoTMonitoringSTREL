@@ -28,6 +28,7 @@ class MyClientCallback : public BLEClientCallbacks {
   }
 };
 static MyClientCallback* myClientCallback = new MyClientCallback();
+static char* cespID;
 
 // Function which is used to initiate a connection
 bool connectToServer() {
@@ -43,10 +44,11 @@ bool connectToServer() {
     client  = BLEDevice::createClient();
     Serial.println(" - Created client");
 
-    delay(2000);
     client->setClientCallbacks(myClientCallback);
     // Connect to the remote BLE Server.
+
     delay(5000);
+
     client->connect(myDevice);  // if you pass BLEAdvertisedDevice instead of address, it will be recognized type of peer device address (public or private)
     Serial.println(" - Connected to server");
     // Obtain a reference to the service we are after in the remote BLE server.
@@ -69,19 +71,22 @@ bool connectToServer() {
     }
     Serial.println(" - Found our characteristic");
 
+
     // Read the value of the characteristic.
     if(pRemoteCharacteristic->canRead()) {
       //int value = pRemoteCharacteristic->readUInt8();
       String value = pRemoteCharacteristic->readValue().c_str();
       Serial.print("The characteristic value was: ");
       Serial.println(value);
-      
-      char *cespID = new char[espID.length() + 1];
+
+      delete cespID;
+      cespID = new char[espID.length() + 1];
       strcpy(cespID, espID.c_str());
       
       char* jsonMessage = convertToJson(espID, value);
       publishESPMessage(cespID, jsonMessage);
     }
+
     connected = true;
 }
 /**
@@ -184,6 +189,7 @@ void loop() {
   // with the current time since boot.
   if (connected) {
     // if everything went right, wait a bit and then disconnect 
+    delay(500);
     doConnect = false;
     connected = false;
     doScan = true;
@@ -191,8 +197,8 @@ void loop() {
     client->disconnect();
     
   }else if(doScan){
-    BLEDevice::getScan()->start(10, false);  
+    BLEDevice::getScan()->start(5000, false);  
   }
   
-  delay(1000);
+  delay(500);
 } // End of loop
