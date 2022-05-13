@@ -55,12 +55,10 @@ void init_wifi(){
  client.loop();
 }
 
-static String newTopic;
-static int str_len;
 void publishESPMessage(char* id, char* message){
-  newTopic = stopic + id;
+  String newTopic = stopic + id;
   // Length (with one extra character for the null terminator)
-  str_len = newTopic.length() + 1; 
+  int str_len = newTopic.length() + 1; 
   
   char char_array[str_len];
   

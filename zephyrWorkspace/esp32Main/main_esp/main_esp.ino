@@ -11,13 +11,22 @@ static BLEUUID serviceUUID("10362e64-3e14-11ec-9bbc-0242ac130002");
 static BLEUUID    charUUID("a3bfe44d-30c3-4a29-acf9-3414fc8972d0");
 
 // Variables to keep track of characteristics, devices and connections
-static BLERemoteService* pRemoteService[size];
 static BLERemoteCharacteristic* pRemoteCharacteristic[size];
 static BLEAdvertisedDevice* myDevice;
 static BLEClient* client[size];
 static String devices[] = {"000", "001", "002"};
 
-
+// Callback struct which holds callbacks for connection and connection termination
+class MyClientCallback : public BLEClientCallbacks {
+  // connection callback
+  void onConnect(BLEClient* pclient) {
+  }
+  // connection-termination callback
+  void onDisconnect(BLEClient* pclient) {
+    Serial.println("onDisconnect");
+  }
+};
+static MyClientCallback* myClientCallback = new MyClientCallback();
 /**
  * Scan for BLE servers and find the first one that advertises the service we are looking for.
  */
@@ -60,17 +69,7 @@ void init_BLEScanner(){
   pBLEScan->start(5000, false);
 }
 
-// Callback struct which holds callbacks for connection and connection termination
-class MyClientCallback : public BLEClientCallbacks {
-  // connection callback
-  void onConnect(BLEClient* pclient) {
-  }
-  // connection-termination callback
-  void onDisconnect(BLEClient* pclient) {
-    Serial.println("onDisconnect");
-  }
-};
-static MyClientCallback* myClientCallback = new MyClientCallback();
+
 String espID[size];
 bool connectToServer(int i) {
   
@@ -94,6 +93,7 @@ bool connectToServer(int i) {
     Serial.println(" - Connected to server");
     // Obtain a reference to the service we are after in the remote BLE server.
 //    delete pRemoteService;
+    BLERemoteService* pRemoteService[size];
     pRemoteService[i] = client[i]->getService(serviceUUID);
     if (pRemoteService[i] == nullptr) {
       Serial.print("Failed to find our service UUID: ");
@@ -194,6 +194,7 @@ void setup() {
       BLEDevice::getScan()->start(2, false); 
     }
   }
+  
 }
 
 void loop() {
