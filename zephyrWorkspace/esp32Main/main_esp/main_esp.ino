@@ -15,7 +15,7 @@ static BLERemoteService* pRemoteService[size];
 static BLERemoteCharacteristic* pRemoteCharacteristic[size];
 static BLEAdvertisedDevice* myDevice;
 static BLEClient* client[size];
-static String devices[] = {"003", "004", "005"};
+static String devices[] = {"000", "001", "002"};
 
 
 /**
@@ -35,7 +35,7 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
       BLEDevice::getScan()->stop();
       myDevice = new BLEAdvertisedDevice(advertisedDevice);
 //      doConnect = true;
- //     doScan = true;
+//      doScan = true;
 
     } // Found our server
   } // onResult
@@ -57,7 +57,7 @@ void init_BLEScanner(){
   pBLEScan->setInterval(1349);
   pBLEScan->setWindow(449);
   pBLEScan->setActiveScan(true);
-  //pBLEScan->start(5000, false);
+  pBLEScan->start(5000, false);
 }
 
 // Callback struct which holds callbacks for connection and connection termination
@@ -118,9 +118,9 @@ bool connectToServer(int i) {
     return false;
   }
 }
-static char* cespID;
-static char* jsonMessage;
-static String value; 
+char* cespID;
+char* jsonMessage;
+String value; 
 bool readDeviceValues(int i){
     value.remove(0);
     if(pRemoteCharacteristic[i]->canRead()) {
@@ -187,11 +187,11 @@ void setup() {
   for(int i = 0; i < size; i++){
     bool doContinue = false;
     while(!doContinue){
-      BLEDevice::getScan()->start(2, false); 
       doContinue = connectToServer(i);
       delay(2000);
       Serial.print("CONTINUE: ");
       Serial.println(doContinue);
+      BLEDevice::getScan()->start(2, false); 
     }
   }
 }

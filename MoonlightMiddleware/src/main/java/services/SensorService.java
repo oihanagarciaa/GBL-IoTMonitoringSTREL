@@ -41,7 +41,7 @@ public class SensorService implements Service, MessageListener {
     @Override
     public void messageArrived(String topic, String jsonMessage) {
         Message message = new Gson().fromJson(jsonMessage, (Type) messageClass);
-
+        System.out.println("MESSAGE: "+jsonMessage);
         DataBus dataBus = DataBus.getInstance();
         dataBus.offer(message);
     }
