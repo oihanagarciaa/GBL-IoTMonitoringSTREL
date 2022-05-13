@@ -1,8 +1,8 @@
 #include "main_setup.h"
 #include "BLEDevice.h"
 
-static const int size = 5; 
-//static int devices[size] = {0, 1, 2, 3, 4};
+static const int size = 3; 
+//static int devices[size] = {0, 1, 2};
 //static boolean connected = {false, false, false, false, false};
 
 // The remote service we wish to connect to, set also in the peripheral
@@ -15,7 +15,7 @@ static BLERemoteService* pRemoteService[size];
 static BLERemoteCharacteristic* pRemoteCharacteristic[size];
 static BLEAdvertisedDevice* myDevice;
 static BLEClient* client[size];
-static String devices[] = {"000", "001", "002", "003", "004"};
+static String devices[] = {"003", "004", "005"};
 
 
 /**
@@ -57,7 +57,7 @@ void init_BLEScanner(){
   pBLEScan->setInterval(1349);
   pBLEScan->setWindow(449);
   pBLEScan->setActiveScan(true);
-  pBLEScan->start(5000, false);
+  //pBLEScan->start(5000, false);
 }
 
 // Callback struct which holds callbacks for connection and connection termination
@@ -71,19 +71,17 @@ class MyClientCallback : public BLEClientCallbacks {
   }
 };
 static MyClientCallback* myClientCallback = new MyClientCallback();
-
+String espID[size];
 bool connectToServer(int i) {
-  String espID;
+  
   Serial.print("Forming a connection to ");
   if (myDevice->haveName())
   {
     Serial.print("Device name: ");
-    espID = myDevice->getName().c_str();
-    Serial.println(espID);
-    Serial.println("");
+    espID[i] = myDevice->getName().c_str();
   }
   
-  if(devices[i]==espID){
+  if(devices[i]==espID[i]){
     client[i]  = BLEDevice::createClient();
     Serial.println(" - Created client");
   
@@ -116,28 +114,31 @@ bool connectToServer(int i) {
     Serial.println(" - Found our characteristic");
     return true;
   }else{
-    client[i]->disconnect();
+    //client[i]->disconnect();
     return false;
   }
 }
-
-String espID;
-char* cespID;
-char* jsonMessage;
+static char* cespID;
+static char* jsonMessage;
+static String value; 
 bool readDeviceValues(int i){
-    String value; 
+    value.remove(0);
     if(pRemoteCharacteristic[i]->canRead()) {
       //int value = pRemoteCharacteristic->readUInt8();
       value = pRemoteCharacteristic[i]->readValue().c_str();
       Serial.print("The characteristic value was: ");
       Serial.println(value);
   
-      cespID = new char[espID.length() + 1];
-      strcpy(cespID, espID.c_str());
+      cespID = new char[espID[i].length() + 1];
+      strcpy(cespID, espID[i].c_str());
   
       delete jsonMessage;
-      jsonMessage = convertToJson(espID, value);
+      jsonMessage = convertToJson(espID[i], value);
       publishESPMessage(cespID, jsonMessage);
+      Serial.print("-> ");
+      Serial.print(cespID);
+      Serial.print(", ");
+      Serial.println(jsonMessage);
       return true;
     }
     return false;
@@ -182,25 +183,22 @@ void setup() {
   Serial.begin(115200);
   init_wifi();
   init_BLEScanner();
+
+  for(int i = 0; i < size; i++){
+    bool doContinue = false;
+    while(!doContinue){
+      BLEDevice::getScan()->start(2, false); 
+      doContinue = connectToServer(i);
+      delay(2000);
+      Serial.print("CONTINUE: ");
+      Serial.println(doContinue);
+    }
+  }
 }
 
-bool doIf = true;
-int i = 0;
 void loop() {
-  if(doIf){
-    //for(int i = 0; i < size; i++){
-      bool doContinue = false;
-      //while(!doContinue){
-        doContinue = connectToServer(i);
-        delay(5000);
-        Serial.print("CONTINUE: ");
-        Serial.println(doContinue);
-      //}
-    //}
-  }
-  
   for(int i = 0; i < size; i ++){
-    delay(1000);
+    delay(2000);
     readDeviceValues(i);
   }
 }
