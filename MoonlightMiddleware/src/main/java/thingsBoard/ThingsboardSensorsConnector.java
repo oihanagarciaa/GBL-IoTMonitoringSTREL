@@ -27,14 +27,13 @@ public class ThingsboardSensorsConnector extends ThingsboardConnector {
     public String getJson() {
         Gson gson = new Gson();
         String jsonInString = gson.toJson(commonSensorsMessage);
-        System.out.println("JSON: "+jsonInString);
         return jsonInString;
     }
 
     @Override
     public String getUsername() {
         int num = commonSensorsMessage.getId()+1;
-        String username = deviceAccessToken.get("Thingy"+num);
+        String username = deviceAccessToken.get(String.valueOf(num));
         return username;
     }
 }

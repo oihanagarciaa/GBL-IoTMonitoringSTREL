@@ -16,9 +16,9 @@ public class ThingsboardSensorTest {
     @BeforeEach
     void initMap(){
         sensorAccessToken = new HashMap<>();
-        sensorAccessToken.put("Thingy1", "askjdzsdjhfb");
-        sensorAccessToken.put("Thingy2", "6s5df4as6dfs");
-        sensorAccessToken.put("Thingy3", "dfsdfagawefs");
+        sensorAccessToken.put("1", "askjdzsdjhfb");
+        sensorAccessToken.put("2", "6s5df4as6dfs");
+        sensorAccessToken.put("3", "dfsdfagawefs");
     }
 
     OfficeSensorMessage getMessage(){

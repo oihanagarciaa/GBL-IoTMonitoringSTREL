@@ -1,5 +1,6 @@
 package main;
 
+import eu.quanticol.moonlight.formula.spatial.EscapeFormula;
 import serviceBuilders.MoonlightServiceBuilder;
 import serviceBuilders.ResultsThingsboardServiceBuilder;
 import serviceBuilders.SensorsServiceBuilder;
@@ -58,9 +59,9 @@ public class Main {
 
     private void setThingsboardServiceBuilder() {
         Map<String, String> deviceAccessTokens = new HashMap<>();
-        deviceAccessTokens.put("Thingy1", "T6Tn0xfSJKolnUfxmZFr");
-        deviceAccessTokens.put("Thingy2", "U7THZHwXrc0cqCT3S0Yz");
-        deviceAccessTokens.put("Thingy3", "LRXoHowQzSHI4MIzlr5s");
+        deviceAccessTokens.put("1", "T6Tn0xfSJKolnUfxmZFr");
+        deviceAccessTokens.put("2", "U7THZHwXrc0cqCT3S0Yz");
+        deviceAccessTokens.put("3", "LRXoHowQzSHI4MIzlr5s");
         deviceAccessTokens.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
         thingsboardServiceBuilder =
                 new ResultsThingsboardServiceBuilder(deviceAccessTokens);
@@ -91,6 +92,7 @@ public class Main {
         return controlPeople;
     }
 
+    //TODO: how do I change here from bool to double??
     private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
         double maxTemperature = 30;
         Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();

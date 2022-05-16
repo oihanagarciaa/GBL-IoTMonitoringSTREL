@@ -53,7 +53,7 @@ public class ThingsboardMoonlightConnector extends ThingsboardConnector {
 
     @Override
     public String getUsername() {
-        String username = deviceAccessToken.get("Thingy"+(device));
+        String username = deviceAccessToken.get(String.valueOf(device));
         return username;
     }
 }

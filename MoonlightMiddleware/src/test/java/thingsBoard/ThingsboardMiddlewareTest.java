@@ -37,9 +37,9 @@ public class ThingsboardMiddlewareTest {
     @BeforeEach
     void initMap(){
         sensorAccessToken = new HashMap<>();
-        sensorAccessToken.put("Thingy1", "T6Tn0xfSJKolnUfxmZFr");
-        sensorAccessToken.put("Thingy2", "U7THZHwXrc0cqCT3S0Yz");
-        sensorAccessToken.put("Thingy3", "LRXoHowQzSHI4MIzlr5s");
+        sensorAccessToken.put("1", "T6Tn0xfSJKolnUfxmZFr");
+        sensorAccessToken.put("2", "U7THZHwXrc0cqCT3S0Yz");
+        sensorAccessToken.put("3", "LRXoHowQzSHI4MIzlr5s");
         sensorAccessToken.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
     }
 
