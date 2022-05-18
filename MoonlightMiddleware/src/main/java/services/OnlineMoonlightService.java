@@ -26,7 +26,7 @@ public class OnlineMoonlightService implements Service{
     private final Map<String, Function<Tuple, Box<Boolean>>> atoms;
     private final Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
     private final LocationService<Double, Double> locSvc;
-
+    //TODO: Change from boolean to generic
     private OnlineSpatialTemporalMonitor<?, Tuple, Boolean> onlineMonitor;
 
     private Buffer<Tuple> buffer;

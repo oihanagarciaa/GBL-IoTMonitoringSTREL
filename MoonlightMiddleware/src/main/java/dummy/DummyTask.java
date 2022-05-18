@@ -42,10 +42,10 @@ public class DummyTask implements Runnable{
                 int cont;
                 final SecureRandom rand = new SecureRandom();
                 do {
-                    temp = 20+ rand.nextDouble(15);
+                    temp = 25+ rand.nextDouble(8);
                     hum = 10+ rand.nextDouble(40);
-                    co2 = 100+ rand.nextInt(300);
-                    tvoc = 100+ rand.nextInt(400);
+                    co2 = 600+ rand.nextInt(100);
+                    tvoc = rand.nextInt(400);
                     String s = "{ 'id':"+id+",\n" +
                             "   'time':"+dummyCommonValues.addAndGetTime()+",\n" +
                             "   'temp':"+temp+",\n" +
