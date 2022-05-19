@@ -41,7 +41,7 @@ public class OnlineMoonlightService implements Service{
         locSvc = new StaticLocationService<>(this.spatialModel);
         this.distanceFunctions = distanceFunctions;
         //TODO: Change the declaration of the buffer
-        buffer = new ConstantSizeBuffer<>(model.size(), 6);
+        buffer = new ConstantSizeBuffer<>(model.size(), 12);
     }
 
     @Override
@@ -63,6 +63,7 @@ public class OnlineMoonlightService implements Service{
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
         ResultsMessage resultsMessage = new ResultsMessage(results);
+        System.out.println(resultsMessage.toString());
         dataBus.offer(resultsMessage);
     }
 

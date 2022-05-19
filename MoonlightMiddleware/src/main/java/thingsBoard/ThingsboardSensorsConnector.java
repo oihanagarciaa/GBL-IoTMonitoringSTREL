@@ -17,10 +17,10 @@ public class ThingsboardSensorsConnector extends ThingsboardConnector {
     @Override
     public void sendMessage(Message message) {
         commonSensorsMessage = (CommonSensorsMessage) message;
-        String username = getUsername();
-        String password = "";
+        String username = getUsername(
+                deviceAccessToken, String.valueOf(commonSensorsMessage.getId()+1));
         String json = getJson();
-        publishToThingsboard(username, password, json);
+        publishToThingsboard(username, json);
     }
 
     @Override
@@ -28,12 +28,5 @@ public class ThingsboardSensorsConnector extends ThingsboardConnector {
         Gson gson = new Gson();
         String jsonInString = gson.toJson(commonSensorsMessage);
         return jsonInString;
-    }
-
-    @Override
-    public String getUsername() {
-        int num = commonSensorsMessage.getId()+1;
-        String username = deviceAccessToken.get(String.valueOf(num));
-        return username;
     }
 }

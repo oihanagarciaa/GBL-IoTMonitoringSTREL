@@ -37,6 +37,6 @@ public class ThingsboardSensorTest {
         ThingsboardSensorsConnector thingsSensors = new ThingsboardSensorsConnector(sensorAccessToken);
         thingsSensors.commonSensorsMessage = getMessage();
         assertEquals("{\"id\":1,\"time\":123456.0,\"temp\":20.2,\"hum\":15.3,\"co2\":123,\"tvoc\":45}", thingsSensors.getJson());
-        assertEquals("6s5df4as6dfs", thingsSensors.getUsername());
+        assertEquals("askjdzsdjhfb", thingsSensors.getUsername(sensorAccessToken, "1"));
     }
 }

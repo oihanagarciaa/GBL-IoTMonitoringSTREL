@@ -59,9 +59,9 @@ public class Main {
 
     private void setThingsboardServiceBuilder() {
         Map<String, String> deviceAccessTokens = new HashMap<>();
-        deviceAccessTokens.put("1", "T6Tn0xfSJKolnUfxmZFr");
-        deviceAccessTokens.put("2", "U7THZHwXrc0cqCT3S0Yz");
-        deviceAccessTokens.put("3", "LRXoHowQzSHI4MIzlr5s");
+        deviceAccessTokens.put("1", "v8iK9AKNXuRZNhIrzROu");
+        deviceAccessTokens.put("2", "q1qbXmY3KR51xhD24iHP");
+        deviceAccessTokens.put("3", "eqV89m6l1buoWhjY9hOV");
         deviceAccessTokens.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
         thingsboardServiceBuilder =
                 new ResultsThingsboardServiceBuilder(deviceAccessTokens);

@@ -10,7 +10,6 @@ import java.util.Map;
 
 public class ThingsboardMoonlightConnector extends ThingsboardConnector {
     private final Map<String, String> deviceAccessToken;
-    private int device;
     private Boolean resultBoolean;
     double lastTime;
 
@@ -32,13 +31,12 @@ public class ThingsboardMoonlightConnector extends ThingsboardConnector {
         for(int i = counter-1; i < resultsList.size()-1; i++){
             List valueList = (List) resultsList.get(i).getValue();
             for(int j = 0; j < valueList.size(); j++){
-                device = j+1;
-                String username = getUsername();
-                String password = "";
+                String username = getUsername(deviceAccessToken,
+                        String.valueOf(j+1));
                 Box box = (Box) valueList.get(j);
                 resultBoolean = (Boolean) box.getStart();
                 String json = getJson();
-                publishToThingsboard(username, password, json);
+                publishToThingsboard(username, json);
             }
         }
         lastTime = (double) resultsList.get(resultsList.size()-1).getStart();
@@ -51,9 +49,9 @@ public class ThingsboardMoonlightConnector extends ThingsboardConnector {
         return jsonMessage;
     }
 
-    @Override
+    /*@Override
     public String getUsername() {
         String username = deviceAccessToken.get(String.valueOf(device));
         return username;
-    }
+    }*/
 }
