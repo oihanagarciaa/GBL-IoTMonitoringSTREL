@@ -12,7 +12,7 @@ static BLEUUID    charUUID("a3bfe44d-30c3-4a29-acf9-3414fc8972d0");
 static BLERemoteCharacteristic* pRemoteCharacteristic[size];
 static BLEAdvertisedDevice* myDevice;
 static BLEClient* client[size];
-static String devices[] = {"004", "005"};
+static String devices[] = {"000", "001"};
 
 // Callback struct which holds callbacks for connection and connection termination
 class MyClientCallback : public BLEClientCallbacks {

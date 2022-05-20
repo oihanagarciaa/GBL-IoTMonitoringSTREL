@@ -62,13 +62,16 @@ public class Main {
         deviceAccessTokens.put("1", "v8iK9AKNXuRZNhIrzROu");
         deviceAccessTokens.put("2", "q1qbXmY3KR51xhD24iHP");
         deviceAccessTokens.put("3", "eqV89m6l1buoWhjY9hOV");
+        deviceAccessTokens.put("4", "MwzTm5OkYmsNfcIQqLmB");
+        deviceAccessTokens.put("5", "0OOXKKKFQF6BkHAQ1DqR");
+        deviceAccessTokens.put("6", "CTDHfcr3KncVvsVZyYb3");
         deviceAccessTokens.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
         thingsboardServiceBuilder =
                 new ResultsThingsboardServiceBuilder(deviceAccessTokens);
     }
 
     private void setMoonlightServiceBuilder(){
-        int size = 3;
+        int size = 6;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
         Formula formula = formula();
