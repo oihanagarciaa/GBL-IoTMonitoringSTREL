@@ -13,7 +13,7 @@ import services.Service;
 import java.util.Map;
 import java.util.function.Function;
 
-public class MoonlightServiceBuilder {
+public class MoonlightServiceBuilder implements ServiceBuilder{
     //If I want to access a variable from a test make it protected
     private Service service;
     private final MonitorType monitorType;
@@ -40,7 +40,8 @@ public class MoonlightServiceBuilder {
     /* it takes the if else as a duplication:
      * see polymorphism [Clean code]
      */
-    private void initializeService() {
+    @Override
+    public void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
             service = new OnlineMoonlightService(formula, spatialModel, atoms, distanceFunctions, bufferSize);
         } else {
@@ -53,6 +54,7 @@ public class MoonlightServiceBuilder {
         it takes the catch as a duplication:
         see Template method or strategy
      */
+    @Override
     public boolean run() {
         try {
             initializeService();
@@ -62,6 +64,7 @@ public class MoonlightServiceBuilder {
         }
     }
 
+    @Override
     public Service getService() {
         return service;
     }

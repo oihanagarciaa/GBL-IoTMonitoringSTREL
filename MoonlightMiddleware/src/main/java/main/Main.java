@@ -1,6 +1,5 @@
 package main;
 
-import eu.quanticol.moonlight.formula.spatial.EscapeFormula;
 import serviceBuilders.MoonlightServiceBuilder;
 import serviceBuilders.ResultsThingsboardServiceBuilder;
 import serviceBuilders.SensorsServiceBuilder;

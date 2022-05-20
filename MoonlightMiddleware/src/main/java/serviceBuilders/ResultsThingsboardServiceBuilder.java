@@ -5,7 +5,7 @@ import services.Service;
 
 import java.util.Map;
 
-public class ResultsThingsboardServiceBuilder {
+public class ResultsThingsboardServiceBuilder implements ServiceBuilder{
     private Service service;
     private final Map<String, String> deviceAccessToken;
 
@@ -13,11 +13,13 @@ public class ResultsThingsboardServiceBuilder {
         this.deviceAccessToken = deviceAccessToken;
     }
 
-    private void initializeService() {
+    @Override
+    public void initializeService() {
         service = new ResultThingsboardService(deviceAccessToken);
         service.init();
     }
 
+    @Override
     public boolean run() {
         try {
             initializeService();
@@ -27,6 +29,7 @@ public class ResultsThingsboardServiceBuilder {
         }
     }
 
+    @Override
     public Service getService() {
         return service;
     }

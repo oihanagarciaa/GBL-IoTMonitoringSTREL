@@ -6,7 +6,7 @@ import services.Service;
 import subscriber.ConnType;
 import subscriber.MQTTSubscriber;
 
-public class SensorsServiceBuilder {
+public class SensorsServiceBuilder implements ServiceBuilder{
     private Service service;
     private String broker;
     private String topic;
@@ -29,7 +29,8 @@ public class SensorsServiceBuilder {
         this.messageClass = messageClass;
     }
 
-    private void initializeService() {
+    @Override
+    public void initializeService() {
         if(connectionType == ConnType.MQTT) {
             service = new SensorService(new MQTTSubscriber(
                     broker, topic, username, password), messageClass);
@@ -46,6 +47,7 @@ public class SensorsServiceBuilder {
         it takes the catch as a duplication:
         see Template method or strategy
      */
+    @Override
     public boolean run() {
         try {
             initializeService();
@@ -55,6 +57,7 @@ public class SensorsServiceBuilder {
         }
     }
 
+    @Override
     public Service getService() {
         return service;
     }
