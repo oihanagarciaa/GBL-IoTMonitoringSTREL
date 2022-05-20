@@ -131,7 +131,7 @@ public class OnlineMoonlightServiceTest {
         SpatialModel spatialModel = mock(SpatialModel.class);
         Map atoms = mock(Map.class);
         Map distances = mock(Map.class);
-        return new OnlineMoonlightService(formula, spatialModel, atoms, distances);
+        return new OnlineMoonlightService(formula, spatialModel, atoms, distances, 6);
     }
 
     private OnlineMoonlightService getOnlineMoonlightServiceWithRealValues(){
@@ -139,7 +139,7 @@ public class OnlineMoonlightServiceTest {
         SpatialModel spatialModel = buildSpatialModel(6);
         Map atoms = getOnlineAtoms();
         Map distances = setDistanceFunctions(spatialModel);
-        return new OnlineMoonlightService(formula, spatialModel, atoms, distances);
+        return new OnlineMoonlightService(formula, spatialModel, atoms, distances, 6);
     }
 
     private Message getMessage(int id, double time, int people){

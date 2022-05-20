@@ -21,17 +21,20 @@ public class MoonlightServiceBuilder {
     private final Formula formula;
     private final Map<String, Function<Tuple, Box<Boolean>>> atoms;
     private final Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions;
+    private final int bufferSize;
 
     public MoonlightServiceBuilder(SpatialModel<Double> spatialModel,
                                    Formula formula,
                                    Map<String, Function<Tuple, Box<Boolean>>> atoms,
-                                   Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distFunctions)
+                                   Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distFunctions,
+                                   int bufferSize)
     {
         this.monitorType = MonitorType.ONLINE_MOONLIGHT;
         this.spatialModel = spatialModel;
         this.formula = formula;
         this.atoms = atoms;
         this.distanceFunctions = distFunctions;
+        this.bufferSize = bufferSize;
     }
 
     /* it takes the if else as a duplication:
@@ -39,7 +42,7 @@ public class MoonlightServiceBuilder {
      */
     private void initializeService() {
         if(monitorType == MonitorType.ONLINE_MOONLIGHT) {
-            service = new OnlineMoonlightService(formula, spatialModel, atoms, distanceFunctions);
+            service = new OnlineMoonlightService(formula, spatialModel, atoms, distanceFunctions, bufferSize);
         } else {
             throw new UnsupportedOperationException("Not supported monitor type");
         }

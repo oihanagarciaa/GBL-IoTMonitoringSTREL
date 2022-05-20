@@ -34,14 +34,14 @@ public class OnlineMoonlightService implements Service{
 
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
             Map<String, Function<Tuple, Box<Boolean>>> atoms,
-            Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions) {
+            Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions,
+            int bufferSize) {
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
         locSvc = new StaticLocationService<>(this.spatialModel);
         this.distanceFunctions = distanceFunctions;
-        //TODO: Change the declaration of the buffer
-        buffer = new ConstantSizeBuffer<>(model.size(), 12);
+        buffer = new ConstantSizeBuffer<>(model.size(), bufferSize);
     }
 
     @Override
@@ -63,6 +63,7 @@ public class OnlineMoonlightService implements Service{
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
         ResultsMessage resultsMessage = new ResultsMessage(results);
+        //TODO: delete print
         System.out.println(resultsMessage.toString());
         dataBus.offer(resultsMessage);
     }

@@ -54,7 +54,7 @@ public class OnlineMoonlightMultipleMessagesTest {
         SpatialModel spatialModel = buildSpatialModel(3);
         Map atoms = getOnlineAtoms();
         Map distances = setDistanceFunctions(spatialModel);
-        return new OnlineMoonlightService(formula, spatialModel, atoms, distances);
+        return new OnlineMoonlightService(formula, spatialModel, atoms, distances, 6);
     }
 
 

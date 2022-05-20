@@ -72,6 +72,7 @@ public class Main {
 
     private void setMoonlightServiceBuilder(){
         int size = 6;
+        int bufferSize = 12;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
         Formula formula = formula();
@@ -79,7 +80,7 @@ public class Main {
         Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
                 distFunctions = setDistanceFunctions(distance, spatialModel);
         moonlightServiceBuilder = new MoonlightServiceBuilder(spatialModel,
-                formula, atoms, distFunctions);
+                formula, atoms, distFunctions, bufferSize);
     }
 
     private static SpatialModel<Double> buildSpatialModel(int size){

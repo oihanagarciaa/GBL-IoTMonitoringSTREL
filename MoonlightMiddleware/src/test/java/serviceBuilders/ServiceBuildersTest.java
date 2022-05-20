@@ -32,7 +32,7 @@ class ServiceBuildersTest {
     @Test
     void moonlightBuilderInitNull() {
         MoonlightServiceBuilder serviceBuilder = new MoonlightServiceBuilder
-                (null, null, null, null);
+                (null, null, null, null, 0);
         assertThrows(NullPointerException.class,
                 () -> serviceBuilder.run());
     }
@@ -42,7 +42,7 @@ class ServiceBuildersTest {
         Formula formula = formula();
         Map<String, Function<Tuple, Box<Boolean>>> atoms = getOnlineAtoms();
         HashMap distanceFunctions = setDistanceFunctions(spatialModel);
-        return new MoonlightServiceBuilder(spatialModel, formula, atoms, distanceFunctions);
+        return new MoonlightServiceBuilder(spatialModel, formula, atoms, distanceFunctions, 6);
     }
 
     @Test
