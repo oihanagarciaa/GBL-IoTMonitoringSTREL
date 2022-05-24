@@ -179,7 +179,8 @@ String getValue(String data, char separator, int index)
 
 void setup() {
   Serial.begin(115200);
-  init_wifi();
+  int randomNumber = random(500);
+  init_wifi(randomNumber);
   init_BLEScanner();
 
   for(int i = 0; i < size; i++){
