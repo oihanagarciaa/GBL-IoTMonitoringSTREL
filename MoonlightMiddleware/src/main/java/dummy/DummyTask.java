@@ -60,7 +60,7 @@ public class DummyTask implements Runnable{
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
-                }while (cont <= 1000);
+                }while (cont <= 5000);
 
                 sampleClient.disconnect();
                 System.out.println("Disconnected");

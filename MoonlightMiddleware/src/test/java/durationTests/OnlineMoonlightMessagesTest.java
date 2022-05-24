@@ -22,6 +22,7 @@ import services.Service;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -40,8 +41,9 @@ public class OnlineMoonlightMessagesTest {
         /**
          * change the i
          */
-        for(int i = 0; i < 100; i++){
-            Message message = getMessage(i%6, i, 11);
+        Random rand = new Random();
+        for(int i = 0; i < 1000; i++){
+            Message message = getMessage(i%6, i, rand.nextInt(20)+20);
             onlineMoonlightService.receive(message);
         }
         long finishingMilis = System.currentTimeMillis();
