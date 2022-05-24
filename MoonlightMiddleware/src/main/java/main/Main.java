@@ -70,7 +70,7 @@ public class Main {
     }
 
     private void setMoonlightServiceBuilder(){
-        int size = 6;
+        int size = 4;
         int bufferSize = 12;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
