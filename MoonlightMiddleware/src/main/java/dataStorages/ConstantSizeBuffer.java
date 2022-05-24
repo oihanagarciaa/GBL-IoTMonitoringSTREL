@@ -33,9 +33,10 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
         double messageTime = message.getTime();
         if(canMonitor){
             if(messageTime > this.time) this.time = messageTime;
-            storingTimeChain.saveNewValue(id,
-                    messageTime-timerSynchronization.getIthTimeDifference(id), (E) message.getValue());
-            counter++;
+            if(storingTimeChain.saveNewValue(id,
+                    messageTime-timerSynchronization.getIthTimeDifference(id), (E) message.getValue())){
+                counter++;
+            }
             if (bufferIsFull()) return true;
         }else {
             timerSynchronization.setNewTime(id, messageTime);

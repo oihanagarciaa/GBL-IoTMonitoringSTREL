@@ -29,3 +29,4 @@ out/
 
 # TODO: temp
 gradle.properties
+*.hprof

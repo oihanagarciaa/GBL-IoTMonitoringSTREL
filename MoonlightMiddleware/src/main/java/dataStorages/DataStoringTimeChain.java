@@ -41,10 +41,18 @@ public class DataStoringTimeChain<V>{
         }
     }
 
-    public void saveNewValue(int id, double time, V value){
-        timeChainList.get(id).add(new TimeSegment<>(time, value));
-        if(!allElements) locations[id] = 1;
-        allValuesPresent();
+    public boolean saveNewValue(int id, double time, V value){
+        double lastTime = 0.0;
+        if(timeChainList.get(id).size() > 0){
+            lastTime = timeChainList.get(id).getLast().getStart();
+        }
+        if(time > lastTime){
+            timeChainList.get(id).add(new TimeSegment<>(time, value));
+            if(!allElements) locations[id] = 1;
+            allValuesPresent();
+            return true;
+        }
+        return false;
     }
 
     public TimeChain<Double, List<V>> getDataToMonitor(double time){
