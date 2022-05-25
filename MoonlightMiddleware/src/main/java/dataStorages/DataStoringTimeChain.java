@@ -46,7 +46,7 @@ public class DataStoringTimeChain<V>{
         if(timeChainList.get(id).size() > 0){
             lastTime = timeChainList.get(id).getLast().getStart();
         }
-        if(time > lastTime){
+        if(time >= lastTime){
             timeChainList.get(id).add(new TimeSegment<>(time, value));
             if(!allElements) locations[id] = 1;
             allValuesPresent();

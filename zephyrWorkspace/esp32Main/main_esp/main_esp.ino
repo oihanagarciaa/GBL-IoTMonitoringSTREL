@@ -1,7 +1,7 @@
 #include "main_setup.h"
 #include "BLEDevice.h"
 
-static const int size = 2; 
+static const int size = 3; 
 
 // The remote service we wish to connect to, set also in the peripheral
 static BLEUUID serviceUUID("10362e64-3e14-11ec-9bbc-0242ac130002");
@@ -12,7 +12,7 @@ static BLEUUID    charUUID("a3bfe44d-30c3-4a29-acf9-3414fc8972d0");
 static BLERemoteCharacteristic* pRemoteCharacteristic[size];
 static BLEAdvertisedDevice* myDevice;
 static BLEClient* client[size];
-static String devices[] = {"002", "003"};
+static String devices[] = {"000", "001", "002"};
 
 // Callback struct which holds callbacks for connection and connection termination
 class MyClientCallback : public BLEClientCallbacks {
@@ -198,7 +198,7 @@ void setup() {
 
 void loop() {
   for(int i = 0; i < size; i ++){
-    delay(2000);
+    delay(500);
     readDeviceValues(i);
   }
 }

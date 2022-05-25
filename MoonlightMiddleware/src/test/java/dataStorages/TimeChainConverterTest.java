@@ -16,6 +16,7 @@ public class TimeChainConverterTest {
         DataStoringTimeChain<Integer> dataStoringTimeChain = new DataStoringTimeChain<>(size);
 
         dataStoringTimeChain.saveNewValue(1, 1.0, 6);
+        dataStoringTimeChain.saveNewValue(2, 0.0, 3);
         dataStoringTimeChain.saveNewValue(2, 0.0, 7);
         dataStoringTimeChain.saveNewValue(1, 2.0, 9);
         dataStoringTimeChain.saveNewValue(0, 4.0, 15);
