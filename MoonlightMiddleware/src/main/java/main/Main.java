@@ -1,5 +1,8 @@
 package main;
 
+import eu.quanticol.moonlight.core.formula.Interval;
+import eu.quanticol.moonlight.formula.classic.AndFormula;
+import eu.quanticol.moonlight.formula.temporal.EventuallyFormula;
 import serviceBuilders.MoonlightServiceBuilder;
 import serviceBuilders.ResultsThingsboardServiceBuilder;
 import serviceBuilders.SensorsServiceBuilder;
@@ -16,6 +19,7 @@ import eu.quanticol.moonlight.util.Utils;
 import messages.OfficeSensorMessage;
 import subscriber.ConnType;
 
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -70,7 +74,7 @@ public class Main {
     }
 
     private void setMoonlightServiceBuilder(){
-        int size = 3;
+        int size = 4;
         int bufferSize = 12;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
@@ -92,14 +96,18 @@ public class Main {
 
     private static Formula formula() {
         Formula controlPeople = new AtomicFormula("highTemperature");
-        return controlPeople;
+        Formula co2Formula = new EventuallyFormula( new AtomicFormula("highCO2"), new Interval(0, 1500)); //15 sec
+        Formula finalFormula = new AndFormula(controlPeople, co2Formula);
+        return finalFormula;
     }
 
     //TODO: how do I change here from bool to double??
     private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
         double maxTemperature = 30;
+        int maxCO2 = 600;
         Map<String, Function<Tuple, Box<Boolean>>> atoms = new HashMap<>();
         atoms.put("highTemperature", a -> booleanInterval((Double) a.getIthValue(0)< maxTemperature));
+        atoms.put("highCO2", a -> booleanInterval((Integer) a.getIthValue(3) < maxCO2));
         return atoms;
     }
 
