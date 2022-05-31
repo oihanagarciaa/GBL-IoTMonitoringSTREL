@@ -26,7 +26,6 @@ public class ConstantSizeBuffer<E> implements Buffer<E>{
         return counter >= maxCapacity;
     }
 
-    //TODO: Think how to declare the messages better
     @Override
     public boolean add(CommonSensorsMessage message) {
         int id = message.getId();

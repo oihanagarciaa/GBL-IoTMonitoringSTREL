@@ -19,7 +19,6 @@ import eu.quanticol.moonlight.util.Utils;
 import messages.OfficeSensorMessage;
 import subscriber.ConnType;
 
-import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
