@@ -43,7 +43,6 @@ public class TimeChainConverter<V> {
         return valuesMap;
     }
 
-    //TODO: Think how to do this better
     private TimeChain<Double, List<V>> createOneTimeChain(Map<Double, Map<Integer, V>> valuesMap, double finalTime){
         TimeChain<Double, List<V>> returnTimeChain = new TimeChain<>(finalTime);
         V listValues[] = (V[]) new Object[size];

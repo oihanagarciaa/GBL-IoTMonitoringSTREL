@@ -94,9 +94,9 @@ public class Main {
     }
 
     private static Formula formula() {
-        Formula controlPeople = new AtomicFormula("highTemperature");
+        Formula highTemperature = new AtomicFormula("highTemperature");
         Formula co2Formula = new EventuallyFormula( new AtomicFormula("highCO2"), new Interval(0, 1500)); //15 sec
-        Formula finalFormula = new AndFormula(controlPeople, co2Formula);
+        Formula finalFormula = new AndFormula(highTemperature, co2Formula);
         return finalFormula;
     }
 

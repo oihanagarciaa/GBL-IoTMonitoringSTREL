@@ -41,7 +41,7 @@ void init_wifi(int randNum){
  client.setServer(mqtt_broker, mqtt_port);
  client.setCallback(callback);
  while (!client.connected()) {
-     String client_id = String(randNum)+String(WiFi.macAddress())+":esp32client";
+     String client_id = String(randNum)+String(WiFi.macAddress())+"_esp32client";
      Serial.printf("\n- The client %s connects to the public mqtt broker\n", client_id.c_str());
      if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
          Serial.println("Public emqx mqtt broker connected\n\n");
