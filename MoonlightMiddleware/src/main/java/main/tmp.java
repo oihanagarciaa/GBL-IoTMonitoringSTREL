@@ -8,13 +8,13 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 public class tmp {
     public static void main(String[] args) {
-        String broker = "tcp://stefanschupp.de:1883";
-        String topic = "institute/thingy/1";
-        String username = "oihana";
-        String password = "22oihana22";
+        String broker = "tcp://thingsboard.stefanschupp.de:1884";
+        String topic = "v1/devices/me/telemetry";
+        String username = "eqV89m6l1buoWhjY9hOV";
+        String password = "";
         //Topic name
         //data to be send
-        String content      = "{}";
+        String content      = "{'result'= 0}";
         int qos             = 0;
         /*hostname is localhost as mqtt publisher and broker are
           running on the same computer*/
