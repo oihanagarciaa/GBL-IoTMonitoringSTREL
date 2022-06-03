@@ -6,6 +6,21 @@
         "type": "mqtt",
         "settings": {
           "broker": "..",
+          "topic": "",
+          "username": "",
+          "password": ""
+        }
+      }
+    },
+    {
+      "serviceType": "moonlight",
+      "formula": "String ... "
+    },
+    {
+      "serviceType": "thingsboard",
+      "connection": {
+        "type": "mqtt",
+        "settings": {
           "topic": ""
         }
       },
@@ -15,10 +30,6 @@
           "accessKey": "XXX"
         }
       ]
-    },
-    {
-      "serviceType": "moonlight",
-      "formula": "String ... "
     }
   ]
 }

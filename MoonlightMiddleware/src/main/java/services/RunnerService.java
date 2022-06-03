@@ -3,9 +3,10 @@ package services;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import eu.quanticol.moonlight.core.formula.Formula;
-import main.DataBus;
 import messages.Message;
-import subscriber.MessageListener;
+import messages.ConfigMessage;
+import services.serviceInfo.ServiceInfo;
+import connection.MessageListener;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -19,9 +20,13 @@ public class RunnerService implements Service, MessageListener {
 
     @Override
     public void receive(Message message) {
-        for(ServiceInfo serviceInfo: message.getServiceInfo()) {
-            if(serviceInfo.getServiceType() == "moonlight") {
-                Formula formula = evaluateFormula(serviceInfo.getFormula());
+        //TODO: Should I put this code in another method??
+        // here I receive from the DataBus
+        if(message instanceof ConfigMessage configMessage){
+            for(ServiceInfo serviceInfo: configMessage.getServiceInfo()) {
+                if(serviceInfo.getServiceType().equals("moonlight")) {
+                    Formula formula = evaluateFormula(serviceInfo.getFormula());
+                }
             }
         }
     }
@@ -52,11 +57,12 @@ public class RunnerService implements Service, MessageListener {
     public void messageArrived(String topic, String jsonMessage) {
         System.out.println("MESSAGE: "+jsonMessage);
         try{
-            Message message = new Gson().fromJson(jsonMessage, (Type) messageClass);
-            
-            
+            Message message = new Gson().fromJson(jsonMessage,
+                    (Type) ConfigMessage.class);
+
         } catch (JsonSyntaxException e){
             throw new UnsupportedOperationException("Unknown message type");
         }
     }
+
 }

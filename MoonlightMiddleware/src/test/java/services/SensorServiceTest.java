@@ -2,8 +2,8 @@ package services;
 
 import messages.OfficeSensorMessage;
 import org.junit.jupiter.api.Test;
-import subscriber.MQTTSubscriber;
-import subscriber.Subscriber;
+import connection.MQTTSubscriber;
+import connection.Subscriber;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;

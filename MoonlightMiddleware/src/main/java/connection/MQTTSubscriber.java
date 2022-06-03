@@ -1,10 +1,10 @@
-package subscriber;
+package connection;
 
 import org.eclipse.paho.client.mqttv3.*;
 
 public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     private MessageListener listener;
-    private final MQTTConnection mqttConnection;
+    protected final MQTTConnection mqttConnection;
 
     public MQTTSubscriber(String broker, String topic,
                           String username, String password){

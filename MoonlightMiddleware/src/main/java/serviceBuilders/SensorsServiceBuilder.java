@@ -1,10 +1,9 @@
 package serviceBuilders;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
 import services.SensorService;
 import services.Service;
-import subscriber.ConnType;
-import subscriber.MQTTSubscriber;
+import connection.ConnType;
+import connection.MQTTSubscriber;
 
 public class SensorsServiceBuilder implements ServiceBuilder{
     private Service service;

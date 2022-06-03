@@ -15,7 +15,7 @@ import eu.quanticol.moonlight.domain.DoubleDomain;
 import eu.quanticol.moonlight.formula.AtomicFormula;
 import eu.quanticol.moonlight.util.Utils;
 import messages.OfficeSensorMessage;
-import subscriber.ConnType;
+import connection.ConnType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,9 +39,9 @@ public class Main {
     }
 
     private void runServices() {
-        sensorsServiceBuilder.run();
-        moonlightServiceBuilder.run();
-        thingsboardServiceBuilder.run();
+        for(ServiceBuilder service: services){
+            service.run();
+        }
     }
 
     private void notifyServices(){
@@ -49,9 +49,6 @@ public class Main {
         for(ServiceBuilder service: services) {
             dataBus.notify(service.getService());
         }
-        dataBus.notify(sensorsServiceBuilder.getService());
-        dataBus.notify(moonlightServiceBuilder.getService());
-        dataBus.notify(thingsboardServiceBuilder.getService());
     }
 
 
@@ -69,19 +66,19 @@ public class Main {
      *      services: [
      *          {
      *            serviceType: "sensors",
-     *      *      connection: {
-     *      *          type: mqtt,
-     *      *          settings: {
-     *      *              broker: "..",
-     *      *              topic: "",
-     *      *          }
-     *      *      devices: [
-     *      *            {
-     *      *              "identifier": "Thingy1",
-     *      *              "accessKey" : "XXX"
-     *      *            }
-     *      *          ]
-     *      *      }  
+     *            connection: {
+     *                type: mqtt,
+     *                settings: {
+     *                    broker: "..",
+     *                    topic: "",
+     *                }
+     *            devices: [
+     *                  {
+     *                    "identifier": "Thingy1",
+     *                    "accessKey" : "XXX"
+     *                  }
+     *                ]
+     *            }
      *          }
      *      ]
      *      ,
@@ -107,8 +104,9 @@ public class Main {
         String topic = "institute/thingy/#";
         String username = "oihana";
         String password = "22oihana22";
+        Class receivingMessage = OfficeSensorMessage.class;
         sensorsServiceBuilder = new SensorsServiceBuilder
-                (ConnType.MQTT, broker, topic, username, password, OfficeSensorMessage.class);
+                (ConnType.MQTT, broker, topic, username, password, receivingMessage);
     }
 
     private void setThingsboardServiceBuilder() {

@@ -1,4 +1,4 @@
-package subscriber;
+package connection;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 

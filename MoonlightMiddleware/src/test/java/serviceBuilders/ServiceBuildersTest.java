@@ -13,7 +13,7 @@ import eu.quanticol.moonlight.util.Utils;
 import messages.OfficeSensorMessage;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import subscriber.ConnType;
+import connection.ConnType;
 
 import java.util.HashMap;
 import java.util.Map;

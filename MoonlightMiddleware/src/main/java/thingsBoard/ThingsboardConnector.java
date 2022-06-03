@@ -1,7 +1,7 @@
 package thingsBoard;
 
 import messages.Message;
-import subscriber.MQTTPublisher;
+import connection.MQTTPublisher;
 
 import java.util.Map;
 

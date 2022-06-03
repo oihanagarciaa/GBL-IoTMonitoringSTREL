@@ -3,10 +3,9 @@ package services;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.DataBus;
-import messages.CommonSensorsMessage;
 import messages.Message;
-import subscriber.MessageListener;
-import subscriber.Subscriber;
+import connection.MessageListener;
+import connection.Subscriber;
 
 import java.lang.reflect.Type;
 
