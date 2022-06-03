@@ -1,0 +1,24 @@
+{
+  "services": [
+    {
+      "serviceType": "sensors",
+      "connection": {
+        "type": "mqtt",
+        "settings": {
+          "broker": "..",
+          "topic": ""
+        }
+      },
+      "devices": [
+        {
+          "identifier": "Thingy1",
+          "accessKey": "XXX"
+        }
+      ]
+    },
+    {
+      "serviceType": "moonlight",
+      "formula": "String ... "
+    }
+  ]
+}

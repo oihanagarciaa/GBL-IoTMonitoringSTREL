@@ -13,7 +13,7 @@ import services.Service;
 import java.util.Map;
 import java.util.function.Function;
 
-public class MoonlightServiceBuilder implements ServiceBuilder{
+public class MoonlightServiceBuilder implements ServiceBuilder {
     //If I want to access a variable from a test make it protected
     private Service service;
     private final MonitorType monitorType;

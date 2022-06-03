@@ -3,9 +3,7 @@ package main;
 import eu.quanticol.moonlight.core.formula.Interval;
 import eu.quanticol.moonlight.formula.classic.AndFormula;
 import eu.quanticol.moonlight.formula.temporal.EventuallyFormula;
-import serviceBuilders.MoonlightServiceBuilder;
-import serviceBuilders.ResultsThingsboardServiceBuilder;
-import serviceBuilders.SensorsServiceBuilder;
+import serviceBuilders.*;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.base.Tuple;
@@ -20,6 +18,7 @@ import messages.OfficeSensorMessage;
 import subscriber.ConnType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -27,6 +26,8 @@ public class Main {
     private SensorsServiceBuilder sensorsServiceBuilder;
     private MoonlightServiceBuilder moonlightServiceBuilder;
     private ResultsThingsboardServiceBuilder thingsboardServiceBuilder;
+    
+    private List<ServiceBuilder> services;
 
     public Main(){
         //TODO: the client must pass all the information
@@ -45,9 +46,60 @@ public class Main {
 
     private void notifyServices(){
         DataBus dataBus = DataBus.getInstance();
+        for(ServiceBuilder service: services) {
+            dataBus.notify(service.getService());
+        }
         dataBus.notify(sensorsServiceBuilder.getService());
         dataBus.notify(moonlightServiceBuilder.getService());
         dataBus.notify(thingsboardServiceBuilder.getService());
+    }
+
+
+    /**
+     * TODO: load in the runner
+     * Settings file:
+     * Thingsboard interaction info:
+     * - topic
+     * - broker
+     */
+
+    /**
+     * // TODO: dynamic stuff, we need to interpret it
+     * {
+     *      services: [
+     *          {
+     *            serviceType: "sensors",
+     *      *      connection: {
+     *      *          type: mqtt,
+     *      *          settings: {
+     *      *              broker: "..",
+     *      *              topic: "",
+     *      *          }
+     *      *      devices: [
+     *      *            {
+     *      *              "identifier": "Thingy1",
+     *      *              "accessKey" : "XXX"
+     *      *            }
+     *      *          ]
+     *      *      }  
+     *          }
+     *      ]
+     *      ,
+     *      
+     *      
+     *     
+     * }
+     * - Broker for the sensors
+     * - Sensor's topic
+     * - Sensors username & password
+     * - A list of pairs: (readable Name, access token)
+     * 
+     * - Formula (later atoms)
+     * - later -> Set the distance and spatial model
+     */
+
+    private void setRunnerServiceBuilder() {
+        services.add(new RunnerServiceBuilder(services));
     }
 
     private void setSensorsServiceBuilderServiceBuilders(){
