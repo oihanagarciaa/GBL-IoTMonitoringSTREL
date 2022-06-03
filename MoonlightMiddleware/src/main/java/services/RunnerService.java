@@ -37,7 +37,7 @@ public class RunnerService implements Service, MessageListener {
             for(ServiceInfo serviceInfo: configMessage.getServiceInfo()) {
                 switch (serviceInfo.getServiceType()){
                     case "sensors":
-                        
+
                         break;
                     case "moonlight":
                         Formula formula = evaluateFormula(serviceInfo.getFormula());
