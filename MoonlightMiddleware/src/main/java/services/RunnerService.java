@@ -2,20 +2,31 @@ package services;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import connection.Subscriber;
 import eu.quanticol.moonlight.core.formula.Formula;
 import messages.Message;
 import messages.ConfigMessage;
+import serviceBuilders.ServiceBuilder;
 import services.serviceInfo.ServiceInfo;
 import connection.MessageListener;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class RunnerService implements Service, MessageListener {
+    private final Subscriber subscriber;
+    private final List<ServiceBuilder> serviceBuilders;
+
+    public RunnerService(Subscriber subscriber, List<ServiceBuilder> serviceBuilders){
+        this.subscriber = subscriber;
+        this.serviceBuilders = serviceBuilders;
+    }
+
     @Override
     public boolean isRunning() {
-        return false;
+        return subscriber!=null;
     }
 
     @Override
@@ -24,8 +35,17 @@ public class RunnerService implements Service, MessageListener {
         // here I receive from the DataBus
         if(message instanceof ConfigMessage configMessage){
             for(ServiceInfo serviceInfo: configMessage.getServiceInfo()) {
-                if(serviceInfo.getServiceType().equals("moonlight")) {
-                    Formula formula = evaluateFormula(serviceInfo.getFormula());
+                switch (serviceInfo.getServiceType()){
+                    case "sensors":
+                        
+                        break;
+                    case "moonlight":
+                        Formula formula = evaluateFormula(serviceInfo.getFormula());
+                        break;
+                    case "thingsboard":
+                        break;
+                    default:
+                        throw new UnsupportedOperationException("Service not recognized");
                 }
             }
         }
@@ -45,7 +65,7 @@ public class RunnerService implements Service, MessageListener {
 
     @Override
     public void init() {
-
+        this.subscriber.addListener(this);
     }
 
     @Override
