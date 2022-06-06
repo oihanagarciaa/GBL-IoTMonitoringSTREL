@@ -17,6 +17,7 @@ import eu.quanticol.moonlight.util.Utils;
 import messages.OfficeSensorMessage;
 import connection.ConnType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ public class Main {
     private List<ServiceBuilder> services;
 
     public Main(){
+        services = new ArrayList<>();
         //TODO: the client must pass all the information
         setSensorsServiceBuilderServiceBuilders();
         setMoonlightServiceBuilder();
@@ -99,6 +101,7 @@ public class Main {
         services.add(new RunnerServiceBuilder(services));
     }
 
+    //TODO: Change the declaration of the services
     private void setSensorsServiceBuilderServiceBuilders(){
         String broker = "tcp://stefanschupp.de:1883";
         String topic = "institute/thingy/#";
@@ -107,6 +110,7 @@ public class Main {
         Class receivingMessage = OfficeSensorMessage.class;
         sensorsServiceBuilder = new SensorsServiceBuilder
                 (ConnType.MQTT, broker, topic, username, password, receivingMessage);
+        services.add(sensorsServiceBuilder);
     }
 
     private void setThingsboardServiceBuilder() {
@@ -120,10 +124,11 @@ public class Main {
         deviceAccessTokens.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
         thingsboardServiceBuilder =
                 new ResultsThingsboardServiceBuilder(deviceAccessTokens);
+        services.add(thingsboardServiceBuilder);
     }
 
     private void setMoonlightServiceBuilder(){
-        int size = 4;
+        int size = 3;
         int bufferSize = 12;
         double distance = 7.0;
         SpatialModel<Double> spatialModel = buildSpatialModel(size);
@@ -133,6 +138,7 @@ public class Main {
                 distFunctions = setDistanceFunctions(distance, spatialModel);
         moonlightServiceBuilder = new MoonlightServiceBuilder(spatialModel,
                 formula, atoms, distFunctions, bufferSize);
+        services.add(moonlightServiceBuilder);
     }
 
     private static SpatialModel<Double> buildSpatialModel(int size){
