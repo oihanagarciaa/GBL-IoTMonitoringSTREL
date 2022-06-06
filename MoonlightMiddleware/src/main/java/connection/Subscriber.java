@@ -9,4 +9,6 @@ public interface Subscriber<M> {
     void receive(String topic, M message);
 
     void addListener(MessageListener messageListener);
+
+    void disconnect();
 }

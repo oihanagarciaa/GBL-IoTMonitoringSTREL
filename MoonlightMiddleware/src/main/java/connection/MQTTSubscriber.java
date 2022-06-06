@@ -41,6 +41,11 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
     }
 
     @Override
+    public void disconnect() {
+        mqttConnection.disconnect();
+    }
+
+    @Override
     public void receive(String topic, String message) {
         listener.messageArrived(topic, message);
     }

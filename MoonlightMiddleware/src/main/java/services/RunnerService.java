@@ -79,10 +79,11 @@ public class RunnerService implements Service, MessageListener {
         try{
             Message message = new Gson().fromJson(jsonMessage,
                     (Type) ConfigMessage.class);
-
         } catch (JsonSyntaxException e){
             throw new UnsupportedOperationException("Unknown message type");
         }
+        //TODO: should I send this to the DataBus??
+        // or is it better to create another method
     }
 
 }
