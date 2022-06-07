@@ -31,12 +31,12 @@ public class Main {
     private List<ServiceBuilder> services;
 
     public Main(){
-        main.LanguageKt.main();
+        //main.LanguageKt.main();
         services = new ArrayList<>();
         //TODO: the client must pass all the information
         //setSensorsServiceBuilderServiceBuilders();
         //setMoonlightServiceBuilder();
-        setThingsboardServiceBuilder();
+        //setThingsboardServiceBuilder();
         setRunnerServiceBuilder();
         runServices();
         notifyServices();
