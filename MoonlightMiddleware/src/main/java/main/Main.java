@@ -31,11 +31,13 @@ public class Main {
     private List<ServiceBuilder> services;
 
     public Main(){
+        main.LanguageKt.main();
         services = new ArrayList<>();
         //TODO: the client must pass all the information
-        setSensorsServiceBuilderServiceBuilders();
-        setMoonlightServiceBuilder();
+        //setSensorsServiceBuilderServiceBuilders();
+        //setMoonlightServiceBuilder();
         setThingsboardServiceBuilder();
+        setRunnerServiceBuilder();
         runServices();
         notifyServices();
     }
@@ -64,6 +66,7 @@ public class Main {
 
     /**
      * // TODO: dynamic stuff, we need to interpret it
+     * <pre>
      * {
      *      services: [
      *          {
@@ -83,11 +86,10 @@ public class Main {
      *            }
      *          }
      *      ]
-     *      ,
-     *      
-     *      
+     *      ,  
      *     
      * }
+     * </pre>
      * - Broker for the sensors
      * - Sensor's topic
      * - Sensors username & password

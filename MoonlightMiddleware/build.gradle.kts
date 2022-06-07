@@ -4,6 +4,7 @@ version = "1.0-SNAPSHOT"
 plugins {
     java
     jacoco
+    kotlin("jvm") version "1.6.21"
     id("org.sonarqube") version "3.3"
 }
 
@@ -15,6 +16,12 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
+
+tasks.withType<JavaCompile> {
+    // Needed by pattern matching on switches:
+    options.compilerArgs.add("--enable-preview")
+}
+
 
 sonarqube {
     properties {

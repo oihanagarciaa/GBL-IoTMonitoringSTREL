@@ -5,6 +5,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ServiceInfo {
+
+    /**
+     * ServiceID is a unique identifier for the service, that will be used to 
+     * update already running services
+     */
+    private String serviceId;
+    /**
+     * Command to execute, currently: start, stop.
+     */
+    private String command; 
     private String serviceType;
     private String formula;
     private ConnectionInfo connection;
@@ -28,6 +38,10 @@ public class ServiceInfo {
             devicesAccessToken.put(device.getIdentifier(), device.getAccessKey());
         }
         return devicesAccessToken;
+    }
+
+    public String getCommand() {
+        return command;
     }
 }
 
