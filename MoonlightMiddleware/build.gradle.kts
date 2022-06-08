@@ -31,6 +31,16 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 
+// Sonarqube settings
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "oihanagarciaa_GBL-IoTMonitoringSTREL")
+        property("sonar.organization", "oihanagarciaa")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
+
 // Dependencies & repositories from which they are fetched
 
 repositories {
@@ -51,7 +61,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.8.5")
     implementation(kotlin("script-runtime"))
-
 }
 
 // JUnit & JaCoCo settings
@@ -65,15 +74,5 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
         xml.required.set(true)
-    }
-}
-
-// Sonarqube settings
-
-sonarqube {
-    properties {
-        property("sonar.projectKey", "oihanagarciaa_GBL-IoTMonitoringSTREL")
-        property("sonar.organization", "oihanagarciaa")
-        property("sonar.host.url", "https://sonarcloud.io")
     }
 }
