@@ -1,5 +1,10 @@
+// Project constants
+
 group = "at.ac.tuwien.trustcps"
 version = "1.0-SNAPSHOT"
+val javaVersion = JavaVersion.VERSION_17
+
+// Gradle plugins required to run the software
 
 plugins {
     java
@@ -8,27 +13,28 @@ plugins {
     id("org.sonarqube") version "3.3"
 }
 
-repositories {
-    mavenCentral()
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
+// Java & Kotlin JVM version settings
 
 tasks.withType<JavaCompile> {
     // Needed by pattern matching on switches:
     options.compilerArgs.add("--enable-preview")
 }
 
+java {
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+}
 
-sonarqube {
-    properties {
-        property("sonar.projectKey", "oihanagarciaa_GBL-IoTMonitoringSTREL")
-        property("sonar.organization", "oihanagarciaa")
-        property("sonar.host.url", "https://sonarcloud.io")
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = javaVersion.toString()
     }
+}
+
+// Dependencies & repositories from which they are fetched
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -44,8 +50,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.8.5")
+    implementation(kotlin("script-runtime"))
 
 }
+
+// JUnit & JaCoCo settings
 
 tasks.test {
     useJUnitPlatform()
@@ -56,5 +65,15 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
     reports {
         xml.required.set(true)
+    }
+}
+
+// Sonarqube settings
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "oihanagarciaa_GBL-IoTMonitoringSTREL")
+        property("sonar.organization", "oihanagarciaa")
+        property("sonar.host.url", "https://sonarcloud.io")
     }
 }

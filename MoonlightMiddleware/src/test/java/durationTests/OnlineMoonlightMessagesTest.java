@@ -107,16 +107,16 @@ public class OnlineMoonlightMessagesTest {
     setDistanceFunctions(SpatialModel<Double> city) {
         HashMap<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions = new HashMap<>();
         distanceFunctions.put("distance",
-                m -> new DefaultDistanceStructure<Double, Double>(x -> x,
+                m -> new DefaultDistanceStructure<>(x -> x,
                         new DoubleDomain(), 60.0, Double.MAX_VALUE, city));
         return distanceFunctions;
     }
 
 
-    public class ServiceTest implements Service {
-        ResultsMessage resultsMessage;
+    public static class ServiceTest implements Service {
+        ResultsMessage<?> resultsMessage;
 
-        public ResultsMessage getResultsMessage() {
+        public ResultsMessage<?> getResultsMessage() {
             return resultsMessage;
         }
 
@@ -128,7 +128,7 @@ public class OnlineMoonlightMessagesTest {
         @Override
         public void receive(Message message) {
             if (message instanceof ResultsMessage){
-                resultsMessage = (ResultsMessage) message;
+                resultsMessage = (ResultsMessage<?>) message;
             }
         }
 
