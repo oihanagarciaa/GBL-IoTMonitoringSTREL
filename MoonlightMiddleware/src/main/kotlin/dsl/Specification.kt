@@ -10,24 +10,26 @@ import eu.quanticol.moonlight.domain.DoubleDomain
 import java.util.function.Function
 
 object Specification {
-    const val defaultDistanceFunction = "infinite"
     
-    val spatialModel: SpatialModel<Double> = TODO()
+    val spatialModel: SpatialModel<Double> = TODO("Yet to be developed")
     
-    val atoms: MutableMap<String, Function<Tuple, Box<Boolean>>> =
-        mutableMapOf()
+    val atoms = mutableMapOf<String, Function<Tuple, Box<Boolean>>>()
     
-    val distanceFunctions: MutableMap<String, Function<SpatialModel<Double>, 
-            DistanceStructure<Double, Double>>> = mutableMapOf(
-        defaultDistanceFunction to Function { infiniteDistance(it) })
+    var formula: Formula = throw Error("The formula has not been setup by the user")
     
-    private fun infiniteDistance(model: SpatialModel<Double>): 
-            DistanceStructure<Double, Double> {
-        return DefaultDistanceStructure(
+    val distanceFunctions = mutableMapOf<String, 
+            Function<SpatialModel<Double>, DistanceStructure<Double, Double>>>(
+        defaultDistanceFunction to Function { infiniteDistance(it) }
+    )
+    
+    internal const val defaultDistanceFunction = "infinite"
+    
+    private fun infiniteDistance(model: SpatialModel<Double>) = 
+        DefaultDistanceStructure(
             { x: Double -> x },
-            DoubleDomain(), 0.0, Double.MAX_VALUE, model
+            DoubleDomain(), 
+            0.0, Double.MAX_VALUE, 
+            model
         )
-    }
     
-    var formula: Formula? = null
 }

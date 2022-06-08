@@ -17,6 +17,7 @@ import messages.Message;
 import messages.OfficeSensorMessage;
 import messages.ResultsMessage;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import services.OnlineMoonlightService;
@@ -41,6 +42,7 @@ public class ThingsboardMiddlewareTest {
         sensorAccessToken.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
     }
 
+    @Disabled("Network should be mocked.")
     @Test
     void thingsboardConvertion(){
         ThingsboardMoonlightConnector thingsboardMiddleware = Mockito.spy(
