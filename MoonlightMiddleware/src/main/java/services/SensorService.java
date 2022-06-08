@@ -35,7 +35,9 @@ public class SensorService implements Service, MessageListener {
 
     @Override
     public void stop() {
-
+        this.subscriber.disconnect();
+        this.subscriber = null;
+        DataBus.getInstance().unsubscribe(this);
     }
 
     @Override

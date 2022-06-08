@@ -5,7 +5,6 @@ import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.signal.Sample;
 import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
 import eu.quanticol.moonlight.core.space.DistanceStructure;
@@ -29,7 +28,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
 
 public class ThingsboardMiddlewareTest {
     Map<String, String> sensorAccessToken;
@@ -60,7 +58,7 @@ public class ThingsboardMiddlewareTest {
     public SpaceTimeSignal setOnlineMoonlight(){
         ServiceTest serviceTest = new ServiceTest();
         DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(serviceTest);
+        dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
         for(int i = 0; i < 6; i++){

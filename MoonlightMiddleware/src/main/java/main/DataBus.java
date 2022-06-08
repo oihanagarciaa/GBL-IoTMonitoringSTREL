@@ -30,8 +30,12 @@ public class DataBus {
         instance.services.forEach(s -> s.receive(m));
     }
 
-    public void notify(Service s) {
+    public void subscribe(Service s) {
         instance.services.add(s);
+    }
+
+    public void unsubscribe(Service s) {
+        instance.services.remove(s);
     }
 
 }

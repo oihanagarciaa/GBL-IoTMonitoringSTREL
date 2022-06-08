@@ -64,7 +64,7 @@ public class OnlineMoonlightService implements Service{
         buffer.flush();
         ResultsMessage resultsMessage = new ResultsMessage(results);
         //TODO: delete print
-        System.out.println(resultsMessage.toString());
+        //System.out.println(resultsMessage.toString());
         dataBus.offer(resultsMessage);
     }
 
@@ -79,5 +79,6 @@ public class OnlineMoonlightService implements Service{
     @Override
     public void stop() {
         onlineMonitor = null;
+        DataBus.getInstance().unsubscribe(this);
     }
 }

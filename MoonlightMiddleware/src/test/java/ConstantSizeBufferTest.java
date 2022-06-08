@@ -45,7 +45,6 @@ public class ConstantSizeBufferTest {
                 }
             }
         }
-        System.out.println(buffer.get().toString());
     }
 
     @Test

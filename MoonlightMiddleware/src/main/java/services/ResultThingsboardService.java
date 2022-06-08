@@ -1,6 +1,7 @@
 package services;
 
 import eu.quanticol.moonlight.core.signal.Sample;
+import main.DataBus;
 import messages.CommonSensorsMessage;
 import messages.Message;
 import messages.ResultsMessage;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultThingsboardService implements Service{
-    private final Map<String, String> deviceAccessTokens;
+    private Map<String, String> deviceAccessTokens;
     private double lastTime;
 
     public ResultThingsboardService(Map<String, String> deviceAccessToken){
@@ -48,7 +49,8 @@ public class ResultThingsboardService implements Service{
 
     @Override
     public void stop() {
-
+        deviceAccessTokens = null;
+        DataBus.getInstance().unsubscribe(this);
     }
 
     public double getLastResultsMessageTimeValue(ResultsMessage resultsMessage){

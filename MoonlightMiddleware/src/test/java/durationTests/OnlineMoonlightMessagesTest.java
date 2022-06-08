@@ -34,7 +34,7 @@ public class OnlineMoonlightMessagesTest {
     void basicSendMessages(){
         ServiceTest serviceTest = new ServiceTest();
         DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(serviceTest);
+        dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
         long startingMillis = System.currentTimeMillis();
@@ -48,7 +48,6 @@ public class OnlineMoonlightMessagesTest {
         }
         long finishingMilis = System.currentTimeMillis();
         double duration = ((finishingMilis-startingMillis)/1000.0);
-        System.out.println("Duration: "+duration);
         assertNotNull(serviceTest.getResultsMessage());
     }
 

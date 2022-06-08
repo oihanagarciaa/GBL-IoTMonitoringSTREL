@@ -40,7 +40,7 @@ public class OnlineMoonlightServiceTest {
     void basicSendMessages(){
         ServiceTest serviceTest = new ServiceTest();
         DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(serviceTest);
+        dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
         for(int i = 0; i < 6; i++){
@@ -59,7 +59,7 @@ public class OnlineMoonlightServiceTest {
     void sendingMessages(){
         ServiceTest serviceTest = new ServiceTest();
         DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(serviceTest);
+        dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
         for(int i = 0; i < 6; i++){
@@ -82,7 +82,7 @@ public class OnlineMoonlightServiceTest {
     void sendingMessages2(){
         ServiceTest serviceTest = new ServiceTest();
         DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(serviceTest);
+        dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
 

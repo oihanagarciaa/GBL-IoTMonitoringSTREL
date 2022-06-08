@@ -4,26 +4,36 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import connection.ConnType;
 import connection.Subscriber;
+import eu.quanticol.moonlight.core.base.Box;
+import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.formula.Formula;
+import eu.quanticol.moonlight.core.space.DistanceStructure;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import main.DataBus;
+import main.Settings;
 import messages.Message;
 import messages.ConfigMessage;
-import messages.OfficeSensorMessage;
+import serviceBuilders.MoonlightServiceBuilder;
+import serviceBuilders.ResultsThingsboardServiceBuilder;
 import serviceBuilders.SensorsServiceBuilder;
 import serviceBuilders.ServiceBuilder;
+import services.serviceInfo.ConnectionInfo;
+import services.serviceInfo.ConnectionSettings;
 import services.serviceInfo.ServiceInfo;
 import connection.MessageListener;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.lang.reflect.Type;
-import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 public class RunnerService implements Service, MessageListener {
     private final Subscriber<?> subscriber;
-    private final List<ServiceBuilder> serviceBuilders;
+    private final Map<String, ServiceBuilder> serviceBuilders;
 
     public RunnerService(Subscriber<?> subscriber,
-                         List<ServiceBuilder> serviceBuilders){
+                         Map<String, ServiceBuilder> serviceBuilders){
         this.subscriber = subscriber;
         this.serviceBuilders = serviceBuilders;
     }
@@ -34,10 +44,10 @@ public class RunnerService implements Service, MessageListener {
     }
     
     private void processMessage(Message message) {
-        switch(message) {
-            case ConfigMessage config -> setupNewCommand(config);
-            default -> throw new UnsupportedOperationException("Unsupported " +
-                    "message");
+        if (message instanceof ConfigMessage config) {
+            setupNewCommand(config);
+        } else {
+            throw new UnsupportedOperationException("Unsupported message");
         }
     }
 
@@ -57,45 +67,58 @@ public class RunnerService implements Service, MessageListener {
     }
 
     private void stopService(ServiceInfo serviceInfo) {
+        String serviceId = serviceInfo.getServiceId();
+        ServiceBuilder serviceBuilder = serviceBuilders.get(serviceId);
+        serviceBuilder.getService().stop();
+        serviceBuilders.remove(serviceId);
     }
 
     private void generateService(ServiceInfo serviceInfo) {
-        switch (serviceInfo.getServiceType()){
-            case "sensors":
-                generateSensorsService(serviceInfo);
-                break;
-            case "moonlight":
-                generateMoonlightService();
-                Formula formula = evaluateFormula(serviceInfo.getFormula());
-                break;
-            case "thingsboard":
-                break;
-            default:
-                throw new UnsupportedOperationException("Service not recognized");
-        }
+        ServiceBuilder serviceBuilder = switch (serviceInfo.getServiceType()) {
+            case "sensors" -> generateSensorsService(serviceInfo);
+            case "moonlight" -> generateMoonlightService(serviceInfo);
+            case "thingsboard" -> generateThingsboardService(serviceInfo);
+            default -> throw new UnsupportedOperationException("Service not recognized");
+        };
+        startBuilder(serviceInfo.getServiceId(), serviceBuilder);
     }
 
-    private void generateMoonlightService() {
-        
+    private void startBuilder(String serviceID, ServiceBuilder serviceBuilder){
+        serviceBuilders.put(serviceID, serviceBuilder);
+        serviceBuilder.run();
+        DataBus dataBus = DataBus.getInstance();
+        dataBus.subscribe(serviceBuilder.getService());
     }
 
-    @Override
-    public void receive(Message message) {
-        processMessage(message);
+    private ServiceBuilder generateThingsboardService(ServiceInfo info) {
+        ResultsThingsboardServiceBuilder thingsboardServiceBuilder;
+        Map<String ,String> deviceAccessTokens = info.getDevices();
+        thingsboardServiceBuilder = new ResultsThingsboardServiceBuilder(deviceAccessTokens);
+        return thingsboardServiceBuilder;
+    }
+
+    private MoonlightServiceBuilder generateMoonlightService(ServiceInfo info) {
+        MoonlightServiceBuilder moonlightServiceBuilder;
+        //TODO: add Spatial Model, atoms and distance
+        SpatialModel<Double> spatialModel = null;
+        Map<String, Function<Tuple, Box<Boolean>>> atoms = null;
+        Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
+                distFunctions = null;
+        Formula formula = evaluateFormula(info.getFormula());
+        moonlightServiceBuilder = new MoonlightServiceBuilder(spatialModel, formula,
+                atoms, distFunctions, Settings.getBufferSize());
+        return moonlightServiceBuilder;
     }
     
     private SensorsServiceBuilder generateSensorsService(ServiceInfo info) {
-        String broker = "tcp://stefanschupp.de:1883";
-        String topic = "institute/thingy/#";
-        String username = "oihana";
-        String password = "22oihana22";
-        Class receivingMessage = OfficeSensorMessage.class;
-//        sensorsServiceBuilder = new SensorsServiceBuilder
-//                (ConnType.MQTT, info.broker, topic, username, password,
-//                        receivingMessage);
-//        services.add(sensorsServiceBuilder);
-//        sensorsServiceBuilder.run();
-        return null;
+        SensorsServiceBuilder sensorsServiceBuilder;
+        ConnectionInfo connInfo = info.getConnection();
+        ConnectionSettings connSett = connInfo.getSettings();
+        sensorsServiceBuilder = new SensorsServiceBuilder(
+                ConnType.valueOf(connInfo.getType()), connSett.getBroker(),
+                connSett.getTopic(), connSett.getUsername(), connSett.getPassword(),
+                Settings.getReceivingMessage());
+        return sensorsServiceBuilder;
     }
     
     private Formula evaluateFormula(String formulaToEvaluate) {
@@ -111,13 +134,17 @@ public class RunnerService implements Service, MessageListener {
     }
 
     @Override
+    public void receive(Message message) {
+        processMessage(message);
+    }
+
+    @Override
     public void init() {
         this.subscriber.addListener(this);
     }
 
     @Override
     public void stop() {
-
     }
 
     @Override
@@ -130,8 +157,5 @@ public class RunnerService implements Service, MessageListener {
         } catch (JsonSyntaxException e){
             throw new UnsupportedOperationException("Unknown message type");
         }
-        //TODO: should I send this to the DataBus??
-        // or is it better to create another method
     }
-
 }

@@ -6,20 +6,21 @@ import main.Settings;
 import services.RunnerService;
 import services.Service;
 
-import java.util.List;
+import java.util.Map;
 
 public class RunnerServiceBuilder implements ServiceBuilder {
     private Service service;
-    private final List<ServiceBuilder> serviceBuilders;
+    private final Map<String, ServiceBuilder> serviceBuilders;
 
-    public RunnerServiceBuilder(List<ServiceBuilder> services) {
+    public RunnerServiceBuilder(Map<String, ServiceBuilder> services) {
         this.serviceBuilders = services;
     }
 
     @Override
     public void initializeService() {
-        Subscriber subscriber = new MQTTSubscriber(Settings.getThingsboardBroker(),
-                Settings.getThingsboardTopic(), "", "");
+        Subscriber subscriber = new MQTTSubscriber(Settings.getSettingsBroker(),
+                Settings.getSettingsTopic(), Settings.getSettingsUsername(),
+                Settings.getSettingsPassword());
         service = new RunnerService(subscriber, serviceBuilders);
         service.init();
     }

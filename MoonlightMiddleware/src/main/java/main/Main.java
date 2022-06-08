@@ -1,58 +1,17 @@
 package main;
 
-import eu.quanticol.moonlight.core.formula.Interval;
-import eu.quanticol.moonlight.formula.classic.AndFormula;
-import eu.quanticol.moonlight.formula.temporal.EventuallyFormula;
 import serviceBuilders.*;
-import eu.quanticol.moonlight.core.base.Box;
-import eu.quanticol.moonlight.core.base.Pair;
-import eu.quanticol.moonlight.core.base.Tuple;
-import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.space.DefaultDistanceStructure;
-import eu.quanticol.moonlight.core.space.DistanceStructure;
-import eu.quanticol.moonlight.core.space.SpatialModel;
-import eu.quanticol.moonlight.domain.DoubleDomain;
-import eu.quanticol.moonlight.formula.AtomicFormula;
-import eu.quanticol.moonlight.util.Utils;
-import messages.OfficeSensorMessage;
-import connection.ConnType;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 public class Main {
-    private SensorsServiceBuilder sensorsServiceBuilder;
-    private MoonlightServiceBuilder moonlightServiceBuilder;
-    private ResultsThingsboardServiceBuilder thingsboardServiceBuilder;
-    
-    private List<ServiceBuilder> services;
+    private Map<String, ServiceBuilder> services;
+    private RunnerServiceBuilder runnerServiceBuilder;
 
     public Main(){
         //main.LanguageKt.main();
-        services = new ArrayList<>();
-        //TODO: the client must pass all the information
-        //setSensorsServiceBuilderServiceBuilders();
-        //setMoonlightServiceBuilder();
-        //setThingsboardServiceBuilder();
+        services = new HashMap<>();
         setRunnerServiceBuilder();
-        runServices();
-        notifyServices();
-    }
-
-    private void runServices() {
-        for(ServiceBuilder service: services){
-            service.run();
-        }
-    }
-
-    private void notifyServices(){
-        DataBus dataBus = DataBus.getInstance();
-        for(ServiceBuilder service: services) {
-            dataBus.notify(service.getService());
-        }
     }
 
 
@@ -100,50 +59,11 @@ public class Main {
      */
 
     private void setRunnerServiceBuilder() {
-        services.add(new RunnerServiceBuilder(services));
+        runnerServiceBuilder = new RunnerServiceBuilder(services);
+        runnerServiceBuilder.run();
     }
 
-    //TODO: Change the declaration of the services
-    private void setSensorsServiceBuilderServiceBuilders(){
-        String broker = "tcp://stefanschupp.de:1883";
-        String topic = "institute/thingy/#";
-        String username = "oihana";
-        String password = "22oihana22";
-        Class receivingMessage = OfficeSensorMessage.class;
-        sensorsServiceBuilder = new SensorsServiceBuilder
-                (ConnType.MQTT, broker, topic, username, password, receivingMessage);
-        services.add(sensorsServiceBuilder);
-    }
-
-    private void setThingsboardServiceBuilder() {
-        Map<String, String> deviceAccessTokens = new HashMap<>();
-        deviceAccessTokens.put("1", "v8iK9AKNXuRZNhIrzROu");
-        deviceAccessTokens.put("2", "q1qbXmY3KR51xhD24iHP");
-        deviceAccessTokens.put("3", "eqV89m6l1buoWhjY9hOV");
-        deviceAccessTokens.put("4", "MwzTm5OkYmsNfcIQqLmB");
-        deviceAccessTokens.put("5", "0OOXKKKFQF6BkHAQ1DqR");
-        deviceAccessTokens.put("6", "CTDHfcr3KncVvsVZyYb3");
-        deviceAccessTokens.put("Monitor", "EN2RFpa41RFQgVZrDNdy");
-        thingsboardServiceBuilder =
-                new ResultsThingsboardServiceBuilder(deviceAccessTokens);
-        services.add(thingsboardServiceBuilder);
-    }
-
-    private void setMoonlightServiceBuilder(){
-        int size = 3;
-        int bufferSize = 12;
-        double distance = 7.0;
-        SpatialModel<Double> spatialModel = buildSpatialModel(size);
-        Formula formula = formula();
-        Map<String, Function<Tuple, Box<Boolean>>> atoms = getOnlineAtoms();
-        Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
-                distFunctions = setDistanceFunctions(distance, spatialModel);
-        moonlightServiceBuilder = new MoonlightServiceBuilder(spatialModel,
-                formula, atoms, distFunctions, bufferSize);
-        services.add(moonlightServiceBuilder);
-    }
-
-    private static SpatialModel<Double> buildSpatialModel(int size){
+    /*private static SpatialModel<Double> buildSpatialModel(int size){
         HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         cityMap.put(new Pair<>(0, 2), 4.0);
         cityMap.put(new Pair<>(2, 0), 4.0);
@@ -180,7 +100,7 @@ public class Main {
                 m -> new DefaultDistanceStructure<>(x -> x,
                         new DoubleDomain(), distance, Double.MAX_VALUE, city));
         return distanceFunctions;
-    }
+    }*/
 
     public static void main(String[] args) {
         new Main();

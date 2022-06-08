@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ServiceInfo {
-
     /**
      * ServiceID is a unique identifier for the service, that will be used to 
      * update already running services
@@ -38,6 +37,10 @@ public class ServiceInfo {
             devicesAccessToken.put(device.getIdentifier(), device.getAccessKey());
         }
         return devicesAccessToken;
+    }
+
+    public String getServiceId() {
+        return serviceId;
     }
 
     public String getCommand() {

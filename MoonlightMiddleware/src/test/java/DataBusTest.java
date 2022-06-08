@@ -26,7 +26,7 @@ class DataBusTest {
         MessageTest message = mock(MessageTest.class);
         when(message.getValue()).thenReturn("test");
 
-        bus.notify(s1);
+        bus.subscribe(s1);
         bus.offer((Message) message);
 
         assertEquals(1, s1.messages.size());

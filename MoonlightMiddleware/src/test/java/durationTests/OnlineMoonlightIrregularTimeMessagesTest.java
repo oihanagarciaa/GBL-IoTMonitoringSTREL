@@ -32,7 +32,7 @@ public class OnlineMoonlightIrregularTimeMessagesTest {
     void irregularTimeSendMessages(){
         OnlineMoonlightIrregularTimeMessagesTest.ServiceTest serviceTest = new OnlineMoonlightIrregularTimeMessagesTest.ServiceTest();
         DataBus dataBus = DataBus.getInstance();
-        dataBus.notify(serviceTest);
+        dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
         long startingMillis = System.currentTimeMillis();
@@ -48,7 +48,6 @@ public class OnlineMoonlightIrregularTimeMessagesTest {
         }
         long finishingMilis = System.currentTimeMillis();
         double duration = ((finishingMilis-startingMillis)/1000.0);
-        System.out.println("Duration: "+duration);
         assertNotNull(serviceTest.getResultsMessage());
     }
 
