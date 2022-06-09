@@ -15,6 +15,7 @@ public class MQTTConnection {
         } catch (MqttPersistenceException e) {
         } catch (MqttSecurityException e) {
         } catch (MqttException e) {
+            e.printStackTrace();
         }
     }
 

@@ -9,7 +9,6 @@ public class Main {
     private RunnerServiceBuilder runnerServiceBuilder;
 
     public Main(){
-        //main.LanguageKt.main();
         services = new HashMap<>();
         setRunnerServiceBuilder();
     }
