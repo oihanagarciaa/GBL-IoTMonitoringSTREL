@@ -9,6 +9,10 @@ import eu.quanticol.moonlight.core.space.SpatialModel
 import eu.quanticol.moonlight.domain.DoubleDomain
 import java.util.function.Function
 
+/**
+ * TODO: it currently supports a single specification. An identifier should 
+ * be used otherwise in the input file that says "which" spec to use.
+ */
 object Specification {
     
     val spatialModel: SpatialModel<Double> = TODO("Yet to be developed")

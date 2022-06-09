@@ -1,8 +1,13 @@
-package dsl
+package dsl // DSL: Domain-specific languages
 
 import dsl.Specification.defaultDistanceFunction
+import dsl.Specification.distanceFunctions
 import eu.quanticol.moonlight.core.formula.Formula
 import eu.quanticol.moonlight.core.formula.Interval
+import eu.quanticol.moonlight.core.space.DefaultDistanceStructure
+import eu.quanticol.moonlight.core.space.DistanceStructure
+import eu.quanticol.moonlight.core.space.SpatialModel
+import eu.quanticol.moonlight.domain.DoubleDomain
 import eu.quanticol.moonlight.formula.classic.AndFormula
 import eu.quanticol.moonlight.formula.classic.NegationFormula
 import eu.quanticol.moonlight.formula.classic.OrFormula
@@ -13,48 +18,46 @@ import eu.quanticol.moonlight.formula.temporal.EventuallyFormula
 import eu.quanticol.moonlight.formula.temporal.GloballyFormula
 import eu.quanticol.moonlight.formula.temporal.UntilFormula
 
+// Interval shorthand
 typealias interval = eu.quanticol.moonlight.core.formula.Interval
 
-// DSL: Domain-specific languages
-fun impliesFormula(left: Formula, right: Formula) =
-    OrFormula(NegationFormula(left), right)
-
-infix fun Formula.implies(right: Formula) =
-    OrFormula(NegationFormula(this), right)
+// Classical logic operators
+infix fun Formula.implies(right: Formula) = OrFormula(NegationFormula(this), right)
 infix fun Formula.or(right: Formula): Formula = OrFormula(this, right)
 infix fun Formula.and(right: Formula): Formula = AndFormula(this, right)
 fun not(argument: Formula): Formula = NegationFormula(argument)
-fun eventually(argument: Formula): EventuallyFormula =
-    EventuallyFormula(argument)
 
-infix fun EventuallyFormula.within(interval: Interval): Formula =
-    EventuallyFormula(this.argument, interval)
+// Temporal operators
+fun eventually(argument: Formula): EventuallyFormula = EventuallyFormula(argument)
+fun globally(argument: Formula): GloballyFormula = GloballyFormula(argument)
+infix fun Formula.until(right: Formula): UntilFormula = UntilFormula(this, right)
 
-fun GloballyFormula.within(interval: Interval): Formula =
-    GloballyFormula(this.argument, interval)
+// Temporal operators intervals
+infix fun EventuallyFormula.within(interval: Interval) = EventuallyFormula(this.argument, interval)
+infix fun GloballyFormula.within(interval: Interval) = GloballyFormula(this.argument, interval)
+infix fun UntilFormula.within(interval: Interval) = UntilFormula(this.firstArgument, this.secondArgument, interval)
 
-fun globally(argument: Formula, interval: Interval? = null): GloballyFormula =
-    GloballyFormula(argument, interval)
+// Spatial operators
+fun everywhere(argument: Formula): EverywhereFormula = EverywhereFormula(defaultDistanceFunction, argument)
+fun somewhere(argument: Formula): SomewhereFormula = SomewhereFormula(defaultDistanceFunction, argument)
+infix fun Formula.reach(right: Formula): ReachFormula = ReachFormula(this, defaultDistanceFunction, right)
 
-fun everywhere(argument: Formula): EverywhereFormula =
-    EverywhereFormula(defaultDistanceFunction, argument)
+// Spatial operators distances
+infix fun SomewhereFormula.within(distanceInterval: Interval) =
+    SomewhereFormula(addDistanceFunction(distanceInterval), this.argument)
+infix fun EverywhereFormula.within(distanceInterval: Interval) =
+    SomewhereFormula(addDistanceFunction(distanceInterval), this.argument)
+infix fun ReachFormula.within(distanceInterval: Interval) = 
+    ReachFormula(this.firstArgument, addDistanceFunction(distanceInterval), this.secondArgument)
 
-fun somewhere(argument: Formula): Formula =
-    SomewhereFormula(defaultDistanceFunction, argument)
-
-infix fun Formula.reach(right: Formula): ReachFormula =
-    ReachFormula(this, defaultDistanceFunction, right)
-
-infix fun ReachFormula.within(distance: String): ReachFormula =
-    ReachFormula(this.firstArgument, distance, this.secondArgument)
-
-infix fun Formula.reach2(right: Formula): (String) -> Formula {
-    return { distance -> ReachFormula(this, distance, right) }
+private fun addDistanceFunction(interval: interval): String {
+    val id = interval.toString()
+    distanceFunctions.put(id) { intervalToDistance(interval, it) }
+    return id
 }
 
-infix fun ((String) -> Formula).distance(distanceId: String): Formula {
-    return this(distanceId)
+private fun intervalToDistance(interval: Interval, model: SpatialModel<Double>):
+        DistanceStructure<Double, Double> { 
+    return DefaultDistanceStructure({ x: Double -> x }, 
+        DoubleDomain(), interval.start, interval.end, model)
 }
-
-infix fun Formula.until(right: Formula): Formula =
-    UntilFormula(this, right)
