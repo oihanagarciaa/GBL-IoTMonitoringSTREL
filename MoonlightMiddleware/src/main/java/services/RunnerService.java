@@ -5,11 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import connection.ConnType;
 import connection.Subscriber;
 import dsl.Specification;
-import eu.quanticol.moonlight.core.base.Box;
-import eu.quanticol.moonlight.core.base.Tuple;
-import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.space.DistanceStructure;
-import eu.quanticol.moonlight.core.space.SpatialModel;
 import main.DataBus;
 import main.Settings;
 import messages.Message;
@@ -27,7 +22,6 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.function.Function;
 
 public class RunnerService implements Service, MessageListener {
     private final Subscriber<?> subscriber;
@@ -100,12 +94,7 @@ public class RunnerService implements Service, MessageListener {
 
     private MoonlightServiceBuilder generateMoonlightService(ServiceInfo info) {
         MoonlightServiceBuilder moonlightServiceBuilder;
-        //TODO: add Spatial Model, atoms and distance
-        SpatialModel<Double> spatialModel = null;
-        Map<String, Function<Tuple, Box<Boolean>>> atoms = null;
-        Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
-                distFunctions = null;
-        Formula formula = evaluateFormula(info.getFormula());
+        evaluateFormula(info.getFormula());
         moonlightServiceBuilder =
                 new MoonlightServiceBuilder(Specification.spatialModel,
                         Specification.formula,
@@ -124,23 +113,15 @@ public class RunnerService implements Service, MessageListener {
                 Settings.getReceivingMessage());
         return sensorsServiceBuilder;
     }
-    
-    private Formula evaluateFormula(String scriptToEvaluate) {
+
+    private void evaluateFormula(String scriptToEvaluate) throws UnsupportedOperationException{
         var engine = new ScriptEngineManager().getEngineByExtension("kts");
         try {
-            //TODO: How do I define the atoms?
-            //engine.put("temp", "\"temperature\" greaterThan 10");
-            //engine.put("humidity", "\"humidity\" lessThan 10");
             engine.eval(scriptToEvaluate);
-            //TODO: I don't have to add the formula to the SpecificationKt?
             System.out.println("Parsed formula: " + Specification.formula);
-            //return result;
-            return null;
         } catch (ScriptException e) {
-            e.printStackTrace();
-            //throw new UnsupportedOperationException("Unable to understand the" +
-            //        " formula");
-            return null;
+            throw new UnsupportedOperationException("Unable to understand the" +
+                    " formula");
         }
     }
 
@@ -166,7 +147,10 @@ public class RunnerService implements Service, MessageListener {
                     (Type) ConfigMessage.class);
             receive(message);
         } catch (JsonSyntaxException e){
-            throw new UnsupportedOperationException("Unknown message type");
+            throw new UnsupportedOperationException("Json Syntax incorrect");
+        } catch (Exception e){
+
+            //TODO: It would be interesting to send the error message to the client
         }
     }
 }

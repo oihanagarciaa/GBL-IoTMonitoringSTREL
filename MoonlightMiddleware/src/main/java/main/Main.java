@@ -1,5 +1,8 @@
 package main;
 
+import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import eu.quanticol.moonlight.util.Utils;
 import serviceBuilders.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,7 +65,7 @@ public class Main {
         runnerServiceBuilder.run();
     }
 
-    /*private static SpatialModel<Double> buildSpatialModel(int size){
+    public static SpatialModel<Double> buildSpatialModel(int size){
         HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         cityMap.put(new Pair<>(0, 2), 4.0);
         cityMap.put(new Pair<>(2, 0), 4.0);
@@ -70,7 +73,7 @@ public class Main {
         return Utils.createSpatialModel(size, cityMap);
     }
 
-    private static Formula formula() {
+   /* private static Formula formula() {
         Formula highTemperature = new AtomicFormula("highTemperature");
         Formula co2Formula = new EventuallyFormula( new AtomicFormula("highCO2"), new Interval(0, 1500)); //15 sec
         Formula finalFormula = new AndFormula(highTemperature, co2Formula);

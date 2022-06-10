@@ -48,10 +48,4 @@ public class ThingsboardMoonlightConnector extends ThingsboardConnector {
         String jsonMessage = "{ 'result' = "+(resultBoolean? 1:0 )+"}";
         return jsonMessage;
     }
-
-    /*@Override
-    public String getUsername() {
-        String username = deviceAccessToken.get(String.valueOf(device));
-        return username;
-    }*/
 }

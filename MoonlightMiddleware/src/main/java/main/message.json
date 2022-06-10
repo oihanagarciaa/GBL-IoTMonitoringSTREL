@@ -1,6 +1,8 @@
 {
   "services": [
     {
+      "serviceId": "sensorService",
+      "command": "start",
       "serviceType": "sensors",
       "connection": {
         "type": "mqtt",
@@ -14,9 +16,13 @@
     },
     {
       "serviceType": "moonlight",
+      "serviceId": "moonlightService",
+      "command": "stop",
       "formula": "String ... "
     },
     {
+      "serviceId": "thingsboardService",
+      "command": "start",
       "serviceType": "thingsboard",
       "connection": {
         "type": "mqtt",

@@ -3,7 +3,6 @@ package dataStorages;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: Change maybe
 public class TimerSynchronization {
     private final int size;
     private List<Double> times;

@@ -86,6 +86,9 @@ private fun addAtom(id: String, operation: Function<Tuple, Box<Boolean>>) {
 private fun addIfAllowed(id: String, op: Function<Tuple, Box<Boolean>>) {
     when(id) {
         "temperature" -> addAtom(id, op)
+        "humidity" -> addAtom(id, op)
+        "co2" -> addAtom(id, op)
+        "tvoc" -> addAtom(id, op)
         else -> throw Error("unsupported identifier")
     }
 }

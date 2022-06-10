@@ -8,7 +8,6 @@ public class Settings {
     private static final String SETTINGS_USERNAME = "oihana";
     private static final String SETTINGS_PASSWORD = "22oihana22";
 
-    //TODO: Can I set this in Kotlin? Is it worth doing?
     private static final Class receivingMessage = OfficeSensorMessage.class;
 
     private static final Integer bufferSize = 6;
