@@ -1,5 +1,6 @@
 package services;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import serviceBuilders.ServiceBuilder;
 
@@ -17,10 +18,10 @@ public class RunnerServiceTest {
             "  ]\n" +
             "}";
     @Test
+    @Disabled()
     void getFormula(){
         Map<String, ServiceBuilder> serviceBuilders = new HashMap<>();
         RunnerService runnerService = new RunnerService(null, serviceBuilders);
         runnerService.messageArrived("", jsonMessage);
-
     }
 }

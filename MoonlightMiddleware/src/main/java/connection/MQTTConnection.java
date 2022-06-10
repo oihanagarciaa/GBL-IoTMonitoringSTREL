@@ -13,7 +13,9 @@ public class MQTTConnection {
             MqttConnectOptions connOpts = setUpConnectionOptions(username, password);
             sampleClient.connect(connOpts);
         } catch (MqttPersistenceException e) {
+            e.printStackTrace();
         } catch (MqttSecurityException e) {
+            e.printStackTrace();
         } catch (MqttException e) {
             e.printStackTrace();
         }

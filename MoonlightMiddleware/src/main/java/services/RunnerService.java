@@ -127,15 +127,17 @@ public class RunnerService implements Service, MessageListener {
         var engine = new ScriptEngineManager().getEngineByExtension("kts");
         try {
             //TODO: How do I define the atoms?
-            engine.put("temp", "\"temperature\" greaterThan 10");
-            engine.put("humidity", "\"humidity\" lessThan 10");
+            //engine.put("temp", "\"temperature\" greaterThan 10");
+            //engine.put("humidity", "\"humidity\" lessThan 10");
             Formula result = (Formula) engine.eval(formulaToEvaluate);
             //TODO: I don't have to add the formula to the SpecificationKt?
             System.out.println("Parsed formula: " + result.toString());
             return result;
         } catch (ScriptException e) {
-            throw new UnsupportedOperationException("Unable to understand the" +
-                    " formula");
+            e.printStackTrace();
+            //throw new UnsupportedOperationException("Unable to understand the" +
+            //        " formula");
+            return null;
         }
     }
 

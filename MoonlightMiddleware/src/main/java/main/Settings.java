@@ -3,7 +3,7 @@ package main;
 import messages.OfficeSensorMessage;
 
 public class Settings {
-    private static final String SETTINGS_BROKER = "tcp://stefanschupp.de:1884";
+    private static final String SETTINGS_BROKER = "tcp://stefanschupp.de:1883";
     private static final String SETTINGS_TOPIC = "v1/board/runner";
     private static final String SETTINGS_USERNAME = "oihana";
     private static final String SETTINGS_PASSWORD = "22oihana22";
