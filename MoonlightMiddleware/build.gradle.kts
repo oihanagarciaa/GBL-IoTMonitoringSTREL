@@ -1,3 +1,5 @@
+import java.util.regex.Pattern.compile
+
 // Project constants
 
 group = "at.ac.tuwien.trustcps"
@@ -61,6 +63,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     implementation("com.google.code.gson:gson:2.8.5")
     implementation(kotlin("script-runtime"))
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:1.6.21")
 }
 
 // JUnit & JaCoCo settings

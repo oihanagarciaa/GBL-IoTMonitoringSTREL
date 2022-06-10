@@ -11,6 +11,8 @@ public class ServiceInfoTest {
     String configJson = "{\n" +
         "  \"services\": [\n" +
         "    {\n" +
+        "      \"serviceId\": \"serciveID1\",\n" +
+        "      \"command\": \"start\",\n" +
         "      \"serviceType\": \"sensors\",\n" +
         "      \"connection\": {\n" +
         "        \"type\": \"mqtt\",\n" +
@@ -50,6 +52,8 @@ public class ServiceInfoTest {
         ServiceInfo serviceInfo = message.getServiceInfo().get(0);
         assertEquals("sensors", serviceInfo.getServiceType());
         assertEquals("sensorBroker", serviceInfo.getConnection().getSettings().getBroker());
+        assertEquals("serciveID1", serviceInfo.getServiceId());
+        assertEquals("start", serviceInfo.getCommand());
     }
 
     @Test

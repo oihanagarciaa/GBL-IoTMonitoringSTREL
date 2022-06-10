@@ -2,6 +2,7 @@ package services;
 
 import dataStorages.Buffer;
 import dataStorages.ConstantSizeBuffer;
+import dsl.Specification;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.space.*;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -32,10 +33,12 @@ public class OnlineMoonlightService implements Service{
     private Buffer<Tuple> buffer;
     private DataBus dataBus;
 
+    //TODO: Do I have to quit the formulas etc?
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
             Map<String, Function<Tuple, Box<Boolean>>> atoms,
             Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions,
             int bufferSize) {
+        Specification specification;
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
