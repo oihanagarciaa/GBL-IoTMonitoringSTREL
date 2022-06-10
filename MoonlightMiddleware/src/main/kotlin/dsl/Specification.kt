@@ -14,15 +14,18 @@ import java.util.function.Function
  * be used otherwise in the input file that says "which" spec to use.
  */
 object Specification {
-    
+    @JvmField
     val spatialModel: SpatialModel<Double> = TODO("Yet to be developed")
-    
+
+    @JvmField
     val atoms = mutableMapOf<String, Function<Tuple, Box<Boolean>>>()
-    
+
+    @JvmField
     var formula: Formula = throw Error("The formula has not been setup by the user")
-    
-    val distanceFunctions = mutableMapOf<String, 
-            Function<SpatialModel<Double>, DistanceStructure<Double, Double>>>(
+
+    @JvmField
+    val distanceFunctions: MutableMap<String, Function<SpatialModel<Double>, 
+            DistanceStructure<Double, *>>> = mutableMapOf(
         defaultDistanceFunction to Function { infiniteDistance(it) }
     )
     

@@ -22,7 +22,6 @@ import services.serviceInfo.ConnectionInfo;
 import services.serviceInfo.ConnectionSettings;
 import services.serviceInfo.ServiceInfo;
 import connection.MessageListener;
-import dsl.*;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -107,8 +106,11 @@ public class RunnerService implements Service, MessageListener {
         Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
                 distFunctions = null;
         Formula formula = evaluateFormula(info.getFormula());
-        moonlightServiceBuilder = new MoonlightServiceBuilder(spatialModel, formula,
-                atoms, distFunctions, Settings.getBufferSize());
+        moonlightServiceBuilder =
+                new MoonlightServiceBuilder(Specification.spatialModel,
+                        Specification.formula,
+                Specification.atoms, Specification.distanceFunctions,
+                        Settings.getBufferSize());
         return moonlightServiceBuilder;
     }
     
@@ -123,16 +125,17 @@ public class RunnerService implements Service, MessageListener {
         return sensorsServiceBuilder;
     }
     
-    private Formula evaluateFormula(String formulaToEvaluate) {
+    private Formula evaluateFormula(String scriptToEvaluate) {
         var engine = new ScriptEngineManager().getEngineByExtension("kts");
         try {
             //TODO: How do I define the atoms?
             //engine.put("temp", "\"temperature\" greaterThan 10");
             //engine.put("humidity", "\"humidity\" lessThan 10");
-            Formula result = (Formula) engine.eval(formulaToEvaluate);
+            engine.eval(scriptToEvaluate);
             //TODO: I don't have to add the formula to the SpecificationKt?
-            System.out.println("Parsed formula: " + result.toString());
-            return result;
+            System.out.println("Parsed formula: " + Specification.formula);
+            //return result;
+            return null;
         } catch (ScriptException e) {
             e.printStackTrace();
             //throw new UnsupportedOperationException("Unable to understand the" +
