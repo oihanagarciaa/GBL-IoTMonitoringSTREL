@@ -1,6 +1,11 @@
 package main;
 
+import eu.quanticol.moonlight.core.base.Pair;
+import eu.quanticol.moonlight.core.space.SpatialModel;
+import eu.quanticol.moonlight.util.Utils;
 import messages.OfficeSensorMessage;
+
+import java.util.HashMap;
 
 public class Settings {
     private static final String SETTINGS_BROKER = "tcp://stefanschupp.de:1883";
@@ -37,5 +42,18 @@ public class Settings {
 
     public static Integer getBufferSize(){
         return bufferSize;
+    }
+
+    public static SpatialModel<Double> buildSpatialModel(int size){
+        HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
+        cityMap.put(new Pair<>(0, 1), 11.0);
+        cityMap.put(new Pair<>(1, 0), 11.0);
+        cityMap.put(new Pair<>(1, 2), 7.0);
+        cityMap.put(new Pair<>(2, 1), 7.0);
+        cityMap.put(new Pair<>(1, 3), 8.0);
+        cityMap.put(new Pair<>(3, 1), 8.0);
+        cityMap.put(new Pair<>(2, 3), 8.0);
+        cityMap.put(new Pair<>(3, 2), 8.0);
+        return Utils.createSpatialModel(size, cityMap);
     }
 }

@@ -32,7 +32,7 @@
       },
       "devices": [
         {
-          "identifier": "Thingy1",
+          "identifier": "1",
           "accessKey": "XXX"
         }
       ]

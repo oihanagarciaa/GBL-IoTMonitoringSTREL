@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    private Map<String, ServiceBuilder> services;
+    private final Map<String, ServiceBuilder> services;
     private RunnerServiceBuilder runnerServiceBuilder;
 
     public Main(){
@@ -63,14 +63,6 @@ public class Main {
     private void setRunnerServiceBuilder() {
         runnerServiceBuilder = new RunnerServiceBuilder(services);
         runnerServiceBuilder.run();
-    }
-
-    public static SpatialModel<Double> buildSpatialModel(int size){
-        HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
-        cityMap.put(new Pair<>(0, 2), 4.0);
-        cityMap.put(new Pair<>(2, 0), 4.0);
-        cityMap.put(new Pair<>(2, 1), 8.0);
-        return Utils.createSpatialModel(size, cityMap);
     }
 
    /* private static Formula formula() {
