@@ -1,5 +1,3 @@
-import java.util.regex.Pattern.compile
-
 // Project constants
 
 group = "at.ac.tuwien.trustcps"
@@ -64,6 +62,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.5")
     implementation(kotlin("script-runtime"))
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:1.6.21")
+
+    implementation ("commons-io:commons-io:2.6")
 }
 
 // JUnit & JaCoCo settings
@@ -78,4 +78,21 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)
     }
+}
+
+tasks.jar {
+    archiveFileName.set("moonlightMiddleware.jar")
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        attributes(mapOf("Main-Class" to "main.Main"))
+    }
+    doFirst {
+        from({
+            configurations.compileClasspath.get().map {
+                if (it.isDirectory) it else zipTree(it)
+            }
+        })
+    }
+
+    exclude ("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 }
