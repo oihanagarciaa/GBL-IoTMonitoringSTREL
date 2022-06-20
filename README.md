@@ -1,4 +1,4 @@
-## RUNTIME VERIFICATION FOR SPATIO-TEMPORAL PROPERTIES OVER IOT NETWORKS
+## RUNTIME VERIFICATION FOR SPATIO-TEMPORAL PROPERTIES OVER IOT NETWORKS [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=oihanagarciaa_GBL-IoTMonitoringSTREL&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=oihanagarciaa_GBL-IoTMonitoringSTREL)
 
 ###### _Final degree project for taking the degree of_ : Degree in Computer engineering
 ___
@@ -29,7 +29,7 @@ The services communicate using a unique Data Bus, a singleton class.
 <p>The client sends a JSON to the Runner with the list of services and their 
 properties. Here is an example:</p>
 
-```
+```json
 {
 	"services": [
 		{
