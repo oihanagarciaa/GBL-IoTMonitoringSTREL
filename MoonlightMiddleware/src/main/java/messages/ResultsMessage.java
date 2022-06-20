@@ -4,7 +4,6 @@ import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.signal.SpaceTimeSignal;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ResultsMessage<V extends Comparable<V>> implements Message{
     SpaceTimeSignal<Double, Box<V>> results;
@@ -17,11 +16,11 @@ public class ResultsMessage<V extends Comparable<V>> implements Message{
     public String toString() {
         List<String> listResults = results.getSegments().toList().stream()
                 .map(Object::toString).toList();
-        String r = "";
+        StringBuilder bld = new StringBuilder();
         for (int i = 0; i < listResults.size(); i++){
-            r += "\t"+listResults.get(i)+"\n";
+            bld.append("\t"+listResults.get(i)+"\n");
         }
-        return r;
+        return bld.toString();
     }
 
     public SpaceTimeSignal<Double, Box<V>> getSpaceTimeSignal(){

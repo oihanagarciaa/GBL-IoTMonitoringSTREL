@@ -12,8 +12,6 @@ public class MQTTConnection {
             sampleClient = new MqttClient(broker, MqttClient.generateClientId(), persistence);
             MqttConnectOptions connOpts = setUpConnectionOptions(username, password);
             sampleClient.connect(connOpts);
-        } catch (MqttPersistenceException e) {
-        } catch (MqttSecurityException e) {
         } catch (MqttException e) {
         }
     }

@@ -1,7 +1,7 @@
 import com.google.gson.Gson;
 import messages.ConfigMessage;
 import org.junit.jupiter.api.Test;
-import services.serviceInfo.ServiceInfo;
+import services.service_info.ServiceInfo;
 
 import java.lang.reflect.Type;
 

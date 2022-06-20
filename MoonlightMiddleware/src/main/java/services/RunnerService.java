@@ -9,13 +9,13 @@ import main.DataBus;
 import main.Settings;
 import messages.Message;
 import messages.ConfigMessage;
-import serviceBuilders.MoonlightServiceBuilder;
-import serviceBuilders.ResultsThingsboardServiceBuilder;
-import serviceBuilders.SensorsServiceBuilder;
-import serviceBuilders.ServiceBuilder;
-import services.serviceInfo.ConnectionInfo;
-import services.serviceInfo.ConnectionSettings;
-import services.serviceInfo.ServiceInfo;
+import service_builders.MoonlightServiceBuilder;
+import service_builders.ResultsThingsboardServiceBuilder;
+import service_builders.SensorsServiceBuilder;
+import service_builders.ServiceBuilder;
+import services.service_info.ConnectionInfo;
+import services.service_info.ConnectionSettings;
+import services.service_info.ServiceInfo;
 import connection.MessageListener;
 
 import javax.script.ScriptEngineManager;
@@ -87,8 +87,11 @@ public class RunnerService implements Service, MessageListener {
 
     private ServiceBuilder generateThingsboardService(ServiceInfo info) {
         ResultsThingsboardServiceBuilder thingsboardServiceBuilder;
+        String broker = info.getConnection().getSettings().getBroker();
+        String topic = info.getConnection().getSettings().getTopic();
         Map<String ,String> deviceAccessTokens = info.getDevices();
-        thingsboardServiceBuilder = new ResultsThingsboardServiceBuilder(deviceAccessTokens);
+        thingsboardServiceBuilder = new ResultsThingsboardServiceBuilder(
+                broker, topic, deviceAccessTokens);
         return thingsboardServiceBuilder;
     }
 
@@ -118,7 +121,6 @@ public class RunnerService implements Service, MessageListener {
         var engine = new ScriptEngineManager().getEngineByExtension("kts");
         try {
             engine.eval(scriptToEvaluate);
-            System.out.println("Parsed formula: " + Specification.formula);
         } catch (ScriptException e) {
             throw new UnsupportedOperationException("Unable to understand the" +
                     " formula");
@@ -137,6 +139,7 @@ public class RunnerService implements Service, MessageListener {
 
     @Override
     public void stop() {
+        //Stop not handled
     }
 
     @Override

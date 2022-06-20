@@ -1,9 +1,6 @@
 package main;
 
-import eu.quanticol.moonlight.core.base.Pair;
-import eu.quanticol.moonlight.core.space.SpatialModel;
-import eu.quanticol.moonlight.util.Utils;
-import serviceBuilders.*;
+import service_builders.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,31 +23,7 @@ public class Main {
      */
 
     /**
-     * // TODO: dynamic stuff, we need to interpret it
-     * <pre>
-     * {
-     *      services: [
-     *          {
-     *            serviceType: "sensors",
-     *            connection: {
-     *                type: mqtt,
-     *                settings: {
-     *                    broker: "..",
-     *                    topic: "",
-     *                }
-     *            devices: [
-     *                  {
-     *                    "identifier": "Thingy1",
-     *                    "accessKey" : "XXX"
-     *                  }
-     *                ]
-     *            }
-     *          }
-     *      ]
-     *      ,  
-     *     
-     * }
-     * </pre>
+     * dynamic stuff, we need to interpret it
      * - Broker for the sensors
      * - Sensor's topic
      * - Sensors username & password
@@ -72,7 +45,6 @@ public class Main {
         return finalFormula;
     }
 
-    //TODO: how do I change here from bool to double??
     private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
         double maxTemperature = 30;
         int maxCO2 = 600;

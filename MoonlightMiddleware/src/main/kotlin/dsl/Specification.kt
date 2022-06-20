@@ -7,10 +7,7 @@ import eu.quanticol.moonlight.core.space.DefaultDistanceStructure
 import eu.quanticol.moonlight.core.space.DistanceStructure
 import eu.quanticol.moonlight.core.space.SpatialModel
 import eu.quanticol.moonlight.domain.DoubleDomain
-import eu.quanticol.moonlight.util.Utils
-import main.Main
 import main.Settings
-import java.util.HashMap
 import java.util.function.Function
 
 /**

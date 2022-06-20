@@ -14,6 +14,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void connectionLost(Throwable cause) {
+        //Connection lost not handled
     }
 
     @Override
@@ -23,6 +24,7 @@ public class MQTTSubscriber implements MqttCallback, Subscriber<String> {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
+        //Delivery complete not handled
     }
 
     @Override

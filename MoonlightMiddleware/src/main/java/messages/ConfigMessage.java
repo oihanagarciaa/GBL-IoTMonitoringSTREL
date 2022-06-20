@@ -1,6 +1,6 @@
 package messages;
 
-import services.serviceInfo.ServiceInfo;
+import services.service_info.ServiceInfo;
 
 import java.util.ArrayList;
 import java.util.List;

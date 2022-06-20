@@ -1,7 +1,7 @@
 package services;
 
-import dataStorages.Buffer;
-import dataStorages.ConstantSizeBuffer;
+import data_storages.Buffer;
+import data_storages.ConstantSizeBuffer;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.space.*;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -51,7 +51,7 @@ public class OnlineMoonlightService implements Service{
     
     @Override
     public void receive(Message message) {
-        if(message instanceof CommonSensorsMessage commonSensorsMessage
+        if(message instanceof CommonSensorsMessage<?> commonSensorsMessage
                 && buffer.add(commonSensorsMessage)){
                 sendResults();
         }
@@ -61,9 +61,7 @@ public class OnlineMoonlightService implements Service{
         SpaceTimeSignal<Double, Box<Boolean>> results;
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
-        ResultsMessage resultsMessage = new ResultsMessage(results);
-        //TODO: delete print
-        //System.out.println(resultsMessage.toString());
+        ResultsMessage<?> resultsMessage = new ResultsMessage<>(results);
         dataBus.offer(resultsMessage);
     }
 

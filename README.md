@@ -67,8 +67,8 @@ properties. Here is an example:</p>
 			"connection": {
 				"type": "mqtt",
 				"settings": {
-				"broker": "tcp://thingsboard.stefanschupp.de:1883",
-				"topic": "v1/board/runner"
+				"broker": "tcp://thingsboard.stefanschupp.de:1884",
+				"topic": "v1/devices/me/telemetry"
 				}
 			},
 			"devices": [
@@ -78,10 +78,10 @@ properties. Here is an example:</p>
 				},
 				{
 					"identifier": "2",
-			    	"accessKey": "q1qbXmY3KR51xhD24iHP"
-			    }
-		    ]
-	    }
-    ]
+			    	        "accessKey": "q1qbXmY3KR51xhD24iHP"
+			        }
+		        ]
+	        }
+        ]
 }
 ```
