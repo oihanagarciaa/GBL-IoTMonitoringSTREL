@@ -5,18 +5,22 @@ import main.DataBus;
 import messages.CommonSensorsMessage;
 import messages.Message;
 import messages.ResultsMessage;
-import thingsBoard.ThingsboardConnector;
-import thingsBoard.ThingsboardMoonlightConnector;
-import thingsBoard.ThingsboardSensorsConnector;
+import thingsboard.ThingsboardConnector;
+import thingsboard.ThingsboardMoonlightConnector;
+import thingsboard.ThingsboardSensorsConnector;
 
 import java.util.List;
 import java.util.Map;
 
 public class ResultThingsboardService implements Service{
     private Map<String, String> deviceAccessTokens;
+    private final String broker;
+    private final String topic;
     private double lastTime;
 
-    public ResultThingsboardService(Map<String, String> deviceAccessToken){
+    public ResultThingsboardService(String broker, String topic, Map<String, String> deviceAccessToken){
+        this.broker = broker;
+        this.topic = topic;
         this.deviceAccessTokens = deviceAccessToken;
         lastTime = 0;
     }
@@ -30,13 +34,13 @@ public class ResultThingsboardService implements Service{
     @Override
     public void receive(Message message) {
         ThingsboardConnector thingsboardCommunication = null;
-        if(message instanceof CommonSensorsMessage commonSensorsMessage){
+        if(message instanceof CommonSensorsMessage<?> commonSensorsMessage){
             thingsboardCommunication =
-                    new ThingsboardSensorsConnector(deviceAccessTokens);
+                    new ThingsboardSensorsConnector(broker, topic, deviceAccessTokens);
             thingsboardCommunication.sendMessage(commonSensorsMessage);
-        }else if(message instanceof ResultsMessage resultsMessage){
+        }else if(message instanceof ResultsMessage<?> resultsMessage){
             thingsboardCommunication =
-                    new ThingsboardMoonlightConnector(deviceAccessTokens, lastTime);
+                    new ThingsboardMoonlightConnector(broker, topic, deviceAccessTokens, lastTime);
             lastTime = getLastResultsMessageTimeValue(resultsMessage);
             thingsboardCommunication.sendMessage(resultsMessage);
         }

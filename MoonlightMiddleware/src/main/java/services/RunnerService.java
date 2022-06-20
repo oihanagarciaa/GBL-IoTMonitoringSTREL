@@ -5,29 +5,23 @@ import com.google.gson.JsonSyntaxException;
 import connection.ConnType;
 import connection.Subscriber;
 import dsl.Specification;
-import eu.quanticol.moonlight.core.base.Box;
-import eu.quanticol.moonlight.core.base.Tuple;
-import eu.quanticol.moonlight.core.formula.Formula;
-import eu.quanticol.moonlight.core.space.DistanceStructure;
-import eu.quanticol.moonlight.core.space.SpatialModel;
 import main.DataBus;
 import main.Settings;
 import messages.Message;
 import messages.ConfigMessage;
-import serviceBuilders.MoonlightServiceBuilder;
-import serviceBuilders.ResultsThingsboardServiceBuilder;
-import serviceBuilders.SensorsServiceBuilder;
-import serviceBuilders.ServiceBuilder;
-import services.serviceInfo.ConnectionInfo;
-import services.serviceInfo.ConnectionSettings;
-import services.serviceInfo.ServiceInfo;
+import service_builders.MoonlightServiceBuilder;
+import service_builders.ResultsThingsboardServiceBuilder;
+import service_builders.SensorsServiceBuilder;
+import service_builders.ServiceBuilder;
+import services.service_info.ConnectionInfo;
+import services.service_info.ConnectionSettings;
+import services.service_info.ServiceInfo;
 import connection.MessageListener;
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.function.Function;
 
 public class RunnerService implements Service, MessageListener {
     private final Subscriber<?> subscriber;
@@ -93,19 +87,17 @@ public class RunnerService implements Service, MessageListener {
 
     private ServiceBuilder generateThingsboardService(ServiceInfo info) {
         ResultsThingsboardServiceBuilder thingsboardServiceBuilder;
+        String broker = info.getConnection().getSettings().getBroker();
+        String topic = info.getConnection().getSettings().getTopic();
         Map<String ,String> deviceAccessTokens = info.getDevices();
-        thingsboardServiceBuilder = new ResultsThingsboardServiceBuilder(deviceAccessTokens);
+        thingsboardServiceBuilder = new ResultsThingsboardServiceBuilder(
+                broker, topic, deviceAccessTokens);
         return thingsboardServiceBuilder;
     }
 
     private MoonlightServiceBuilder generateMoonlightService(ServiceInfo info) {
         MoonlightServiceBuilder moonlightServiceBuilder;
-        //TODO: add Spatial Model, atoms and distance
-        SpatialModel<Double> spatialModel = null;
-        Map<String, Function<Tuple, Box<Boolean>>> atoms = null;
-        Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>>
-                distFunctions = null;
-        Formula formula = evaluateFormula(info.getFormula());
+        evaluateFormula(info.getFormula());
         moonlightServiceBuilder =
                 new MoonlightServiceBuilder(Specification.spatialModel,
                         Specification.formula,
@@ -124,23 +116,14 @@ public class RunnerService implements Service, MessageListener {
                 Settings.getReceivingMessage());
         return sensorsServiceBuilder;
     }
-    
-    private Formula evaluateFormula(String scriptToEvaluate) {
+
+    private void evaluateFormula(String scriptToEvaluate) throws UnsupportedOperationException{
         var engine = new ScriptEngineManager().getEngineByExtension("kts");
         try {
-            //TODO: How do I define the atoms?
-            //engine.put("temp", "\"temperature\" greaterThan 10");
-            //engine.put("humidity", "\"humidity\" lessThan 10");
             engine.eval(scriptToEvaluate);
-            //TODO: I don't have to add the formula to the SpecificationKt?
-            System.out.println("Parsed formula: " + Specification.formula);
-            //return result;
-            return null;
         } catch (ScriptException e) {
-            e.printStackTrace();
-            //throw new UnsupportedOperationException("Unable to understand the" +
-            //        " formula");
-            return null;
+            throw new UnsupportedOperationException("Unable to understand the" +
+                    " formula");
         }
     }
 
@@ -156,6 +139,7 @@ public class RunnerService implements Service, MessageListener {
 
     @Override
     public void stop() {
+        //Stop not handled
     }
 
     @Override
@@ -166,7 +150,10 @@ public class RunnerService implements Service, MessageListener {
                     (Type) ConfigMessage.class);
             receive(message);
         } catch (JsonSyntaxException e){
-            throw new UnsupportedOperationException("Unknown message type");
+            throw new UnsupportedOperationException("Json Syntax incorrect");
+        } catch (Exception e){
+
+            //TODO: It would be interesting to send the error message to the client
         }
     }
 }

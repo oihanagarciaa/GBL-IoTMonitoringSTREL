@@ -38,7 +38,7 @@ public class OnlineMoonlightIrregularTimeMessagesTest {
         long startingMillis = System.currentTimeMillis();
         Random rand = new Random();
         double t = 0;
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 12; i++){
             t += 5;
             for(int j = 0; j < 6; j++){
                 double randT = rand.nextInt(8);

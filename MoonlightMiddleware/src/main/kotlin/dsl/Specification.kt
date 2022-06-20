@@ -7,6 +7,7 @@ import eu.quanticol.moonlight.core.space.DefaultDistanceStructure
 import eu.quanticol.moonlight.core.space.DistanceStructure
 import eu.quanticol.moonlight.core.space.SpatialModel
 import eu.quanticol.moonlight.domain.DoubleDomain
+import main.Settings
 import java.util.function.Function
 
 /**
@@ -15,22 +16,22 @@ import java.util.function.Function
  */
 object Specification {
     @JvmField
-    val spatialModel: SpatialModel<Double> = TODO("Yet to be developed")
+    val spatialModel: SpatialModel<Double> = Settings.buildSpatialModel(4);
 
     @JvmField
     val atoms = mutableMapOf<String, Function<Tuple, Box<Boolean>>>()
 
     @JvmField
-    var formula: Formula = throw Error("The formula has not been setup by the user")
+    var formula: Formula? = null //throw Error("The formula has not been setup by the user")
+
+    internal const val defaultDistanceFunction = "infinite"
 
     @JvmField
     val distanceFunctions: MutableMap<String, Function<SpatialModel<Double>, 
             DistanceStructure<Double, *>>> = mutableMapOf(
         defaultDistanceFunction to Function { infiniteDistance(it) }
     )
-    
-    internal const val defaultDistanceFunction = "infinite"
-    
+
     private fun infiniteDistance(model: SpatialModel<Double>) = 
         DefaultDistanceStructure(
             { x: Double -> x },
@@ -38,5 +39,5 @@ object Specification {
             0.0, Double.MAX_VALUE, 
             model
         )
-    
+
 }

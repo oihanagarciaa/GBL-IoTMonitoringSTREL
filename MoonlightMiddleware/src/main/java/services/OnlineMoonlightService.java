@@ -1,8 +1,7 @@
 package services;
 
-import dataStorages.Buffer;
-import dataStorages.ConstantSizeBuffer;
-import dsl.Specification;
+import data_storages.Buffer;
+import data_storages.ConstantSizeBuffer;
 import eu.quanticol.moonlight.core.base.Tuple;
 import eu.quanticol.moonlight.core.space.*;
 import eu.quanticol.moonlight.domain.BooleanDomain;
@@ -33,12 +32,10 @@ public class OnlineMoonlightService implements Service{
     private Buffer<Tuple> buffer;
     private DataBus dataBus;
 
-    //TODO: Do I have to quit the formulas etc?
     public OnlineMoonlightService(Formula formula, SpatialModel<Double> model,
             Map<String, Function<Tuple, Box<Boolean>>> atoms,
             Map<String, Function<SpatialModel<Double>, DistanceStructure<Double, ?>>> distanceFunctions,
             int bufferSize) {
-        Specification specification;
         this.formula = formula;
         this.spatialModel = model;
         this.atoms = atoms;
@@ -51,11 +48,10 @@ public class OnlineMoonlightService implements Service{
     public boolean isRunning() {
         return onlineMonitor!=null;
     }
-
-    //TODO: Use pattern matching
+    
     @Override
     public void receive(Message message) {
-        if(message instanceof CommonSensorsMessage commonSensorsMessage
+        if(message instanceof CommonSensorsMessage<?> commonSensorsMessage
                 && buffer.add(commonSensorsMessage)){
                 sendResults();
         }
@@ -65,9 +61,7 @@ public class OnlineMoonlightService implements Service{
         SpaceTimeSignal<Double, Box<Boolean>> results;
         results = onlineMonitor.monitor(buffer.get());
         buffer.flush();
-        ResultsMessage resultsMessage = new ResultsMessage(results);
-        //TODO: delete print
-        //System.out.println(resultsMessage.toString());
+        ResultsMessage<?> resultsMessage = new ResultsMessage<>(results);
         dataBus.offer(resultsMessage);
     }
 

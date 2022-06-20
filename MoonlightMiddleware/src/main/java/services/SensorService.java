@@ -3,6 +3,7 @@ package services;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import main.DataBus;
+import messages.CommonSensorsMessage;
 import messages.Message;
 import connection.MessageListener;
 import connection.Subscriber;
@@ -10,10 +11,10 @@ import connection.Subscriber;
 import java.lang.reflect.Type;
 
 public class SensorService implements Service, MessageListener {
-    private Subscriber subscriber;
-    Class messageClass;
+    private Subscriber<String> subscriber;
+    Class<? extends CommonSensorsMessage<?>> messageClass;
 
-    public SensorService(Subscriber subscriber, Class messageClass){
+    public SensorService(Subscriber subscriber, Class<? extends CommonSensorsMessage<?>> messageClass){
         this.subscriber = subscriber;
         this.messageClass = messageClass;
     }
@@ -42,7 +43,6 @@ public class SensorService implements Service, MessageListener {
 
     @Override
     public void messageArrived(String topic, String jsonMessage) {
-        System.out.println("MESSAGE: "+jsonMessage);
         try{
             Message message = new Gson().fromJson(jsonMessage, (Type) messageClass);
             DataBus dataBus = DataBus.getInstance();

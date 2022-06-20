@@ -1,11 +1,11 @@
 package main;
 
-import serviceBuilders.*;
+import service_builders.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
-    private Map<String, ServiceBuilder> services;
+    private final Map<String, ServiceBuilder> services;
     private RunnerServiceBuilder runnerServiceBuilder;
 
     public Main(){
@@ -23,31 +23,7 @@ public class Main {
      */
 
     /**
-     * // TODO: dynamic stuff, we need to interpret it
-     * <pre>
-     * {
-     *      services: [
-     *          {
-     *            serviceType: "sensors",
-     *            connection: {
-     *                type: mqtt,
-     *                settings: {
-     *                    broker: "..",
-     *                    topic: "",
-     *                }
-     *            devices: [
-     *                  {
-     *                    "identifier": "Thingy1",
-     *                    "accessKey" : "XXX"
-     *                  }
-     *                ]
-     *            }
-     *          }
-     *      ]
-     *      ,  
-     *     
-     * }
-     * </pre>
+     * dynamic stuff, we need to interpret it
      * - Broker for the sensors
      * - Sensor's topic
      * - Sensors username & password
@@ -62,22 +38,13 @@ public class Main {
         runnerServiceBuilder.run();
     }
 
-    /*private static SpatialModel<Double> buildSpatialModel(int size){
-        HashMap<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
-        cityMap.put(new Pair<>(0, 2), 4.0);
-        cityMap.put(new Pair<>(2, 0), 4.0);
-        cityMap.put(new Pair<>(2, 1), 8.0);
-        return Utils.createSpatialModel(size, cityMap);
-    }
-
-    private static Formula formula() {
+   /* private static Formula formula() {
         Formula highTemperature = new AtomicFormula("highTemperature");
         Formula co2Formula = new EventuallyFormula( new AtomicFormula("highCO2"), new Interval(0, 1500)); //15 sec
         Formula finalFormula = new AndFormula(highTemperature, co2Formula);
         return finalFormula;
     }
 
-    //TODO: how do I change here from bool to double??
     private static Map<String, Function<Tuple, Box<Boolean>>> getOnlineAtoms() {
         double maxTemperature = 30;
         int maxCO2 = 600;
