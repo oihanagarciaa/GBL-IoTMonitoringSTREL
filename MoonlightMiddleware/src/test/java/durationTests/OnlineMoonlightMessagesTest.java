@@ -37,17 +37,14 @@ public class OnlineMoonlightMessagesTest {
         dataBus.subscribe(serviceTest);
         OnlineMoonlightService onlineMoonlightService = getOnlineMoonlightServiceWithRealValues();
         onlineMoonlightService.init();
-        long startingMillis = System.currentTimeMillis();
         /**
          * change the i
          */
         Random rand = new Random();
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < 50; i++){
             Message message = getMessage(i%6, i, rand.nextInt(20)+20);
             onlineMoonlightService.receive(message);
         }
-        long finishingMilis = System.currentTimeMillis();
-        double duration = ((finishingMilis-startingMillis)/1000.0);
         assertNotNull(serviceTest.getResultsMessage());
     }
 

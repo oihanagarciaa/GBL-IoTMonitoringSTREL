@@ -64,7 +64,7 @@ class ServiceBuildersTest {
     @Test
     void sensorsBuilderInitNull2() {
         SensorsServiceBuilder serviceBuilder = new SensorsServiceBuilder
-                (null, "tcp://localhost:1883", "topic", "", "", OfficeSensorMessage.class);
+                (null, "", "", "", "", OfficeSensorMessage.class);
         assertFalse(serviceBuilder.run());
     }
 
