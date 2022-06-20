@@ -33,7 +33,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     }
 }
 
-// Sonarqube settings
+// Sonarqube settings & task
 
 sonarqube {
     properties {
@@ -41,6 +41,12 @@ sonarqube {
         property("sonar.organization", "oihanagarciaa")
         property("sonar.host.url", "https://sonarcloud.io")
     }
+}
+
+
+tasks.register("analyze") {
+    dependsOn(tasks.named("check"))
+    dependsOn(tasks.named("sonarqube"))
 }
 
 // Dependencies & repositories from which they are fetched
