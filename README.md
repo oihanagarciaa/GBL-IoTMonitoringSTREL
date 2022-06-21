@@ -5,8 +5,9 @@ ___
 ### Middleware
 
 <p>The Middleware connects different components or applications with each other.
-This project uses SOA architecture, these are the services you can find in this
-project: <br>
+This project uses SOA architecture.</p>
+<img src="https://github.com/oihanagarciaa/GBL-IoTMonitoringSTREL/blob/main/Documents/Images/Middleware-Middleware%20diagram.drawio%20(2).png"/>
+<p>These are the services you can find in this project: <br>
 <strong><em>Runner service</em></strong><br>
 The runner service receives the commands to <strong>set up the other services
 </strong>. When the project is initialized, the runner subscribes to a broker
@@ -50,15 +51,14 @@ properties. Here is an example:</p>
 			"serviceType": "moonlight",
 			"serviceId": "moonlightService",
 			"command": "stop",
-			"formula": "import dsl.* 
+			"formula":  "import dsl.*
+			            val temp = \"temperature\" greaterThan 10 
+			            val humidity = \"humidity\" lessThan 10 
 
-			val temp = \"temperatura\" greaterThan 10 
-			val humidity = \"humidity\" lessThan 10 
+			            val f1 = temp and (eventually(humidity) within interval(0, 1)) 
+			            or somewhere(humidity) 
 
-			val f1 = temp and (eventually(humidity) within interval(0, 1)) 
-			or somewhere(humidity) 
-
-			Specification.formula = f1"
+			            Specification.formula = f1"
 		},
 		{
 			"serviceId": "thingsboardService",

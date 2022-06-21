@@ -79,7 +79,8 @@ class ServiceBuildersTest {
     @Test
     void runnerBuilderInit(){
         Map<String, ServiceBuilder> map = new HashMap();
-        RunnerServiceBuilder runnerServiceBuilder = new RunnerServiceBuilder(map);
+        RunnerServiceBuilder runnerServiceBuilder = new RunnerServiceBuilder(
+                "tcp://localhost:1883", "topic", "", "", map);
         assertTrue(runnerServiceBuilder.run());
     }
 
