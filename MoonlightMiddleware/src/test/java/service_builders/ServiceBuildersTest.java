@@ -76,6 +76,13 @@ class ServiceBuildersTest {
         assertTrue(resultsThingsboardServiceBuilder.run());
     }
 
+    @Test
+    void runnerBuilderInit(){
+        Map<String, ServiceBuilder> map = new HashMap();
+        RunnerServiceBuilder runnerServiceBuilder = new RunnerServiceBuilder(map);
+        assertTrue(runnerServiceBuilder.run());
+    }
+
     private static SpatialModel<Double> buildSpatialModel(int size){
         Map<Pair<Integer, Integer>, Double> cityMap = new HashMap<>();
         cityMap.put(new Pair<>(0, 2), 4.0);
