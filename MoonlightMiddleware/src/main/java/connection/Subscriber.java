@@ -1,10 +1,8 @@
 package connection;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
-
 public interface Subscriber<M> {
 
-    void subscribe(String topic) throws MqttException;
+    void subscribe(String topic);
 
     void receive(String topic, M message);
 

@@ -70,6 +70,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223:1.6.21")
 
     implementation ("commons-io:commons-io:2.6")
+
+    implementation("org.powermock:powermock-module-junit4:1.6.4")
+    implementation("org.powermock:powermock-api-mockito2:2.0.9")
 }
 
 // JUnit & JaCoCo settings

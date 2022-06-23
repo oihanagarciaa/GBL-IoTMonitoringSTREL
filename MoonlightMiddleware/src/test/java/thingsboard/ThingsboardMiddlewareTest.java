@@ -1,6 +1,7 @@
 package thingsboard;
 
 import com.google.gson.Gson;
+import connection.ConnType;
 import eu.quanticol.moonlight.core.base.Box;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.base.Tuple;
@@ -18,6 +19,7 @@ import messages.OfficeSensorMessage;
 import messages.ResultsMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import services.OnlineMoonlightService;
 import services.Service;
@@ -45,11 +47,11 @@ public class ThingsboardMiddlewareTest {
     @Test
     void thingsboardConvertion(){
         ThingsboardMoonlightConnector thingsboardMiddleware = Mockito.spy(
-                new ThingsboardMoonlightConnector(
+                new ThingsboardMoonlightConnector( ConnType.MQTT,
                         "tcp://thingsboard.stefanschupp.de:1884", "t",
                         sensorAccessToken, 0));
         doNothing().when(thingsboardMiddleware).
-                publishToThingsboard(Mockito.anyString(), Mockito.anyString(),
+                publishToThingsboard(Mockito.any(), Mockito.anyString(), Mockito.anyString(),
                         Mockito.anyString(), Mockito.anyString());
 
         SpaceTimeSignal spaceTimeSignal = setOnlineMoonlight();

@@ -1,10 +1,13 @@
 package service_builders;
 
+import connection.ConnType;
 import connection.MQTTSubscriber;
 import connection.Subscriber;
 import main.Settings;
 import services.RunnerService;
+import services.SensorService;
 import services.Service;
+import simulation.ConnectionSimulations.RunnerSubscriberSimulator;
 
 import java.util.Map;
 
@@ -15,9 +18,12 @@ public class RunnerServiceBuilder implements ServiceBuilder {
     private final String password;
     private Service service;
     private final Map<String, ServiceBuilder> serviceBuilders;
+    private final ConnType connectionType;
 
-    public RunnerServiceBuilder(String broker, String topic, String username,
+    public RunnerServiceBuilder(ConnType connection,
+                                String broker, String topic, String username,
                                 String password, Map<String, ServiceBuilder> services) {
+        this.connectionType = connection;
         this.broker = broker;
         this.topic = topic;
         this.username = username;
@@ -27,8 +33,18 @@ public class RunnerServiceBuilder implements ServiceBuilder {
 
     @Override
     public void initializeService() {
-        Subscriber<String> subscriber = new MQTTSubscriber(broker,
-                topic, username, password);
+        Subscriber subscriber;
+        if(connectionType == ConnType.MQTT) {
+            subscriber = new MQTTSubscriber(broker,
+                    topic, username, password);
+        }else if (connectionType == ConnType.REST){
+            throw new UnsupportedOperationException("Not supported connection type");
+        }else if (connectionType == ConnType.SIMULATION){
+            subscriber = new RunnerSubscriberSimulator();
+        }
+        else {
+            throw new UnsupportedOperationException("Not supported connection type");
+        }
         service = new RunnerService(subscriber, serviceBuilders);
         service.init();
     }

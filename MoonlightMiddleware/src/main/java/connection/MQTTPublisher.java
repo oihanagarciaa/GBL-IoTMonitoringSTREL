@@ -5,7 +5,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.nio.charset.StandardCharsets;
 
-public class MQTTPublisher {
+public class MQTTPublisher implements Publisher{
     private final String broker;
     private final String topic;
     private final int qos;
@@ -16,6 +16,7 @@ public class MQTTPublisher {
         this.qos = qos;
     }
 
+    @Override
     public void publish(String username, String password, String message){
         try {
             MQTTConnection mqttConnection = new MQTTConnection(broker, username, password);

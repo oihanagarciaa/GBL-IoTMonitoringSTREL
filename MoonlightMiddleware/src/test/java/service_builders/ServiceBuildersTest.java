@@ -72,14 +72,14 @@ class ServiceBuildersTest {
     void thingsboardBuilderInit(){
         Map<String, String> tokens = new HashMap<>();
         ResultsThingsboardServiceBuilder resultsThingsboardServiceBuilder =
-                new ResultsThingsboardServiceBuilder("", "", tokens);
+                new ResultsThingsboardServiceBuilder(ConnType.MQTT, "", "", tokens);
         assertTrue(resultsThingsboardServiceBuilder.run());
     }
 
     @Test
     void runnerBuilderInit(){
         Map<String, ServiceBuilder> map = new HashMap();
-        RunnerServiceBuilder runnerServiceBuilder = new RunnerServiceBuilder(
+        RunnerServiceBuilder runnerServiceBuilder = new RunnerServiceBuilder( ConnType.MQTT,
                 "tcp://localhost:1883", "topic", "", "", map);
         assertTrue(runnerServiceBuilder.run());
     }

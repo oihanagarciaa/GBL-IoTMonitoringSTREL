@@ -1,10 +1,12 @@
 package service_builders;
 
+import connection.Subscriber;
 import messages.CommonSensorsMessage;
 import services.SensorService;
 import services.Service;
 import connection.ConnType;
 import connection.MQTTSubscriber;
+import simulation.ConnectionSimulations.SensorSubscriberSimulator;
 
 public class SensorsServiceBuilder implements ServiceBuilder{
     private Service service;
@@ -31,15 +33,18 @@ public class SensorsServiceBuilder implements ServiceBuilder{
 
     @Override
     public void initializeService() {
+        Subscriber subscriber;
         if(connectionType == ConnType.MQTT) {
-            service = new SensorService(new MQTTSubscriber(
-                    broker, topic, username, password), messageClass);
+            subscriber = new MQTTSubscriber(broker, topic, username, password);
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Not supported connection type");
+        } else if (connectionType == ConnType.SIMULATION){
+            subscriber = new SensorSubscriberSimulator();
         }
         else {
             throw new UnsupportedOperationException("Not supported connection type");
         }
+        service = new SensorService(subscriber, messageClass);
         service.init();
     }
 

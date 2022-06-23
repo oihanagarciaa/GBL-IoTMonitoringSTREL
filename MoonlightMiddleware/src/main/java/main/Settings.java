@@ -1,5 +1,6 @@
 package main;
 
+import connection.ConnType;
 import eu.quanticol.moonlight.core.base.Pair;
 import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.util.Utils;
@@ -8,6 +9,7 @@ import messages.OfficeSensorMessage;
 import java.util.HashMap;
 
 public class Settings {
+    private static final ConnType CONN_TYPE = ConnType.MQTT;
     private static final String SETTINGS_BROKER = "tcp://stefanschupp.de:1883";
     private static final String SETTINGS_TOPIC = "v1/board/runner";
     private static final String SETTINGS_USERNAME = "oihana";
@@ -19,6 +21,9 @@ public class Settings {
 
     private Settings() {}   // Hidden from the external
     
+    public static ConnType getConnType(){
+        return CONN_TYPE;
+    }
 
     public static String getSettingsBroker() {
         return SETTINGS_BROKER;

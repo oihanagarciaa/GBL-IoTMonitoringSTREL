@@ -1,6 +1,7 @@
 package thingsboard;
 
 import com.google.gson.Gson;
+import connection.ConnType;
 import messages.OfficeSensorMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ public class ThingsboardSensorTest {
 
     @Test
     void thingsboardConversion(){
-        ThingsboardSensorsConnector thingsSensors = new ThingsboardSensorsConnector("", "", sensorAccessToken);
+        ThingsboardSensorsConnector thingsSensors = new ThingsboardSensorsConnector(ConnType.MQTT, "", "", sensorAccessToken);
         thingsSensors.commonSensorsMessage = getMessage();
         assertEquals("{\"id\":1,\"time\":123456.0,\"temp\":20.2,\"hum\":15.3,\"co2\":123,\"tvoc\":45}", thingsSensors.getJson());
         assertEquals("askjdzsdjhfb", thingsSensors.getUsername(sensorAccessToken, "1"));

@@ -1,17 +1,20 @@
 package service_builders;
 
+import connection.ConnType;
 import services.ResultThingsboardService;
 import services.Service;
 
 import java.util.Map;
 
 public class ResultsThingsboardServiceBuilder implements ServiceBuilder{
+    private final ConnType connType;
     private Service service;
     private final String broker;
     private final String topic;
     private final Map<String, String> deviceAccessToken;
 
-    public ResultsThingsboardServiceBuilder(String broker, String topic, Map<String, String> deviceAccessToken){
+    public ResultsThingsboardServiceBuilder(ConnType connType, String broker, String topic, Map<String, String> deviceAccessToken){
+        this.connType = connType;
         this.broker = broker;
         this.topic = topic;
         this.deviceAccessToken = deviceAccessToken;
@@ -19,7 +22,7 @@ public class ResultsThingsboardServiceBuilder implements ServiceBuilder{
 
     @Override
     public void initializeService() {
-        service = new ResultThingsboardService(broker, topic, deviceAccessToken);
+        service = new ResultThingsboardService(connType, broker, topic, deviceAccessToken);
         service.init();
     }
 

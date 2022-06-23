@@ -1,5 +1,6 @@
 package services;
 
+import connection.ConnType;
 import eu.quanticol.moonlight.core.signal.Sample;
 import main.DataBus;
 import messages.CommonSensorsMessage;
@@ -13,12 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultThingsboardService implements Service{
+    private final ConnType connType;
     private Map<String, String> deviceAccessTokens;
     private final String broker;
     private final String topic;
     private double lastTime;
 
-    public ResultThingsboardService(String broker, String topic, Map<String, String> deviceAccessToken){
+    public ResultThingsboardService(ConnType connType, String broker, String topic, Map<String, String> deviceAccessToken){
+        this.connType = connType;
         this.broker = broker;
         this.topic = topic;
         this.deviceAccessTokens = deviceAccessToken;
@@ -36,11 +39,11 @@ public class ResultThingsboardService implements Service{
         ThingsboardConnector thingsboardCommunication = null;
         if(message instanceof CommonSensorsMessage<?> commonSensorsMessage){
             thingsboardCommunication =
-                    new ThingsboardSensorsConnector(broker, topic, deviceAccessTokens);
+                    new ThingsboardSensorsConnector(connType, broker, topic, deviceAccessTokens);
             thingsboardCommunication.sendMessage(commonSensorsMessage);
         }else if(message instanceof ResultsMessage<?> resultsMessage){
             thingsboardCommunication =
-                    new ThingsboardMoonlightConnector(broker, topic, deviceAccessTokens, lastTime);
+                    new ThingsboardMoonlightConnector(connType, broker, topic, deviceAccessTokens, lastTime);
             lastTime = getLastResultsMessageTimeValue(resultsMessage);
             thingsboardCommunication.sendMessage(resultsMessage);
         }

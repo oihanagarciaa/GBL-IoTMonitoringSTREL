@@ -91,6 +91,7 @@ public class RunnerService implements Service, MessageListener {
         String topic = info.getConnection().getSettings().getTopic();
         Map<String ,String> deviceAccessTokens = info.getDevices();
         thingsboardServiceBuilder = new ResultsThingsboardServiceBuilder(
+                ConnType.valueOf(info.getConnection().getType()),
                 broker, topic, deviceAccessTokens);
         return thingsboardServiceBuilder;
     }
@@ -144,7 +145,7 @@ public class RunnerService implements Service, MessageListener {
 
     @Override
     public void messageArrived(String topic, String jsonMessage) {
-        System.out.println("MESSAGE: "+jsonMessage);
+        System.out.println("Client: "+jsonMessage);
         try{
             Message message = new Gson().fromJson(jsonMessage,
                     (Type) ConfigMessage.class);

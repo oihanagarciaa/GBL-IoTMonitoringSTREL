@@ -13,6 +13,7 @@ import eu.quanticol.moonlight.core.space.SpatialModel;
 import eu.quanticol.moonlight.online.monitoring.OnlineSpatialTemporalMonitor;
 import eu.quanticol.moonlight.space.StaticLocationService;
 import main.DataBus;
+import main.Settings;
 import messages.CommonSensorsMessage;
 import messages.Message;
 import messages.ResultsMessage;

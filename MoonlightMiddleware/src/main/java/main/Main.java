@@ -34,7 +34,8 @@ public class Main {
      */
 
     private void setRunnerServiceBuilder() {
-        runnerServiceBuilder = new RunnerServiceBuilder(Settings.getSettingsBroker(),
+        runnerServiceBuilder = new RunnerServiceBuilder(Settings.getConnType(),
+                Settings.getSettingsBroker(),
                 Settings.getSettingsTopic(), Settings.getSettingsUsername(),
                 Settings.getSettingsPassword(), services);
         runnerServiceBuilder.run();
