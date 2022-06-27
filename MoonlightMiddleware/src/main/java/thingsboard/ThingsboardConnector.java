@@ -1,12 +1,10 @@
 package thingsboard;
 
 import connection.ConnType;
-import connection.MQTTSubscriber;
 import connection.Publisher;
 import messages.Message;
 import connection.MQTTPublisher;
-import simulation.ConnectionSimulations.PublisherSimulator;
-import simulation.ConnectionSimulations.SensorSubscriberSimulator;
+import simulation.ConnectionSimulations.DataBusPublisherSimulator;
 
 import java.util.Map;
 
@@ -20,7 +18,7 @@ public abstract class ThingsboardConnector {
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Not supported connection type");
         } else if (connectionType == ConnType.SIMULATION){
-            publisher = new PublisherSimulator();
+            publisher = new DataBusPublisherSimulator();
         }
         else {
             throw new UnsupportedOperationException("Not supported connection type");

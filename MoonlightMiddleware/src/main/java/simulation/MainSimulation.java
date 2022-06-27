@@ -2,7 +2,6 @@ package simulation;
 
 import connection.ConnType;
 import main.DataBus;
-import main.Settings;
 import service_builders.RunnerServiceBuilder;
 import service_builders.ServiceBuilder;
 
@@ -20,7 +19,7 @@ public class MainSimulation {
     }
 
     private void setMessageReaderService() {
-        MessageReaderService messageReaderService = new MessageReaderService();
+        DataBusMessageReaderService messageReaderService = new DataBusMessageReaderService();
         DataBus.getInstance().subscribe(messageReaderService);
     }
 

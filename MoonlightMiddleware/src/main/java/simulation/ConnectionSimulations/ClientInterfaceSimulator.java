@@ -10,12 +10,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
-public class RunnerSubscriberSimulator implements Subscriber<String>, ActionListener {
+public class ClientInterfaceSimulator implements Subscriber<String>, ActionListener {
     MessageListener messageListener;
     JFrame frame;
     JTextArea field;
 
-    public RunnerSubscriberSimulator(){
+    public ClientInterfaceSimulator(){
         frame = new JFrame("Custom properties");
         frame.setSize(550, 500);
         frame.setLocationRelativeTo(null);

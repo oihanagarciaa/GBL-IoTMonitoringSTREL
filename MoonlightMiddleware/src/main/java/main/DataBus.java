@@ -18,7 +18,7 @@ public class DataBus {
         services = new ArrayList<>();
     }
 
-    public static DataBus getInstance() {
+    synchronized public static DataBus getInstance() {
         if(instance == null) {
             instance = new DataBus();
         }
@@ -26,15 +26,15 @@ public class DataBus {
         return instance;
     }
 
-    public void offer(Message m) {
+    synchronized public void offer(Message m) {
         instance.services.forEach(s -> s.receive(m));
     }
 
-    public void subscribe(Service s) {
+    synchronized public void subscribe(Service s) {
         instance.services.add(s);
     }
 
-    public void unsubscribe(Service s) {
+    synchronized public void unsubscribe(Service s) {
         instance.services.remove(s);
     }
 

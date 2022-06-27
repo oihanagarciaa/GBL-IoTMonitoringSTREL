@@ -4,7 +4,7 @@ import connection.Publisher;
 import main.DataBus;
 import messages.Message;
 
-public class PublisherSimulator implements Publisher {
+public class DataBusPublisherSimulator implements Publisher {
 
     @Override
     public void publish(String username, String password, String message) {

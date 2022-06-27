@@ -6,7 +6,7 @@ import services.SensorService;
 import services.Service;
 import connection.ConnType;
 import connection.MQTTSubscriber;
-import simulation.ConnectionSimulations.SensorSubscriberSimulator;
+import simulation.ConnectionSimulations.SensorMessagesSubscriberSimulator;
 
 public class SensorsServiceBuilder implements ServiceBuilder{
     private Service service;
@@ -39,7 +39,7 @@ public class SensorsServiceBuilder implements ServiceBuilder{
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Not supported connection type");
         } else if (connectionType == ConnType.SIMULATION){
-            subscriber = new SensorSubscriberSimulator();
+            subscriber = new SensorMessagesSubscriberSimulator();
         }
         else {
             throw new UnsupportedOperationException("Not supported connection type");

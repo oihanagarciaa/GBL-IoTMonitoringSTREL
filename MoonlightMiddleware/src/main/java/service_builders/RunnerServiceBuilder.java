@@ -3,11 +3,9 @@ package service_builders;
 import connection.ConnType;
 import connection.MQTTSubscriber;
 import connection.Subscriber;
-import main.Settings;
 import services.RunnerService;
-import services.SensorService;
 import services.Service;
-import simulation.ConnectionSimulations.RunnerSubscriberSimulator;
+import simulation.ConnectionSimulations.ClientInterfaceSimulator;
 
 import java.util.Map;
 
@@ -40,7 +38,7 @@ public class RunnerServiceBuilder implements ServiceBuilder {
         }else if (connectionType == ConnType.REST){
             throw new UnsupportedOperationException("Not supported connection type");
         }else if (connectionType == ConnType.SIMULATION){
-            subscriber = new RunnerSubscriberSimulator();
+            subscriber = new ClientInterfaceSimulator();
         }
         else {
             throw new UnsupportedOperationException("Not supported connection type");

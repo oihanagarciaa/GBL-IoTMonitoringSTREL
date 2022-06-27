@@ -5,10 +5,10 @@ import connection.Subscriber;
 
 import java.security.SecureRandom;
 
-public class SensorSubscriberSimulator implements Subscriber<String> {
+public class SensorMessagesSubscriberSimulator implements Subscriber<String> {
     SenderThread thread;
 
-    public SensorSubscriberSimulator(){
+    public SensorMessagesSubscriberSimulator(){
     }
 
     @Override
@@ -53,10 +53,10 @@ public class SensorSubscriberSimulator implements Subscriber<String> {
                 try
                 {
                     for (int i = 0; i < spatialModelSize; i++){
-                        temp = 25+ rand.nextDouble(8);
-                        hum = 10+ rand.nextDouble(40);
+                        temp = 25+ rand.nextDouble(2);
+                        hum = 30+ rand.nextDouble(5);
                         co2 = 600+ rand.nextInt(100);
-                        tvoc = rand.nextInt(400);
+                        tvoc = 10+rand.nextInt(10);
                         message = "{ 'id':"+i+",\n" +
                                 "   'time':"+time+",\n" +
                                 "   'temp':"+temp+",\n" +

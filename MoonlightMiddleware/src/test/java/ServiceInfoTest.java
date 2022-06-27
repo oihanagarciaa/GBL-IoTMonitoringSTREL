@@ -69,7 +69,7 @@ public class ServiceInfoTest {
         ConfigMessage message = new Gson().fromJson(configJson, (Type) ConfigMessage.class);
         ServiceInfo serviceInfo = message.getServiceInfo().get(2);
         assertEquals("thingsboard", serviceInfo.getServiceType());
-        assertEquals("mqtt", serviceInfo.getConnection().getType());
+        assertEquals("MQTT", serviceInfo.getConnection().getType());
         assertEquals("thingsboardTopic", serviceInfo.getConnection()
                 .getSettings().getTopic());
         assertEquals("XXX", serviceInfo.getDevices().get("Thingy1"));
